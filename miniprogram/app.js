@@ -7,7 +7,6 @@ App({
     this.InitCustom(); //初始化custom所需配置信息
   },
   InitCloud() {
-    var that = this;
     wx.cloud.init({
       env: config.CloudID,
       traceUser: true,

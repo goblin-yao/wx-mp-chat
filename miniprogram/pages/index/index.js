@@ -32,7 +32,6 @@ Page({
       submitBtnDisabled: !e.detail.value.trim(),
     });
     this.data.inputContent = e.detail.value.trim();
-    console.log("ddd=>", e.detail.value);
   },
   async submit() {
     if (this.data.login) {
@@ -41,7 +40,6 @@ Page({
     } else {
       let res = await wx.getUserProfile({
         desc: "获取用户聊天头像",
-        // success: (res) => {},
       });
       let userInfo = res.userInfo;
 
@@ -143,10 +141,6 @@ Page({
     } catch (error) {
       console.log("ddd=>", error);
     }
-    //按钮disable
-    this.setData({
-      submitBtnDisabled: false,
-    });
   },
   /**
    * 生命周期函数--监听页面加载

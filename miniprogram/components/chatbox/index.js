@@ -117,6 +117,7 @@ Component({
           openid: app.globalData.openid,
           userInfo: app.globalData.userInfo,
         };
+        // console.log("dddd->", app.globalData.userInfo);
         this.data.chatList.push(msgForUser);
         this.data.chatList.push(msg);
 
