@@ -14,18 +14,16 @@ App({
     });
   },
   InitCustom() {
-    wx.getSystemInfo({
-      success: (e) => {
-        //console.log(e)
-        this.globalData.StatusBar = e.statusBarHeight;
-        let custom = wx.getMenuButtonBoundingClientRect();
-        // console.log(custom)
-        this.globalData.Custom = custom;
-        this.globalData.CustomBar =
-          custom.bottom + custom.top - e.statusBarHeight;
-        this.globalData.safeBottomLeft = e.screenHeight - e.safeArea.bottom;
-      },
-    });
+    let e = wx.getSystemInfoSync()
+
+    console.log('getSystemInfoSync=>', e)
+    this.globalData.StatusBar = e.statusBarHeight;
+    let custom = wx.getMenuButtonBoundingClientRect();
+    // console.log(custom)
+    this.globalData.Custom = custom;
+    this.globalData.CustomBar =
+      custom.bottom + custom.top - e.statusBarHeight;
+    this.globalData.safeBottomLeft = e.screenHeight - e.safeArea.bottom;
   },
   globalData: {},
   config,

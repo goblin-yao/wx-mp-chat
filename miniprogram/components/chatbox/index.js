@@ -54,7 +54,7 @@ Component({
       {
         msgType: "text",
         content: "ChatGPT欢迎你",
-        userInfo: { nickName: "chatgpt" },
+        userInfo: { nickName: "ChatGPT" },
       },
     ],
     //标记触顶事件
@@ -84,7 +84,7 @@ Component({
         let msg = {
           content: e.data.text,
           msgType: "text",
-          userInfo: { nickName: "chatGpt" },
+          userInfo: { nickName: "ChatGPT" },
         };
         //把原来消息的loading删掉
         let newChatList = [];
@@ -108,7 +108,7 @@ Component({
         let msg = {
           content: "......",
           msgType: "loading",
-          userInfo: { nickName: "chatGpt" },
+          userInfo: { nickName: "ChatGPT" },
         };
         // 这个loading是给chatgpt的
         let msgForUser = {

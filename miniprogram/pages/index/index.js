@@ -1,5 +1,9 @@
 // 获取全局APP
 const app = getApp();
+const Cloud = require("../../common/util/cloud-call");
+const Config = require("../../config");
+const MockData = require("../../mock-data");
+
 // 获取计时器函数
 Page({
   /**
@@ -8,7 +12,7 @@ Page({
   data: {
     login: false,
     //输入框距离
-    InputBottom: 0,
+    InputBottom: app.globalData.safeBottomLeft,
     userInfo: {},
     inputContent: "",
     submitBtnDisabled: true,
@@ -20,7 +24,7 @@ Page({
   },
   InputBlur(e) {
     this.setData({
-      InputBottom: 0,
+      InputBottom: app.globalData.safeBottomLeft,
     });
   },
   bindKeyInput(e) {
@@ -70,93 +74,69 @@ Page({
     console.log("send msg", e);
     this.selectComponent("#chat_room").receiveMsg(e);
   },
+  //在消息校验的时候确定输入框是否清空
+  async msgChecker(content) {
+    //按钮disable
+    this.setData({
+      submitBtnDisabled: true,
+    });
+    let result = false;
+    let res = await Cloud.MsgSecCheck(content);
+    if (res?.result?.code == 200) {
+      result = true;
+    } else {
+      wx.showToast({
+        title: res.result.msg,
+      });
+    }
+    return result;
+  },
+
   async sendMsgToChatGPT() {
+    let checkResult = await this.msgChecker(
+      this.data.inputContent.replace(/\s/g, "").trim()
+    );
+    if (!checkResult) {
+      return;
+    }
     // 先发送一条消息到屏幕上，再等待server的回复
     let eventDataFirst = {
       fromWhere: "user",
       data: { text: this.data.inputContent },
     };
     this.onChatRoomEvent(eventDataFirst);
-    //按钮disable
-    this.setData({
-      submitBtnDisabled: true,
-    });
     try {
-      let res = await wx.cloud.callContainer({
-        config: {
-          env: "prod-3gqv2g55fbf85d86",
-        },
-        path: "/api/chat",
-        header: {
-          "X-WX-SERVICE": "express-wjw3",
-          "content-type": "application/json",
-        },
-        method: "POST",
-        data: { question: this.data.inputContent },
-      });
-
-      //调试内容
-      // 返回数据-mock
-      // let res = {
-      //   data: {
-      //     role: "assistant",
-      //     id: "cmpl-6kWYwkLeDv8LfLXcBNzXNPNdDucCH",
-      //     parentMessageId: "e2fb72a5-d2a8-410a-8dda-013b2e52dea2",
-      //     conversationId: "6d83626c-726f-4ae2-9a0d-c6ed2bdcc7d9",
-      //     text: "2",
-      //     detail: {
-      //       id: "cmpl-6kWYwkLeDv8LfLXcBNzXNPNdDucCH",
-      //       object: "text_completion",
-      //       created: 1676546278,
-      //       model: "text-davinci-003",
-      //       choices: [
-      //         {
-      //           text: "\n2",
-      //           index: 0,
-      //           logprobs: null,
-      //           finish_reason: "stop",
-      //         },
-      //       ],
-      //       usage: {
-      //         prompt_tokens: 61,
-      //         completion_tokens: 2,
-      //         total_tokens: 63,
-      //       },
-      //     },
-      //   },
-      //   header: {
-      //     "Access-Control-Allow-Origin": "*",
-      //     "Access-Control-Allow-Credentials": "true",
-      //     "X-CloudBase-Request-Id": "4c65e376c131417a986af7af4ba31c53",
-      //     server: "nginx/1.17.8",
-      //     date: "Thu, 16 Feb 2023 11:17:59 GMT",
-      //     "content-type": "application/json; charset=utf-8",
-      //     vary: "Accept-Encoding",
-      //     "x-powered-by": "Express",
-      //     etag: 'W/"1cb-ofKrb2sDJOBgrtgVmc5AzcyaVJA"',
-      //     "x-cloudbase-upstream-status-code": "200",
-      //     "X-CloudBase-Upstream-TimeCost": "1281",
-      //     "x-wx-call-id": "0.7320950346479209_1676546277869",
-      //     "x-wx-server-timing": "1676546278077,1676546279470",
-      //     "Access-Control-Expose-Headers": "x-wx-call-id, x-wx-server-timing",
-      //     Connection: "keep-alive",
-      //     "Content-Encoding": "gzip",
-      //     "Content-Length": "314",
-      //   },
-      //   statusCode: 200,
-      //   cookies: [],
-      //   errMsg: "request:ok",
-      // };
-
+      let res = null;
+      if (Config.LocalDevMode) {
+        // res = MockData.chatGPTTimeout;
+        res = MockData.chatGPTSuccess;
+      } else {
+        res = await wx.cloud.callContainer({
+          config: {
+            env: "prod-3gqv2g55fbf85d86",
+          },
+          path: "/api/chat",
+          header: {
+            "X-WX-SERVICE": "express-wjw3",
+            "content-type": "application/json",
+          },
+          method: "POST",
+          data: { question: this.data.inputContent },
+        });
+      }
       console.log("res=====>", res);
       let eventData = { fromWhere: "chatgpt", statusCode: res.statusCode };
       if (res.statusCode === 200) {
+        //清空文本
+        this.setData({
+          inputContent: "",
+        });
         Object.assign(eventData, {
           data: res.data,
         });
       } else {
         Object.assign(eventData, {
-          data: { text: JSON.stringify(res.data) },
+          data: { text: JSON.stringify(res?.base_resp || { error: "出错啦" }) },
         });
       }
       this.onChatRoomEvent(eventData);
@@ -220,35 +200,35 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {},
+  onReady: function () { },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {},
+  onShow: function () { },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {},
+  onHide: function () { },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {},
+  onUnload: function () { },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {},
+  onPullDownRefresh: function () { },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {},
+  onReachBottom: function () { },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {},
+  onShareAppMessage: function () { },
 });
