@@ -1,0 +1,4 @@
+/* components/chatcard/chatcard.wxss */
+text{
+    word-break: break-all;
+}

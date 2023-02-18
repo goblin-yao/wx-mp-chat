@@ -1,0 +1,12 @@
+<mp-toptips msg="{{errMsg}}" type="error" show="{{errMsg}}"></mp-toptips>
+<!--聊天内容-->
+<chat-box id="chat_room" roomId="{{roomId}}"></chat-box>
+
+<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
+  <!-- <view class="action">
+    <text class="cuIcon-add text-grey" bindtap="showAction"></text>
+    <text class="cuIcon-discover text-grey" bindtap="selectImg"></text>
+  </view> -->
+  <input class="solid-bottom" placeholder="问任何你想要的问题" bindfocus="InputFocus" bindblur="InputBlur" bindinput="bindKeyInput" adjust-position="{{false}}" focus="{{false}}" maxlength="300" cursor-spacing="10"></input>
+  <button class="cu-btn bg-green shadow" disabled="{{submitBtnDisabled}}" bindtap="submit"> 发送</button>
+</view>
