@@ -6,7 +6,7 @@ cloud.init({
 const db = cloud.database();
 const _ = db.command;
 // 用户
-const USERS = 'chat-users';
+const USERS = 'chat_users';
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()

@@ -1,7 +1,7 @@
 // release/components/chatbox
 const app = getApp();
-// 配置消息侦听器
-var messageWatcher = null;
+const { MESSAGE_TYPE, CHAT_GPT_INFO } = require("../../constants.js");
+
 // 时间工具类
 const timeutil = require("./timeutil");
 Component({
@@ -26,12 +26,8 @@ Component({
       that.initMessageHistory();
       //初始化监听器
       // that.initWatcher();
-      wx.getSystemInfo({
-        success: function (res) {
-          that.setData({
-            systemInfo: res,
-          });
-        },
+      that.setData({
+        scrollHeight: app.globalData.systemInfo.windowHeight - (50 + app.globalData.safeBottomLeft),
       });
       console.log("data in chatbox:", this.data);
     },
@@ -49,16 +45,14 @@ Component({
   data: {
     scrollId: "",
     systemInfo: {},
+    MESSAGE_TYPE: MESSAGE_TYPE,
+    CHAT_GPT_INFO: CHAT_GPT_INFO,
     //消息记录列表
-    chatList: [
-      {
-        msgType: "text",
-        content: "ChatGPT欢迎你",
-        userInfo: { nickName: "ChatGPT" },
-      },
-    ],
+    chatList: [],
     //标记触顶事件
     isTop: false,
+    //没有更多数据
+    noMoreList: false,
   },
   /**
    * 组件的方法列表
@@ -66,31 +60,30 @@ Component({
   methods: {
     //触顶事件
     tapTop() {
-      console.log("--触顶--");
       var that = this;
       that.setData(
         {
           isTop: true,
         },
         () => {
-          this.getMsgHistory();
+          this.reqMsgHis();
         }
       );
     },
-    receiveMsg(e) {
+    receiveMsg(_e) {
       let that = this;
-      console.log("received msg", e);
-      if (e.fromWhere === "chatgpt") {
+      console.log("received msg", _e);
+      if (_e.msgType === MESSAGE_TYPE.CHATGPT_ANSWER) {
         let msg = {
-          content: e.data.text,
-          msgType: "text",
-          userInfo: { nickName: "ChatGPT" },
+          content: _e.data.text,
+          msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+          userInfo: { nickName: CHAT_GPT_INFO.nickName },
         };
         //把原来消息的loading删掉
         let newChatList = [];
         for (let index = 0; index < this.data.chatList.length; index++) {
           const element = this.data.chatList[index];
-          if (element.msgType != "loading") {
+          if (element.msgType != MESSAGE_TYPE.WAITING_CHATGPT) {
             newChatList.push(element);
           }
         }
@@ -104,16 +97,18 @@ Component({
           });
         }, 100);
       }
-      if (e.fromWhere === "user") {
+
+      // loading和用户的信息放一起处理，都在页面上展示用
+      if (_e.msgType === MESSAGE_TYPE.USER_QUESTION) {
         let msg = {
-          content: "......",
-          msgType: "loading",
-          userInfo: { nickName: "ChatGPT" },
+          content: "输入中...",
+          msgType: MESSAGE_TYPE.WAITING_CHATGPT,
+          userInfo: { nickName: CHAT_GPT_INFO.nickName },
         };
         // 这个loading是给chatgpt的
         let msgForUser = {
-          content: e.data.text,
-          msgType: "text",
+          content: _e.data.text,
+          msgType: MESSAGE_TYPE.USER_QUESTION,
           openid: app.globalData.openid,
           userInfo: app.globalData.userInfo,
         };
@@ -132,66 +127,82 @@ Component({
       }
     },
     //初始化
-    initMessageHistory() {
+    async initMessageHistory() {
       //初始化消息历史
       var that = this;
-      that.setData(
-        {
-          // chatList: [],
-        },
-        () => {
-          that.reqMsgHis();
+      //如果没有userinfo先查询一次
+      if (!app.globalData.userInfo) {
+        const res = await wx.cloud.callFunction({
+          name: "auth"
+        })
+        if (res.result.errCode == -1) {
+          //todo
+        } else {
+          app.globalData.openid = res.result.result.openid;
+          app.globalData.userInfo = res.result.result.userInfo;
         }
-      );
+        that.reqMsgHis()
+      }
     },
-    getMsgHistory() {},
     // 请求聊天记录
     reqMsgHis() {
-      return;
       var that = this;
-      wx.showLoading({
-        title: "获取历史记录",
-        mask: true,
-      });
+      if (that.data.noMoreList) {
+        return;
+      }
+      // wx.showLoading({
+      //   title: "获取历史记录",
+      //   mask: true,
+      // });
       wx.cloud.callFunction({
         name: "cloud-msg-his",
         data: {
           step: that.data.chatList.length,
-          roomId: that.properties.roomId,
         },
         success: (res) => {
-          console.log(res);
+          console.log("cloud-msg-his", res);
           let tarr = res.result.data;
           let newsLen = tarr.length;
           if (newsLen == 0) {
+            that.data.noMoreList = true;
+            return;
             //查无数据
-            setTimeout(function () {
-              wx.showToast({
-                title: "到顶了",
-                icon: "none",
-              });
-            }, 300);
+            // setTimeout(function () {
+            //   wx.showToast({
+            //     title: "到顶了",
+            //     icon: "none",
+            //   });
+            // }, 300);
           }
           tarr = tarr.reverse();
+
+          let len = that.data.chatList.length + newsLen;
+          //给每个用户的信息加上userinfo
+          for (let index = 0; index < tarr.length; index++) {
+            if (tarr[index]['msgType'] === MESSAGE_TYPE.USER_QUESTION) { tarr[index]['userInfo'] = app.globalData.userInfo }
+          }
           that.setData(
             {
               chatList: tarr.concat(that.data.chatList),
+              scrollId: that.data.isTop
+                ? "msg-" + parseInt(newsLen)
+                : "msg-" + parseInt(len - 1),
             },
             () => {
-              let len = that.data.chatList.length;
-              if (that.data.isTop) {
-                setTimeout(function () {
-                  that.setData({
-                    scrollId: "msg-" + parseInt(newsLen),
-                  });
-                }, 100);
-              } else {
-                setTimeout(function () {
-                  that.setData({
-                    scrollId: "msg-" + parseInt(len - 1),
-                  });
-                }, 100);
-              }
+              // let len = that.data.chatList.length;
+              // if (that.data.isTop) {
+              //   setTimeout(function () {
+              //     that.setData({
+              //       scrollId: "msg-" + parseInt(newsLen),
+              //     });
+              //   }, 100);
+              // } else {
+              //   setTimeout(function () {
+              //     that.setData({
+              //       scrollId: "msg-" + parseInt(len - 1),
+              //     });
+              //   }, 100);
+              // }
             }
           );
         },
@@ -199,7 +210,7 @@ Component({
           console.log(res);
         },
         complete: (res) => {
-          wx.hideLoading();
+          // wx.hideLoading();
         },
       });
     },

@@ -3,6 +3,7 @@ const app = getApp();
 const Cloud = require("../../common/util/cloud-call");
 const Config = require("../../config");
 const MockData = require("../../mock-data");
+const { MESSAGE_TYPE } = require("../../constants.js");
 
 // 获取计时器函数
 Page({
@@ -16,6 +17,7 @@ Page({
     userInfo: {},
     inputContent: "",
     submitBtnDisabled: true,
+    inputDisabled: false, //深入框在等待回答时禁止输入
   },
   InputFocus(e) {
     this.setData({
@@ -35,8 +37,15 @@ Page({
   },
   async submit() {
     if (this.data.login) {
-      this.sendMsgToChatGPT();
-      //页面一个loading的交互，chatgpt等待
+      this.setData({
+        inputDisabled: true,
+      });
+      await this.sendMsgToChatGPT();
+      //页面一个loading的交互，chatgpt等待, 发送消息等待的时候，输入框不能再输入东西了。可以disable掉，有内容返回后再添加
+
+      this.setData({
+        inputDisabled: false,
+      });
     } else {
       let res = await wx.getUserProfile({
         desc: "获取用户聊天头像",
@@ -68,9 +77,17 @@ Page({
       );
     }
   },
-  onChatRoomEvent(e) {
-    console.log("send msg", e);
-    this.selectComponent("#chat_room").receiveMsg(e);
+  async onChatRoomEvent(_e) {
+    console.log("onChatRoomEvent=>", _e);
+    this.selectComponent("#chat_room").receiveMsg(_e);
+
+    //存储问题/答案 数据库
+    const res = await wx.cloud.callFunction({
+      name: "cloud-msg-push",
+      data: _e,
+    });
+
+    console.log("cloud-msg-push", res);
   },
   //在消息校验的时候确定输入框是否清空
   async msgChecker(content) {
@@ -97,13 +114,14 @@ Page({
     if (!checkResult) {
       return;
     }
+
     // 先发送一条消息到屏幕上，再等待server的回复
     let eventDataFirst = {
-      fromWhere: "user",
+      msgType: MESSAGE_TYPE.USER_QUESTION,
       data: { text: this.data.inputContent },
     };
-    this.onChatRoomEvent(eventDataFirst);
     try {
+      await this.onChatRoomEvent(eventDataFirst);
       let res = null;
       if (Config.LocalDevMode) {
         // res = MockData.chatGPTTimeout;
@@ -123,30 +141,36 @@ Page({
         });
       }
       console.log("res=====>", res);
-      let eventData = { fromWhere: "chatgpt", statusCode: res.statusCode };
+      let eventData = {
+        msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+        statusCode: res.statusCode,
+      };
       if (res.statusCode === 200) {
         //清空文本
         this.setData({
           inputContent: "",
         });
-        Object.assign(eventData, {
-          data: res.data,
-        });
+        eventData.data = res.data;
       } else {
-        Object.assign(eventData, {
-          data: { text: JSON.stringify(res?.base_resp || { error: "出错啦" }) },
-        });
+        eventData.data = {
+          text: JSON.stringify(res?.base_resp || { error: "出错啦" }),
+        };
       }
-      this.onChatRoomEvent(eventData);
+      await this.onChatRoomEvent(eventData);
     } catch (error) {
+      this.onChatRoomEvent({
+        msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+        data: { text: "出错啦" },
+      });
       console.log("ddd=>", error);
     }
   },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // this.userAuth();
+    this.userAuth();
   },
 
   // 目前是getOpenId 2023-2-16
@@ -171,15 +195,19 @@ Page({
     wx.cloud.callFunction({
       name: "auth",
       success: (res) => {
-        console.log(res);
+        console.log("auth=>", res);
 
         if (res.result.errCode == -1) {
-          //
           console.log("--未登录--");
           this.setData({
             login: false,
           });
         } else {
+          app.globalData.openid = res.result.result.openid;
+          app.globalData.userInfo = res.result.result.userInfo;
+          this.setData({
+            userInfo: app.globalData.userInfo ,
+          });
           console.log("--已登录--");
           this.setData({
             login: true,
@@ -194,35 +222,35 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () { },
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () { },
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () { },
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () { },
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () { },
+  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () { },
+  onShareAppMessage: function () {},
 });

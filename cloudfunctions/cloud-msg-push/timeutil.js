@@ -16,6 +16,11 @@ function _formatTime(time) {
   var ftime = time.getHours() + '时' + time.getMinutes() + '分' + time.getSeconds() + '秒'
   return date + ftime;
 }
+
+//获取日期
+function getTimeSecond(time) {
+  return Math.floor(new Date(time).getTime()/1000)
+}
 function TimeCodeYmd(){
   var date = new Date();
   var year = date.getFullYear()
@@ -29,6 +34,7 @@ function formatNumber(n) {
   return n[1] ? n : '0' + n
 }
 module.exports={
+  getTimeSecond,
   TimeCode,
   TimeCodeYmd
 }
