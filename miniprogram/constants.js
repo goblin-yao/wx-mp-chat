@@ -4,6 +4,7 @@ module.exports = {
   CHAT_GPT_INFO: {
     nickName: "ChatGPT",
     wellcomeTitle: "ChatGPT欢迎你",
+    loadingText: '输入中...'
   },
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息

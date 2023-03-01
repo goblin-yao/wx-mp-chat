@@ -1,6 +1,8 @@
 // 获取全局APP
 const app = getApp();
 const Cloud = require("../../common/util/cloud-call");
+const abortPromiseWrapper = require("../../common/util/abort-promise");
+
 const Config = require("../../config");
 const MockData = require("../../mock-data");
 const { MESSAGE_TYPE } = require("../../constants.js");
@@ -121,48 +123,68 @@ Page({
       data: { text: this.data.inputContent },
     };
     try {
-      await this.onChatRoomEvent(eventDataFirst);
+      await this.onChatRoomEvent(eventDataFirst); //todo
       let res = null;
       if (Config.LocalDevMode) {
-        // res = MockData.chatGPTTimeout;
-        res = MockData.chatGPTSuccess;
+        res = MockData.chatGPTTimeout;
+        // res = MockData.chatGPTSuccess;
       } else {
-        res = await wx.cloud.callContainer({
-          config: {
-            env: "prod-3gqv2g55fbf85d86",
-          },
-          path: "/api/chat",
-          header: {
-            "X-WX-SERVICE": "express-wjw3",
-            "content-type": "application/json",
-          },
-          method: "POST",
-          data: { question: this.data.inputContent },
-        });
+        var resPromise = new Promise((resolve, reject) => {
+          wx.cloud.callContainer({
+            config: {
+              env: Config.ServerEnv,
+            },
+            path: "/api/chat",
+            header: {
+              "X-WX-SERVICE": "express-wjw3",
+              "content-type": "application/json",
+            },
+            method: "POST",
+            data: { question: this.data.inputContent },
+            success: function (_e) {
+              resolve(_e)
+            }, fail: function (_e) {
+              reject(_e);
+            }
+          });
+        })
+        var newResPromise = abortPromiseWrapper(resPromise);
+        newResPromise.then(_res => {
+          res = _res;
+          let eventData = {
+            msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+            statusCode: res.statusCode,
+          };
+          if (res.statusCode === 200) {
+            //清空文本
+            this.setData({
+              inputContent: "",
+            });
+            eventData.data = res.data;
+          } else {
+            eventData.data = {
+              text: JSON.stringify(res?.base_resp || { error: "出错啦" }),
+            };
+          }
+          this.onChatRoomEvent(eventData); //todo
+        }).catch((error) => {
+          console.log("ddd=>", error);
+          if (error && error.type === 'abort') {
+            this.onChatRoomEvent({
+              msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+              data: { text: "用户取消等待回复" },
+            });
+          } else {
+            this.onChatRoomEvent({
+              msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+              data: { text: "出错啦" },
+            });
+          }
+        })
+
+        app.globalData.curResPromise = newResPromise; //当前有promise
       }
-      console.log("res=====>", res);
-      let eventData = {
-        msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-        statusCode: res.statusCode,
-      };
-      if (res.statusCode === 200) {
-        //清空文本
-        this.setData({
-          inputContent: "",
-        });
-        eventData.data = res.data;
-      } else {
-        eventData.data = {
-          text: JSON.stringify(res?.base_resp || { error: "出错啦" }),
-        };
-      }
-      await this.onChatRoomEvent(eventData);
     } catch (error) {
-      this.onChatRoomEvent({
-        msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-        data: { text: "出错啦" },
-      });
-      console.log("ddd=>", error);
     }
   },
 
@@ -206,7 +228,7 @@ Page({
           app.globalData.openid = res.result.result.openid;
           app.globalData.userInfo = res.result.result.userInfo;
           this.setData({
-            userInfo: app.globalData.userInfo ,
+            userInfo: app.globalData.userInfo,
           });
           console.log("--已登录--");
           this.setData({
@@ -222,35 +244,35 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {},
+  onReady: function () { },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {},
+  onShow: function () { },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {},
+  onHide: function () { },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {},
+  onUnload: function () { },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {},
+  onPullDownRefresh: function () { },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {},
+  onReachBottom: function () { },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {},
+  onShareAppMessage: function () { },
 });

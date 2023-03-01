@@ -1,9 +1,34 @@
 const data = {
-  chatGPTTimeout: {
+  chatGPTTimeout1: {
     base_resp: {
       ret: 102002,
       errmsg: "请求超时",
     },
+  },
+  chatGPTTimeout:{
+    "data": {
+      "base_resp": {
+        "ret": 102002,
+        "errmsg": "请求超时"
+      }
+    },
+    "header": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "x-wx-system-error": "102002",
+      "Content-Type": "application/json; charset=UTF-8",
+      "Cache-Control": "no-cache, must-revalidate",
+      "RetKey": "11",
+      "LogicRet": "102002",
+      "x-wx-call-id": "0.8370317322430423_1677169862227",
+      "x-wx-server-timing": "1677169862285,1677169877358",
+      "Access-Control-Expose-Headers": "x-wx-system-error, x-wx-call-id, x-wx-server-timing",
+      "Connection": "keep-alive",
+      "Content-Length": "52"
+    },
+    "statusCode": 200,
+    "cookies": [],
+    "errMsg": "request:ok"
   },
   chatGPTSuccess: {
     data: {

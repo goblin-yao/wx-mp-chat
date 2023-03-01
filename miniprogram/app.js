@@ -25,7 +25,9 @@ App({
       custom.bottom + custom.top - _e.statusBarHeight;
     this.globalData.safeBottomLeft = _e.screenHeight - _e.safeArea.bottom;
   },
-  globalData: {},
+  globalData: {
+    curResPromise: null //当前的Promise，用来abort
+  },
   config,
   Cloud,
 });

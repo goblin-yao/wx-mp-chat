@@ -2,7 +2,7 @@
   <!--chatgpt欢迎消息-->
 
   <view class="cu-item title">
-    <view class="cu-avatar radius" style="background-image:url('https://bkimg.cdn.bcebos.com/pic/5bafa40f4bfbfbedab645fce06a6e036afc37931b17e?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UxMTY=,g_7,xp_5,yp_5');"></view>
+    <view class="cu-avatar radius chat-gpt-avatar"></view>
     <view class="main">
       <view class="content bg-cyan shadow">
         <text>{{CHAT_GPT_INFO.wellcomeTitle}}</text>
@@ -13,20 +13,22 @@
   <view wx:for="{{chatList}}" wx:key="index" wx:for-item="item">
     <!--chatgpt发送的信息-->
     <view class="cu-item" wx:if="{{item.msgType == MESSAGE_TYPE.CHATGPT_ANSWER}}" id="msg-{{index}}">
-      <view class="cu-avatar radius" style="background-image:url('https://bkimg.cdn.bcebos.com/pic/5bafa40f4bfbfbedab645fce06a6e036afc37931b17e?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UxMTY=,g_7,xp_5,yp_5');"></view>
+      <view class="cu-avatar radius chat-gpt-avatar"></view>
       <view class="main">
-        <view class="content bg-cyan shadow">
-          <text user-select>{{item.content}}</text>
+        <view class="content bg-cyan shadow" data-msgid="msg-{{index}}" bindlongpress="copyMsg">
+          <text>{{item.content}}</text>
         </view>
       </view>
       <!-- <view class="date">{{item._createTime}} {{item.userInfo.nickName}}</view> -->
       <!-- <view class="date">{{item._createTime}}</view>  -->
     </view>
     <view class="cu-item" wx:if="{{item.msgType == MESSAGE_TYPE.WAITING_CHATGPT}}" id="msg-{{index}}">
-      <view class="cu-avatar radius" style="background-image:url('https://bkimg.cdn.bcebos.com/pic/5bafa40f4bfbfbedab645fce06a6e036afc37931b17e?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UxMTY=,g_7,xp_5,yp_5');"></view>
+      <view class="cu-avatar radius chat-gpt-avatar"></view>
       <view class="main">
-        <view class="content bg-cyan shadow">
-          <text>{{item.content}}</text>
+        <view class="content bg-cyan shadow loading-container">
+          <view class="loading"></view>
+          <text>输入中输入中...</text>
+          <view class="cancel_text" bindtap="cancelRequest" data-msgid="msg-{{index}}">取消</view>
         </view>
       </view>
       <!-- <view class="date">{{item.userInfo.nickName}}</view> -->
@@ -41,8 +43,8 @@
     <!--自己发送的信息-->
     <view class="cu-item self" wx:if="{{item.openid && item.msgType == MESSAGE_TYPE.USER_QUESTION}}" id="msg-{{index}}">
       <view class="main">
-        <view class="content bg-green shadow">
-          <text user-select>{{item.content}}</text>
+        <view class="content bg-green shadow" data-msgid="msg-{{index}}" bindlongpress="copyMsg">
+          <text>{{item.content}}</text>
         </view>
       </view>
       <view class="cu-avatar radius" style="background-image:url({{item.userInfo.avatarUrl}});"></view>
