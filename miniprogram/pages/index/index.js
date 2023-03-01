@@ -108,7 +108,28 @@ Page({
     }
     return result;
   },
-
+  handleMsgSuccess(res) {
+    let eventData = {
+      msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+      statusCode: res.statusCode,
+    };
+    if (res.statusCode === 200) {
+      if (res?.data?.base_resp?.ret === 102002) {
+        eventData.data = { text: '请求超时' };
+      } else {
+        //清空文本
+        this.setData({
+          inputContent: "",
+        });
+        eventData.data = res.data;
+      }
+    } else {
+      eventData.data = {
+        text: JSON.stringify(res?.data?.base_resp || { error: "出错啦" }),
+      };
+    }
+    this.onChatRoomEvent(eventData); //todo
+  },
   async sendMsgToChatGPT() {
     let checkResult = await this.msgChecker(
       this.data.inputContent.replace(/\s/g, "").trim()
@@ -126,8 +147,9 @@ Page({
       await this.onChatRoomEvent(eventDataFirst); //todo
       let res = null;
       if (Config.LocalDevMode) {
-        res = MockData.chatGPTTimeout;
-        // res = MockData.chatGPTSuccess;
+        // res = MockData.chatGPTTimeout;
+        res = MockData.chatGPTSuccess;
+        this.handleMsgSuccess(res)
       } else {
         var resPromise = new Promise((resolve, reject) => {
           wx.cloud.callContainer({
@@ -142,6 +164,7 @@ Page({
             method: "POST",
             data: { question: this.data.inputContent },
             success: function (_e) {
+              console.log('/api/chat', _e)
               resolve(_e)
             }, fail: function (_e) {
               reject(_e);
@@ -150,29 +173,13 @@ Page({
         })
         var newResPromise = abortPromiseWrapper(resPromise);
         newResPromise.then(_res => {
-          res = _res;
-          let eventData = {
-            msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-            statusCode: res.statusCode,
-          };
-          if (res.statusCode === 200) {
-            //清空文本
-            this.setData({
-              inputContent: "",
-            });
-            eventData.data = res.data;
-          } else {
-            eventData.data = {
-              text: JSON.stringify(res?.base_resp || { error: "出错啦" }),
-            };
-          }
-          this.onChatRoomEvent(eventData); //todo
+          this.handleMsgSuccess(_res)
         }).catch((error) => {
           console.log("ddd=>", error);
           if (error && error.type === 'abort') {
             this.onChatRoomEvent({
               msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-              data: { text: "用户取消等待回复" },
+              data: { text: "用户取消" },
             });
           } else {
             this.onChatRoomEvent({

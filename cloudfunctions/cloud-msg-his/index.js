@@ -12,7 +12,7 @@ exports.main = async (event, context) => {
   var step = event.step;
   var option = event.option
   if (option && option.fromTop == true) {
-    return { result: { data: [] } }
+    return { data: [] }
   }
   // 用户身份唯一识别ID
   var openid = wxContext.OPENID;

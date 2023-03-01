@@ -27,7 +27,7 @@
       <view class="main">
         <view class="content bg-cyan shadow loading-container">
           <view class="loading"></view>
-          <text>输入中输入中...</text>
+          <text>{{CHAT_GPT_INFO.loadingText}}</text>
           <view class="cancel_text" bindtap="cancelRequest" data-msgid="msg-{{index}}">取消</view>
         </view>
       </view>

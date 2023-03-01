@@ -102,7 +102,7 @@ Component({
           isTop: true,
         },
         () => {
-          this.reqMsgHis({ fromTop: true });
+          // this.reqMsgHis({ fromTop: true });
         }
       );
     },
