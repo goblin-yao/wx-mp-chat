@@ -8,6 +8,7 @@
         <text>{{CHAT_GPT_INFO.wellcomeTitle}}</text>
       </view>
     </view>
+    <view class="date">长按可复制消息</view>
   </view>
 
   <view wx:for="{{chatList}}" wx:key="index" wx:for-item="item">

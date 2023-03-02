@@ -4,8 +4,9 @@ const Cloud = require("../../common/util/cloud-call");
 const abortPromiseWrapper = require("../../common/util/abort-promise");
 
 const Config = require("../../config");
+
 const MockData = require("../../mock-data");
-const { MESSAGE_TYPE } = require("../../constants.js");
+const { MESSAGE_TYPE, MaxInputLength } = require("../../constants.js");
 
 // 获取计时器函数
 Page({
@@ -18,6 +19,8 @@ Page({
     InputBottom: app.globalData.safeBottomLeft,
     userInfo: {},
     inputContent: "",
+    MaxInputLength: MaxInputLength,
+    leftChatNum: 0,
     submitBtnDisabled: true,
     inputDisabled: false, //深入框在等待回答时禁止输入
   },
@@ -115,7 +118,7 @@ Page({
     };
     if (res.statusCode === 200) {
       if (res?.data?.base_resp?.ret === 102002) {
-        eventData.data = { text: '请求超时' };
+        eventData.data = { text: "请求超时" };
       } else {
         //清空文本
         this.setData({
@@ -129,8 +132,16 @@ Page({
       };
     }
     this.onChatRoomEvent(eventData); //todo
+
+    this.reduceLimit(); //消耗1次
   },
   async sendMsgToChatGPT() {
+    if (this.data.leftChatNum <= 0) {
+      wx.showToast({
+        title: '今日使用次数已用完',
+      })
+      return
+    }
     let checkResult = await this.msgChecker(
       this.data.inputContent.replace(/\s/g, "").trim()
     );
@@ -149,7 +160,7 @@ Page({
       if (Config.LocalDevMode) {
         // res = MockData.chatGPTTimeout;
         res = MockData.chatGPTSuccess;
-        this.handleMsgSuccess(res)
+        await this.handleMsgSuccess(res);
       } else {
         var resPromise = new Promise((resolve, reject) => {
           wx.cloud.callContainer({
@@ -164,35 +175,38 @@ Page({
             method: "POST",
             data: { question: this.data.inputContent },
             success: function (_e) {
-              console.log('/api/chat', _e)
-              resolve(_e)
-            }, fail: function (_e) {
+              console.log("/api/chat", _e);
+              resolve(_e);
+            },
+            fail: function (_e) {
               reject(_e);
+            },
+          });
+        });
+        var newResPromise = abortPromiseWrapper(resPromise);
+        newResPromise
+          .then(async (_res) => {
+            console.log('api-chat->', _res)
+            await this.handleMsgSuccess(_res);
+          })
+          .catch((error) => {
+            console.log("ddd=>", error);
+            if (error && error.type === "abort") {
+              this.onChatRoomEvent({
+                msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+                data: { text: "用户取消" },
+              });
+            } else {
+              this.onChatRoomEvent({
+                msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+                data: { text: "出错啦" },
+              });
             }
           });
-        })
-        var newResPromise = abortPromiseWrapper(resPromise);
-        newResPromise.then(_res => {
-          this.handleMsgSuccess(_res)
-        }).catch((error) => {
-          console.log("ddd=>", error);
-          if (error && error.type === 'abort') {
-            this.onChatRoomEvent({
-              msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-              data: { text: "用户取消" },
-            });
-          } else {
-            this.onChatRoomEvent({
-              msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-              data: { text: "出错啦" },
-            });
-          }
-        })
 
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) {
-    }
+    } catch (error) { }
   },
 
   /**
@@ -248,10 +262,46 @@ Page({
       },
     });
   },
+  // 获取用户今天剩余聊天次数
+  async getChatLimit() {
+    let leftChatNum = 0;
+    try {
+
+      const result = await wx.cloud.callFunction({
+        name: "cloud-user-limit",
+        data: {
+          action: "getLimit",
+        },
+      });
+      console.log('getChatLimit=>', result)
+      if (result?.result?.stats?.created) {
+        leftChatNum = 5
+      } else {
+        leftChatNum = result?.result?.data?.chat_left_nums || 0
+      }
+    } catch (error) {
+
+    }
+    this.setData({ leftChatNum: leftChatNum })
+  },
+  // 获取用户今天剩余聊天次数
+  async reduceLimit() {
+    this.setData({ leftChatNum: --this.data.leftChatNum })
+    const res = await wx.cloud.callFunction({
+      name: "cloud-user-limit",
+      data: {
+        action: "reduceLimit",
+      },
+    });
+    console.log('reduceLimit=>', res)
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () { },
+  onReady: function () {
+    this.getChatLimit()
+    // this.reduceLimit()
+  },
 
   /**
    * 生命周期函数--监听页面显示

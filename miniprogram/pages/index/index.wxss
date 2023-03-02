@@ -1,7 +1,8 @@
-page{
+page {
   background-color: gray;
   background: ghostwhite;
 }
+
 movable-area {
   position: fixed;
   left: 0;
@@ -49,6 +50,14 @@ movable-view view {
 movable-view image {
   width: 100%;
   height: 100%;
+}
+
+.left_chat_bar {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  font-size: 24rpx;
+  color: var(--grey);
 }
 
 .bbbug_player {

@@ -2110,7 +2110,7 @@ button.icon.lg {
 
 .cu-chat .cu-item.title {
 	display: flex;
-	padding: 5rpx 20rpx 10rpx;
+	padding: 5rpx 20rpx 60rpx;
 	position: relative;
 }
 

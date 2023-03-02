@@ -1,10 +1,11 @@
 //一些常量配置
 module.exports = {
+  MaxInputLength: 2000,
   // chatGPT的一些配置
   CHAT_GPT_INFO: {
     nickName: "ChatGPT",
     wellcomeTitle: "ChatGPT欢迎你",
-    loadingText: '输入中...'
+    loadingText: "输入中...",
   },
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息
