@@ -131,6 +131,36 @@ const data = {
     errMsg: "request:ok",
   },
   chatHistory: {},
+  chatGPTErrorToken: {
+    "data": {
+      "question": "请规划一次双月湾团建活动，时间3月25日26日",
+      "error": {
+        "statusCode": 400,
+        "data": {
+          "error": {
+            "message": "This model's maximum context length is 2049 tokens, however you requested 2062 tokens (62 in your prompt; 2000 for the completion). Please reduce your prompt; or completion length.",
+            "type": "invalid_request_error",
+            "param": null,
+            "code": null
+          }
+        }
+      }
+    },
+    "header": {
+      "Content-Length": "369",
+      "Content-Type": "application/json; charset=utf-8",
+      "Date": "Fri, 03 Mar 2023 09:54:34 GMT",
+      "ETag": "W/\"171-Cwmmzb1d6/TALLwWz4SzadGGV8A\"",
+      "Set-Cookie": "ARRAffinity=f8425e22e55f7700616eb13548eef96fe6407f656f273545becd10a64bdf978c;Path=/;HttpOnly;Secure;Domain=wxchatnodeexpressazure.azurewebsites.net,ARRAffinitySameSite=f8425e22e55f7700616eb13548eef96fe6407f656f273545becd10a64bdf978c;Path=/;HttpOnly;SameSite=None;Secure;Domain=wxchatnodeexpressazure.azurewebsites.net",
+      "X-Powered-By": "Express"
+    },
+    "statusCode": 200,
+    "cookies": [
+      "ARRAffinity=f8425e22e55f7700616eb13548eef96fe6407f656f273545becd10a64bdf978c;Path=/;HttpOnly;Secure;Domain=wxchatnodeexpressazure.azurewebsites.net",
+      "ARRAffinitySameSite=f8425e22e55f7700616eb13548eef96fe6407f656f273545becd10a64bdf978c;Path=/;HttpOnly;SameSite=None;Secure;Domain=wxchatnodeexpressazure.azurewebsites.net"
+    ],
+    "errMsg": "request:ok"
+  }
 };
 
 module.exports = data;

@@ -1,6 +1,6 @@
 //一些常量配置
 module.exports = {
-  MaxInputLength: 2000,
+  MaxInputLength: 500,
   // chatGPT的一些配置
   CHAT_GPT_INFO: {
     nickName: "ChatGPT",
