@@ -119,6 +119,8 @@ Page({
     if (res.statusCode === 200) {
       if (res?.data?.base_resp?.ret === 102002) {
         eventData.data = { text: "请求超时" };
+      } else if (res?.data?.error?.statusCode === -1) {
+        eventData.data = { text: "请求超时" };
       } else {
         //清空文本
         this.setData({
@@ -159,29 +161,45 @@ Page({
       let res = null;
       if (Config.LocalDevMode) {
         // res = MockData.chatGPTTimeout;
-        res = MockData.chatGPTSuccess;
+        // res = MockData.chatGPTSuccess;
+        res = MockData.chatGPTInnerError
         await this.handleMsgSuccess(res);
       } else {
         var resPromise = new Promise((resolve, reject) => {
-          wx.cloud.callContainer({
-            config: {
-              env: Config.ServerEnv,
-            },
-            path: "/api/chat",
+          wx.request({
+            url: `${Config.RemoteHttpDomain}/api/chat`,
+            data: { question: this.data.inputContent },
+            method: "POST",
             header: {
-              "X-WX-SERVICE": "express-wjw3",
               "content-type": "application/json",
             },
-            method: "POST",
-            data: { question: this.data.inputContent },
-            success: function (_e) {
+            success(_e) {
               console.log("/api/chat", _e);
               resolve(_e);
-            },
-            fail: function (_e) {
-              reject(_e);
-            },
-          });
+            }, fail(error) {
+              reject(error);
+            }
+          })
+          // 腾讯云屏蔽，先取消
+          // wx.cloud.callContainer({
+          //   config: {
+          //     env: Config.CloudInfo.ServerEnv,
+          //   },
+          //   path: "/api/chat",
+          //   header: {
+          //     "X-WX-SERVICE": Config.CloudInfo.SericeName,
+          //     "content-type": "application/json",
+          //   },
+          //   method: "POST",
+          //   data: { question: this.data.inputContent },
+          //   success: function (_e) {
+          //     console.log("/api/chat", _e);
+          //     resolve(_e);
+          //   },
+          //   fail: function (_e) {
+          //     reject(_e);
+          //   },
+          // });
         });
         var newResPromise = abortPromiseWrapper(resPromise);
         newResPromise

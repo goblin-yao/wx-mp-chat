@@ -5,6 +5,7 @@ const data = {
       errmsg: "请求超时",
     },
   },
+
   reduceLimitSuccess: {
     "errMsg": "cloud.callFunction:ok",
     "result": {
@@ -45,6 +46,34 @@ const data = {
       "Access-Control-Expose-Headers": "x-wx-system-error, x-wx-call-id, x-wx-server-timing",
       "Connection": "keep-alive",
       "Content-Length": "52"
+    },
+    "statusCode": 200,
+    "cookies": [],
+    "errMsg": "request:ok"
+  },
+  chatGPTInnerError: {
+    "data": {
+      "error": {
+        "statusCode": -1,
+        "data": "服务内部错误"
+      }
+    },
+    "header": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "X-CloudBase-Request-Id": "0a1f17e853851ecca39f203d2e63778f",
+      "server": "nginx/1.17.8",
+      "date": "Thu, 02 Mar 2023 14:36:10 GMT",
+      "content-type": "application/json; charset=utf-8",
+      "x-powered-by": "Express",
+      "etag": "W/\"37-PmWL/sTcRk73ga5IwUVlRe4ffAE\"",
+      "x-cloudbase-upstream-status-code": "200",
+      "X-CloudBase-Upstream-TimeCost": "240",
+      "x-wx-call-id": "0.6367847680545042_1677767769792",
+      "x-wx-server-timing": "1677767770117,1677767770437",
+      "Access-Control-Expose-Headers": "x-wx-call-id, x-wx-server-timing",
+      "Connection": "keep-alive",
+      "Content-Length": "55"
     },
     "statusCode": 200,
     "cookies": [],
