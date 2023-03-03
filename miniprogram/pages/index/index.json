@@ -3,5 +3,5 @@
     "mp-toptips": "weui-miniprogram/toptips/toptips",
     "mp-actionSheet": "weui-miniprogram/actionsheet/actionsheet"
   },
-  "navigationBarTitleText": "ChatGPT聊天"
+  "navigationBarTitleText": "AI聊天宝"
 }

@@ -6,7 +6,7 @@ const abortPromiseWrapper = require("../../common/util/abort-promise");
 const Config = require("../../config");
 
 const MockData = require("../../mock-data");
-const { MESSAGE_TYPE, MaxInputLength } = require("../../constants.js");
+const { MESSAGE_TYPE, MaxInputLength, ShareInfo } = require("../../constants.js");
 
 // 获取计时器函数
 Page({
@@ -130,7 +130,7 @@ Page({
       }
     } else {
       eventData.data = {
-        text: JSON.stringify(res?.data?.base_resp || { error: "出错啦" }),
+        text: JSON.stringify(res?.data?.base_resp || { error: "出错啦!" }),
       };
     }
     this.onChatRoomEvent(eventData); //todo
@@ -166,40 +166,26 @@ Page({
         await this.handleMsgSuccess(res);
       } else {
         var resPromise = new Promise((resolve, reject) => {
-          wx.request({
-            url: `${Config.RemoteHttpDomain}/api/chat`,
-            data: { question: this.data.inputContent },
-            method: "POST",
+          // 腾讯云屏蔽，先取消
+          wx.cloud.callContainer({
+            config: {
+              env: Config.CloudInfo.ServerEnv,
+            },
+            path: "/api/chat",
             header: {
+              "X-WX-SERVICE": Config.CloudInfo.SericeName,
               "content-type": "application/json",
             },
-            success(_e) {
+            method: "POST",
+            data: { question: this.data.inputContent },
+            success: function (_e) {
               console.log("/api/chat", _e);
               resolve(_e);
-            }, fail(error) {
-              reject(error);
-            }
-          })
-          // 腾讯云屏蔽，先取消
-          // wx.cloud.callContainer({
-          //   config: {
-          //     env: Config.CloudInfo.ServerEnv,
-          //   },
-          //   path: "/api/chat",
-          //   header: {
-          //     "X-WX-SERVICE": Config.CloudInfo.SericeName,
-          //     "content-type": "application/json",
-          //   },
-          //   method: "POST",
-          //   data: { question: this.data.inputContent },
-          //   success: function (_e) {
-          //     console.log("/api/chat", _e);
-          //     resolve(_e);
-          //   },
-          //   fail: function (_e) {
-          //     reject(_e);
-          //   },
-          // });
+            },
+            fail: function (_e) {
+              reject(_e);
+            },
+          });
         });
         var newResPromise = abortPromiseWrapper(resPromise);
         newResPromise
@@ -349,5 +335,12 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () { },
+  onShareAppMessage: function () {
+    const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
+    return {
+      title: randomShare.title,
+      path: '/pages/index/index',
+      imageUrl: randomShare.imageUrl
+    }
+  },
 });

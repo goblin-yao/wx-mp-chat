@@ -1,10 +1,23 @@
 //一些常量配置
 module.exports = {
+  ShareInfo: [{
+    imageUrl: 'https://wxchatnodeexpressazure.azurewebsites.net/images/share_1.png',
+    title: '提问题-ai来回答'
+  },
+  {
+    imageUrl: 'https://wxchatnodeexpressazure.azurewebsites.net/images/share_2.jpg',
+    title: '据说知道的比爱因斯坦还多！'
+  },
+  {
+    imageUrl: 'https://wxchatnodeexpressazure.azurewebsites.net/images/share_3.png',
+    title: 'ai随心聊-天文地理/古今中外'
+  }
+  ],
   MaxInputLength: 500,
   // chatGPT的一些配置
   CHAT_GPT_INFO: {
-    nickName: "ChatGPT",
-    wellcomeTitle: "ChatGPT欢迎你",
+    nickName: "AI聊天宝",
+    wellcomeTitle: "AI聊天宝欢迎你",
     loadingText: "输入中...",
   },
   /**
