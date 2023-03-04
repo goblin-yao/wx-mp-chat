@@ -16,8 +16,8 @@ module.exports = {
   MaxInputLength: 500,
   // chatGPT的一些配置
   CHAT_GPT_INFO: {
-    nickName: "AI聊天宝",
-    wellcomeTitle: "AI聊天宝欢迎你",
+    nickName: "AI火",
+    wellcomeTitle: "AI火欢迎你",
     loadingText: "输入中...",
   },
   /**
@@ -27,4 +27,5 @@ module.exports = {
    * 2 -> ChatGPT的回答
    */
   MESSAGE_TYPE: { WAITING_CHATGPT: -1, USER_QUESTION: 1, CHATGPT_ANSWER: 2 },
+  MESSAGE_ERROR_TYPE: { TIMEOUT: -1, SERVER_ERROR: -2 },
 };

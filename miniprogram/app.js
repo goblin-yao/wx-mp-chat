@@ -26,7 +26,8 @@ App({
     this.globalData.safeBottomLeft = _e.screenHeight - _e.safeArea.bottom;
   },
   globalData: {
-    curResPromise: null //当前的Promise，用来abort
+    curResPromise: null,//当前的Promise，用来abort
+    curUserQuestion: '' //用户当前的提问，用来重新发送
   },
   config,
   Cloud,

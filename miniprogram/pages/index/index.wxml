@@ -1,7 +1,12 @@
 <mp-toptips msg="{{errMsg}}" type="error" show="{{errMsg}}"></mp-toptips>
 <!--聊天内容-->
-<chat-box id="chat_room" roomId="{{roomId}}"></chat-box>
+<chat-box id="chat_room" bind:resendMsg="resendMsg"></chat-box>
 <view class="left_chat_bar">
+  <view wx:if="{{isLocalDevelopment}}">
+    <view>
+      openid: <input value="{{curOpenId}}"></input>
+    </view>
+  </view>
   <text>剩余{{leftChatNum}}次问答</text>
 </view>
 

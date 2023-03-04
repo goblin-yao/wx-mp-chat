@@ -89,7 +89,7 @@ async function getLimit(event, context) {
   try {
     let userLimit = await db.collection(CHAT_USER_LIMIT).doc(openid).get();
     if (userLimit.data._updateTime < timeUtil.getTodayZeroTime()) {
-      return await db
+      await db
         .collection(CHAT_USER_LIMIT)
         .doc(openid)
         .set({
@@ -99,11 +99,18 @@ async function getLimit(event, context) {
             _updateTime: new Date().getTime(),
           },
         });
+      return {
+        data: {
+          openid,
+          chat_left_nums: MAX_LIMIT,
+          _updateTime: new Date().getTime(),
+        },
+      }
     }
     return userLimit;
   } catch (error) {
     // 不存在该用户信息 新建并写入 MAX_LIMIT
-    return await db
+    await db
       .collection(CHAT_USER_LIMIT)
       .doc(openid)
       .set({
@@ -113,5 +120,13 @@ async function getLimit(event, context) {
           _updateTime: new Date().getTime(),
         },
       });
+
+    return {
+      data: {
+        openid,
+        chat_left_nums: MAX_LIMIT,
+        _updateTime: new Date().getTime(),
+      },
+    }
   }
 }

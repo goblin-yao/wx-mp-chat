@@ -20,6 +20,9 @@
           <text>{{item.content}}</text>
         </view>
       </view>
+      <view wx:if="{{item.errorType}}">
+        <view class="retry_text" bindtap="retryRequest" data-msgindex="{{index}}">再问一次</view>
+      </view>
       <!-- <view class="date">{{item._createTime}} {{item.userInfo.nickName}}</view> -->
       <!-- <view class="date">{{item._createTime}}</view>  -->
     </view>

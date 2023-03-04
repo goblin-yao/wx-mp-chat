@@ -1,6 +1,6 @@
 // release/components/chatbox
 const app = getApp();
-const { MESSAGE_TYPE, CHAT_GPT_INFO } = require("../../constants.js");
+const { MESSAGE_TYPE, CHAT_GPT_INFO, MESSAGE_ERROR_TYPE } = require("../../constants.js");
 
 // 时间工具类
 const timeutil = require("./timeutil");
@@ -48,6 +48,7 @@ Component({
     scrollId: "",
     systemInfo: {},
     MESSAGE_TYPE: MESSAGE_TYPE,
+    MESSAGE_ERROR_TYPE: MESSAGE_ERROR_TYPE,
     CHAT_GPT_INFO: CHAT_GPT_INFO,
     //消息记录列表
     chatList: [],
@@ -75,6 +76,14 @@ Component({
           })
         }
       }
+    },
+    retryRequest(event) {
+      var msgindex = event.target.dataset.msgindex;
+      // 删除掉再问一次
+      this.setData({
+        [`chatList[${msgindex}].errorType`]: ''
+      })
+      this.triggerEvent('resendMsg')
     },
     cancelRequest(event) {
       var curMsgId = event.target.dataset.msgid;
@@ -108,10 +117,11 @@ Component({
     },
     receiveMsg(_e) {
       let that = this;
-      console.log("received msg", _e);
+      console.log("received msg=>", _e);
       if (_e.msgType === MESSAGE_TYPE.CHATGPT_ANSWER) {
         let msg = {
           content: _e.data.text,
+          errorType: _e.data.errorType,
           msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
           userInfo: { nickName: CHAT_GPT_INFO.nickName },
         };
