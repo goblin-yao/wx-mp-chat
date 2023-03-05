@@ -125,6 +125,8 @@ Page({
         eventData.data = { text: "请求超时。", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
       } else if (res?.data?.error?.statusCode === -1) {
         eventData.data = { text: "请求超时!", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
+      } else if (res?.data?.error?.statusCode === 404) {
+        eventData.data = { text: "请求超时!!", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
       } else {
         eventData.data = res.data;
       }
@@ -229,11 +231,11 @@ Page({
       content: '调试中，遇到偶尔会有错误',
       complete: (res) => {
         if (res.cancel) {
-          
+
         }
-    
+
         if (res.confirm) {
-          
+
         }
       }
     })
