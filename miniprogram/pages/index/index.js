@@ -6,7 +6,7 @@ const abortPromiseWrapper = require("../../common/util/abort-promise");
 const Config = require("../../config");
 
 const MockData = require("../../mock-data");
-const { MESSAGE_TYPE, MaxInputLength, ShareInfo, MESSAGE_ERROR_TYPE } = require("../../constants.js");
+const { MESSAGE_TYPE, MaxInputLength, ShareInfo, MESSAGE_ERROR_TYPE, ADMIN_OPENID } = require("../../constants.js");
 
 // 获取计时器函数
 Page({
@@ -24,7 +24,7 @@ Page({
     leftChatNum: 0,
     submitBtnDisabled: true,
     inputDisabled: false, //深入框在等待回答时禁止输入
-    isLocalDevelopment: Config.LocalDevMode
+    isLocalDevelopment: false
   },
   InputFocus(e) {
     this.setData({
@@ -122,9 +122,9 @@ Page({
     };
     if (res.statusCode === 200) {
       if (res?.data?.base_resp?.ret === 102002) {
-        eventData.data = { text: "请求超时", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
+        eventData.data = { text: "请求超时。", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
       } else if (res?.data?.error?.statusCode === -1) {
-        eventData.data = { text: "请求超时", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
+        eventData.data = { text: "请求超时!", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
       } else {
         eventData.data = res.data;
       }
@@ -140,7 +140,6 @@ Page({
   },
   resendMsg(event) {
     console.log('ev', event)
-    debugger;
     this.sendMsgToChatGPT(app.globalData.curUserQuestion)
   },
   async sendMsgToChatGPT(userInputQuestion) {
@@ -185,6 +184,7 @@ Page({
               "X-WX-SERVICE": Config.CloudInfo.SericeName,
               "content-type": "application/json",
             },
+            timeout: 30000,
             method: "POST",
             data: { question: userInputQuestion },
             success: function (_e) {
@@ -224,6 +224,19 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showModal({
+      title: '调试中',
+      content: '调试中，遇到偶尔会有错误',
+      complete: (res) => {
+        if (res.cancel) {
+          
+        }
+    
+        if (res.confirm) {
+          
+        }
+      }
+    })
     this.userAuth();
   },
 
@@ -263,6 +276,7 @@ Page({
             curUserInfo: app.globalData.userInfo,
             curOpenId: app.globalData.openid,
             login: true,
+            isLocalDevelopment: Config.LocalDevMode || ADMIN_OPENID.includes(app.globalData.openid)
           });
         }
       },
@@ -310,6 +324,9 @@ Page({
       },
     });
     console.log('reduceLimit=>', res)
+  },
+  jumpToAdmin() {
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

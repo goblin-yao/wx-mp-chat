@@ -3,7 +3,7 @@
 <chat-box id="chat_room" bind:resendMsg="resendMsg"></chat-box>
 <view class="left_chat_bar">
   <view wx:if="{{isLocalDevelopment}}">
-    <view>
+    <view bindtap="jumpToAdmin">
       openid: <input value="{{curOpenId}}"></input>
     </view>
   </view>
