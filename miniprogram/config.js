@@ -5,5 +5,5 @@ const cloudConfigs = {
 module.exports = {
   CloudInfo: cloudConfigs.prod, //发布时记得更改
   // RemoteHttpDomain: 'https://wxchatnodeexpressazure.azurewebsites.net',
-  LocalDevMode: 0, //本地开发模式的选项
+  LocalDevMode: 1, //本地开发模式的选项
 };
