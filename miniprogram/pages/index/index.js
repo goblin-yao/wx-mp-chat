@@ -75,10 +75,10 @@ Page({
       let _r = await this.userRegister(userInfo);
       console.log("dddd", _r);
       wx.hideLoading();
-      app.globalData.openid = _r.result.openid;
-      app.globalData.userInfo = _r.result;
+      app.globalData.openid = _r.data.data.openid;
+      app.globalData.userInfo = _r.data.data;
       this.setData({
-        curUserInfo: userInfo,
+        curUserInfo: app.globalData.userInfo,
       });
 
       //异步配置缓存
@@ -262,7 +262,6 @@ Page({
   },
   userAuth() {
     cloudContainerCaller({
-      url: '/miniprogram/user/auth',
       path: "/miniprogram/user/auth",
       success: async (res) => {
         console.log("auth=>", res);

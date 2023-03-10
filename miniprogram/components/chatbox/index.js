@@ -208,7 +208,7 @@ Component({
         },
         success: (result) => {
           console.log("cloud-msg-his", result);
-          let tarr = result.data.data;
+          let tarr = result.data.data.rows;
           let newsLen = tarr.length;
           if (newsLen == 0) {
             this.data.noMoreList = true;
