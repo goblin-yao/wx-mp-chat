@@ -10,8 +10,7 @@ const {
   MESSAGE_TYPE,
   MaxInputLength,
   ShareInfo,
-  MESSAGE_ERROR_TYPE,
-  ADMIN_OPENID,
+  MESSAGE_ERROR_TYPE
 } = require("../../constants.js");
 
 // 获取计时器函数
@@ -282,7 +281,7 @@ Page({
             login: true,
             isLocalDevelopment:
               Config.LocalDevMode ||
-              ADMIN_OPENID.includes(app.globalData.openid),
+              Config.ADMIN_OPENID.includes(app.globalData.openid),
           });
         }
       },

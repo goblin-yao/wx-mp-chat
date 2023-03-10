@@ -3,7 +3,8 @@ const cloudConfigs = {
   test: { ServerEnv: "test-1glra4je5fec5838", SericeName: "express-dfat" },
 };
 module.exports = {
+  ADMIN_OPENID: ['o9Onv5BcWuj8o8-78-N1S-HTur7k'],
   CloudInfo: cloudConfigs.prod, //发布时记得更改
   // RemoteHttpDomain: 'https://wxchatnodeexpressazure.azurewebsites.net',
-  LocalDevMode: 1, //本地开发模式的选项
+  LocalDevMode: 0, //本地开发模式的选项
 };
