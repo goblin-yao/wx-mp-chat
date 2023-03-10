@@ -12,6 +12,8 @@ $RECYCLE.BIN/
 
 workprogress.md
 .cloudbase
+# 确保环境忘记切换去提交审核
+miniprogram/config.js
 
 # Node.js
 node_modules/
