@@ -1,12 +1,18 @@
 // 获取全局APP
 const app = getApp();
-const Cloud = require("../../common/util/cloud-call");
 const abortPromiseWrapper = require("../../common/util/abort-promise");
 
 const Config = require("../../config");
+const cloudContainerCaller = require("../../common/util/cloud-container-call");
 
 const MockData = require("../../mock-data");
-const { MESSAGE_TYPE, MaxInputLength, ShareInfo, MESSAGE_ERROR_TYPE, ADMIN_OPENID } = require("../../constants.js");
+const {
+  MESSAGE_TYPE,
+  MaxInputLength,
+  ShareInfo,
+  MESSAGE_ERROR_TYPE,
+  ADMIN_OPENID,
+} = require("../../constants.js");
 
 // 获取计时器函数
 Page({
@@ -16,7 +22,7 @@ Page({
   data: {
     login: false,
     curUserInfo: {},
-    curOpenId: '',
+    curOpenId: "",
     //输入框距离
     InputBottom: app.globalData.safeBottomLeft,
     inputContent: "",
@@ -24,7 +30,7 @@ Page({
     leftChatNum: 0,
     submitBtnDisabled: true,
     inputDisabled: false, //深入框在等待回答时禁止输入
-    isLocalDevelopment: false
+    isLocalDevelopment: false,
   },
   InputFocus(e) {
     this.setData({
@@ -44,13 +50,15 @@ Page({
   },
   async submit() {
     if (this.data.login) {
-      const userInputQuestion = this.data.inputContent.trim().replace(/\s+/g, " ")
+      const userInputQuestion = this.data.inputContent
+        .trim()
+        .replace(/\s+/g, " ");
       this.setData({
         inputDisabled: true,
         inputContent: "",
       });
-      await this.sendMsgToChatGPT(userInputQuestion);
-      //页面一个loading的交互，chatgpt等待, 发送消息等待的时候，输入框不能再输入东西了。可以disable掉，有内容返回后再添加
+      await this.sendMsgToChatAI(userInputQuestion);
+      //页面一个loading的交互，chatai等待, 发送消息等待的时候，输入框不能再输入东西了。可以disable掉，有内容返回后再添加
 
       this.setData({
         inputDisabled: false,
@@ -68,7 +76,7 @@ Page({
       console.log("dddd", _r);
       wx.hideLoading();
       app.globalData.openid = _r.result.openid;
-      app.globalData.userInfo = userInfo;
+      app.globalData.userInfo = _r.result;
       this.setData({
         curUserInfo: userInfo,
       });
@@ -91,8 +99,8 @@ Page({
     this.selectComponent("#chat_room").receiveMsg(_e);
 
     //存储问题/答案 数据库
-    const res = await wx.cloud.callFunction({
-      name: "cloud-msg-push",
+    const res = await cloudContainerCaller({
+      path: "/miniprogram/chatmessage/add",
       data: _e,
     });
 
@@ -105,35 +113,50 @@ Page({
       submitBtnDisabled: true,
     });
     let result = false;
-    let res = await Cloud.MsgSecCheck(content);
-    if (res?.result?.code == 200) {
+    let res = await cloudContainerCaller({
+      path: "/miniprogram/checker/text",
+      data: { content }
+    });
+    console.log('res=>', res);
+    if (res?.data?.code == 200) {
       result = true;
     } else {
       wx.showToast({
-        title: res.result.msg,
+        title: '内容含有敏感词',
       });
     }
     return result;
   },
   handleMsgSuccess(res) {
     let eventData = {
-      msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+      msgType: MESSAGE_TYPE.CHATAI_ANSWER,
       statusCode: res.statusCode,
     };
     if (res.statusCode === 200) {
       if (res?.data?.base_resp?.ret === 102002) {
-        eventData.data = { text: "请求超时。", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
+        eventData.data = {
+          text: "请求超时。",
+          errorType: MESSAGE_ERROR_TYPE.TIMEOUT,
+        };
       } else if (res?.data?.error?.statusCode === -1) {
-        eventData.data = { text: "请求超时!", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
+        eventData.data = {
+          text: "请求超时!",
+          errorType: MESSAGE_ERROR_TYPE.TIMEOUT,
+        };
       } else if (res?.data?.error?.statusCode === 404) {
-        eventData.data = { text: "请求超时!!", errorType: MESSAGE_ERROR_TYPE.TIMEOUT };
+        eventData.data = {
+          text: "请求超时!!",
+          errorType: MESSAGE_ERROR_TYPE.TIMEOUT,
+        };
       } else {
         eventData.data = res.data;
       }
     } else {
       eventData.data = {
-        text: JSON.stringify(res?.data?.base_resp || { error: "服务器内部错误!" }),
-        errorType: MESSAGE_ERROR_TYPE.SERVER_ERROR
+        text: res?.data?.base_resp ? JSON.stringify(
+          res?.data?.base_resp
+        ) : "服务器内部错误!",
+        errorType: MESSAGE_ERROR_TYPE.SERVER_ERROR,
       };
     }
     this.onChatRoomEvent(eventData); //todo
@@ -141,23 +164,21 @@ Page({
     this.reduceLimit(); //消耗1次
   },
   resendMsg(event) {
-    console.log('ev', event)
-    this.sendMsgToChatGPT(app.globalData.curUserQuestion)
+    console.log("ev", event);
+    this.sendMsgToChatAI(app.globalData.curUserQuestion);
   },
-  async sendMsgToChatGPT(userInputQuestion) {
+  async sendMsgToChatAI(userInputQuestion) {
     if (this.data.leftChatNum <= 0) {
       wx.showToast({
-        title: '今日使用次数已用完',
-      })
-      return
+        title: "今日使用次数已用完",
+      });
+      return;
     }
     if (!userInputQuestion) {
-      return
+      return;
     }
-    app.globalData.curUserQuestion = userInputQuestion
-    let checkResult = await this.msgChecker(
-      userInputQuestion
-    );
+    app.globalData.curUserQuestion = userInputQuestion;
+    let checkResult = await this.msgChecker(userInputQuestion);
     if (!checkResult) {
       return;
     }
@@ -171,26 +192,17 @@ Page({
       await this.onChatRoomEvent(eventDataFirst); //todo
       let res = null;
       if (Config.LocalDevMode) {
-        // res = MockData.chatGPTTimeout;
-        // res = MockData.chatGPTSuccess;
-        res = MockData.chatGPTInnerError
+        // res = MockData.chatAITimeout;
+        // res = MockData.chatAISuccess;
+        res = MockData.chatAIInnerError;
         await this.handleMsgSuccess(res);
       } else {
         const resPromise = new Promise((resolve, reject) => {
-          wx.cloud.callContainer({
-            config: {
-              env: Config.CloudInfo.ServerEnv,
-            },
-            path: "/api/chat",
-            header: {
-              "X-WX-SERVICE": Config.CloudInfo.SericeName,
-              "content-type": "application/json",
-            },
-            timeout: 30000,
-            method: "POST",
+          cloudContainerCaller({
+            path: "/openai/chat",
             data: { question: userInputQuestion },
             success: function (_e) {
-              console.log("/api/chat", _e);
+              console.log("/openai/chat", _e);
               resolve(_e);
             },
             fail: function (_e) {
@@ -207,13 +219,16 @@ Page({
             console.log("ddd=>", error);
             if (error && error.type === "user_abort") {
               this.onChatRoomEvent({
-                msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
+                msgType: MESSAGE_TYPE.CHATAI_ANSWER,
                 data: { text: "用户取消" },
               });
             } else {
               this.onChatRoomEvent({
-                msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-                data: { text: "服务器内部错误。" },
+                msgType: MESSAGE_TYPE.CHATAI_ANSWER,
+                data: {
+                  text: "服务器内部错误。",
+                  errorType: MESSAGE_ERROR_TYPE.SERVER_ERROR,
+                },
               });
             }
           });
@@ -226,59 +241,49 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.showModal({
-      title: '调试中',
-      content: '调试中，遇到偶尔会有错误',
-      complete: (res) => {
-        if (res.cancel) {
-
-        }
-
-        if (res.confirm) {
-
-        }
-      }
-    })
     this.userAuth();
+    console.log("options=>", options);
   },
 
-  // 目前是getOpenId 2023-2-16
   userRegister(userInfo) {
     return new Promise(function (resolve, reject) {
-      wx.cloud.callFunction({
-        name: "cloud-user",
-        data: {
-          userInfo: userInfo,
+      cloudContainerCaller({
+        path: "/miniprogram/user/register",
+        data: userInfo,
+        success: function (_e) {
+          console.log("/miniprogram/user/register", _e);
+          resolve(_e);
         },
-        success: (res) => {
-          resolve(res);
-        },
-        fail: (res) => {
-          reject(res);
+        fail: function (_e) {
+          reject(_e);
         },
       });
     });
   },
   userAuth() {
-    //身份校验
-    wx.cloud.callFunction({
-      name: "auth",
-      success: (res) => {
+    cloudContainerCaller({
+      url: '/miniprogram/user/auth',
+      path: "/miniprogram/user/auth",
+      success: async (res) => {
         console.log("auth=>", res);
-        if (res.result.errCode == -1) {
+        if (res.data.code == -1) {
           console.log("--未登录--");
+          app.globalData.openid = res.data.data.openid;
           this.setData({
             login: false,
+            curOpenId: res.data.data.openid,
           });
         } else {
           console.log("--已登录--");
-          app.globalData.openid = res.result.result.openid;
-          app.globalData.userInfo = res.result.result.userInfo;
+          app.globalData.openid = res.data.data.openid;
+          app.globalData.userInfo = res.data.data;
           this.setData({
             curUserInfo: app.globalData.userInfo,
             curOpenId: app.globalData.openid,
             login: true,
-            isLocalDevelopment: Config.LocalDevMode || ADMIN_OPENID.includes(app.globalData.openid)
+            isLocalDevelopment:
+              Config.LocalDevMode ||
+              ADMIN_OPENID.includes(app.globalData.openid),
           });
         }
       },
@@ -291,45 +296,33 @@ Page({
   async getChatLimit() {
     let leftChatNum = 0;
     if (Config.LocalDevMode) {
-      this.setData({ leftChatNum: 9999 })
+      this.setData({ leftChatNum: 9999 });
       return;
     }
     try {
-
-      const result = await wx.cloud.callFunction({
-        name: "cloud-user-limit",
-        data: {
-          action: "getLimit",
-        },
+      const result = await cloudContainerCaller({
+        path: "/miniprogram/limit/get",
       });
-      console.log('getChatLimit=>', result)
-      if (result?.result?.stats?.created) {
-        leftChatNum = 5
-      } else {
-        leftChatNum = result?.result?.data?.chat_left_nums || 0
-      }
-    } catch (error) {
 
-    }
-    this.setData({ leftChatNum: leftChatNum })
+      console.log("/miniprogram/limit/get=>", result);
+      leftChatNum = result?.data?.chat_left_nums || 0;
+    } catch (error) { }
+
+    this.setData({ leftChatNum: leftChatNum });
   },
   // 获取用户今天剩余聊天次数
   async reduceLimit() {
     if (Config.LocalDevMode) {
-      return;// 本地开发不减少次数
+      return; // 本地开发不减少次数
     }
-    this.setData({ leftChatNum: --this.data.leftChatNum })
-    const res = await wx.cloud.callFunction({
-      name: "cloud-user-limit",
-      data: {
-        action: "reduceLimit",
-      },
-    });
-    console.log('reduceLimit=>', res)
-  },
-  jumpToAdmin() {
+    this.setData({ leftChatNum: --this.data.leftChatNum });
 
+    const res = await cloudContainerCaller({
+      path: "/miniprogram/limit/reduce",
+    });
+    console.log("/miniprogram/limit/reduce=>", res);
   },
+  jumpToAdmin() { },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -345,7 +338,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.getChatLimit()
+    this.getChatLimit();
   },
 
   /**
@@ -375,8 +368,8 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index`,
-      imageUrl: randomShare.imageUrl
-    }
+      path: `/pages/index/index?share_openid=${this.data.curOpenId}`,
+      imageUrl: randomShare.imageUrl,
+    };
   },
 });

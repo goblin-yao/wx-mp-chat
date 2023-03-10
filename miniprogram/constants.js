@@ -14,19 +14,19 @@ module.exports = {
   }
   ],
   MaxInputLength: 500,
-  // chatGPT的一些配置
-  CHAT_GPT_INFO: {
-    nickName: "AI火",
-    wellcomeTitle: "AI火欢迎你",
+  // chatAI的一些配置
+  CHAT_AI_INFO: {
+    nickName: "AI机智魔盒",
+    wellcomeTitle: "AI机智魔盒欢迎你",
     loadingText: "输入中...",
   },
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息
    * -1 -> UI的loading等待
    * 1 -> 用户发送的问题
-   * 2 -> ChatGPT的回答
+   * 2 -> ChatAI的回答
    */
-  MESSAGE_TYPE: { WAITING_CHATGPT: -1, USER_QUESTION: 1, CHATGPT_ANSWER: 2 },
+  MESSAGE_TYPE: { WAITING_CHATAI: -1, USER_QUESTION: 1, CHATAI_ANSWER: 2 },
   MESSAGE_ERROR_TYPE: { TIMEOUT: -1, SERVER_ERROR: -2 },
   ADMIN_OPENID: ['o9Onv5BcWuj8o8-78-N1S-HTur7k']
 };

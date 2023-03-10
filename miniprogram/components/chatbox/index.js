@@ -1,6 +1,12 @@
 // release/components/chatbox
 const app = getApp();
-const { MESSAGE_TYPE, CHAT_GPT_INFO, MESSAGE_ERROR_TYPE } = require("../../constants.js");
+const {
+  MESSAGE_TYPE,
+  CHAT_AI_INFO,
+  MESSAGE_ERROR_TYPE,
+} = require("../../constants.js");
+
+const cloudContainerCaller = require("../../common/util/cloud-container-call");
 
 // 时间工具类
 const timeutil = require("./timeutil");
@@ -49,7 +55,7 @@ Component({
     systemInfo: {},
     MESSAGE_TYPE: MESSAGE_TYPE,
     MESSAGE_ERROR_TYPE: MESSAGE_ERROR_TYPE,
-    CHAT_GPT_INFO: CHAT_GPT_INFO,
+    CHAT_AI_INFO: CHAT_AI_INFO,
     //消息记录列表
     chatList: [],
     //标记触顶事件
@@ -65,15 +71,13 @@ Component({
       var curMsgId = event.currentTarget.dataset.msgid;
       for (let index = 0; index < this.data.chatList.length; index++) {
         const element = this.data.chatList[index];
-        if (
-          curMsgId == `msg-${index}`
-        ) {
+        if (curMsgId == `msg-${index}`) {
           wx.setClipboardData({
             data: element.content,
             success(res) {
-              console.log(res.data) // data
-            }
-          })
+              console.log(res.data); // data
+            },
+          });
         }
       }
     },
@@ -81,9 +85,9 @@ Component({
       var msgindex = event.target.dataset.msgindex;
       // 删除掉再问一次
       this.setData({
-        [`chatList[${msgindex}].errorType`]: ''
-      })
-      this.triggerEvent('resendMsg')
+        [`chatList[${msgindex}].errorType`]: "",
+      });
+      this.triggerEvent("resendMsg");
     },
     cancelRequest(event) {
       var curMsgId = event.target.dataset.msgid;
@@ -93,7 +97,7 @@ Component({
       for (let index = 0; index < this.data.chatList.length; index++) {
         const element = this.data.chatList[index];
         if (
-          element.msgType != MESSAGE_TYPE.WAITING_CHATGPT &&
+          element.msgType != MESSAGE_TYPE.WAITING_CHATAI &&
           curMsgId !== `msg-${index}`
         ) {
           newChatList.push(element);
@@ -118,18 +122,18 @@ Component({
     receiveMsg(_e) {
       let that = this;
       console.log("received msg=>", _e);
-      if (_e.msgType === MESSAGE_TYPE.CHATGPT_ANSWER) {
+      if (_e.msgType === MESSAGE_TYPE.CHATAI_ANSWER) {
         let msg = {
           content: _e.data.text,
           errorType: _e.data.errorType,
-          msgType: MESSAGE_TYPE.CHATGPT_ANSWER,
-          userInfo: { nickName: CHAT_GPT_INFO.nickName },
+          msgType: MESSAGE_TYPE.CHATAI_ANSWER,
+          userInfo: { nickName: CHAT_AI_INFO.nickName },
         };
         //把原来消息的loading删掉
         let newChatList = [];
         for (let index = 0; index < this.data.chatList.length; index++) {
           const element = this.data.chatList[index];
-          if (element.msgType != MESSAGE_TYPE.WAITING_CHATGPT) {
+          if (element.msgType != MESSAGE_TYPE.WAITING_CHATAI) {
             newChatList.push(element);
           }
         }
@@ -147,11 +151,11 @@ Component({
       // loading和用户的信息放一起处理，都在页面上展示用
       if (_e.msgType === MESSAGE_TYPE.USER_QUESTION) {
         let msg = {
-          content: CHAT_GPT_INFO.loadingText,
-          msgType: MESSAGE_TYPE.WAITING_CHATGPT,
-          userInfo: { nickName: CHAT_GPT_INFO.nickName },
+          content: CHAT_AI_INFO.loadingText,
+          msgType: MESSAGE_TYPE.WAITING_CHATAI,
+          userInfo: { nickName: CHAT_AI_INFO.nickName },
         };
-        // 这个loading是给chatgpt的
+        // 这个loading是给chatai的
         let msgForUser = {
           content: _e.data.text,
           msgType: MESSAGE_TYPE.USER_QUESTION,
@@ -174,92 +178,100 @@ Component({
     },
     //初始化
     async initMessageHistory() {
-      //初始化消息历史
-      var that = this;
       //如果没有userinfo先查询一次
-      if (!app.globalData.userInfo) {
-        const res = await wx.cloud.callFunction({
-          name: "auth",
-        });
-        if (res.result.errCode == -1) {
-          //todo
-        } else {
-          app.globalData.openid = res.result.result.openid;
-          app.globalData.userInfo = res.result.result.userInfo;
+      try {
+        if (!app.globalData.userInfo) {
+          const res =await cloudContainerCaller({
+            path: "/miniprogram/user/auth",
+          });
+
+          if (res.data.code == 200) {
+            app.globalData.openid = res.data.data.openid;
+            app.globalData.userInfo = res.data.data;
+          } else {
+          }
         }
-        that.reqMsgHis();
-      }
+      } catch (error) {}
+      this.reqMsgHis();
     },
     // 请求聊天记录
     reqMsgHis(option) {
-      var that = this;
+      let that = this;
       if (that.data.noMoreList) {
         return;
       }
-      // wx.showLoading({
-      //   title: "获取历史记录",
-      //   mask: true,
-      // });
-      wx.cloud.callFunction({
-        name: "cloud-msg-his",
+      cloudContainerCaller({
+        path: "/miniprogram//chatmessage/history",
         data: {
           step: that.data.chatList.length,
           option,
         },
-        success: (res) => {
-          console.log("cloud-msg-his", res);
-          let tarr = res.result.data;
+        success: (result) => {
+          console.log("cloud-msg-his", result);
+          let tarr = result.data.data;
           let newsLen = tarr.length;
           if (newsLen == 0) {
-            that.data.noMoreList = true;
+            this.data.noMoreList = true;
             return;
-            //查无数据
-            // setTimeout(function () {
-            //   wx.showToast({
-            //     title: "到顶了",
-            //     icon: "none",
-            //   });
-            // }, 300);
           }
           tarr = tarr.reverse();
 
-          let len = that.data.chatList.length + newsLen;
+          let len = this.data.chatList.length + newsLen;
           //给每个用户的信息加上userinfo
           for (let index = 0; index < tarr.length; index++) {
             if (tarr[index]["msgType"] === MESSAGE_TYPE.USER_QUESTION) {
               tarr[index]["userInfo"] = app.globalData.userInfo;
             }
           }
-          that.setData(
+          this.setData(
             {
               chatList: tarr.concat(that.data.chatList),
               scrollId: that.data.isTop
                 ? "msg-" + parseInt(newsLen)
                 : "msg-" + parseInt(len - 1),
             },
-            () => {
-              // let len = that.data.chatList.length;
-              // if (that.data.isTop) {
-              //   setTimeout(function () {
-              //     that.setData({
-              //       scrollId: "msg-" + parseInt(newsLen),
-              //     });
-              //   }, 100);
-              // } else {
-              //   setTimeout(function () {
-              //     that.setData({
-              //       scrollId: "msg-" + parseInt(len - 1),
-              //     });
-              //   }, 100);
-              // }
-            }
+            () => {}
           );
         },
-        fail: (res) => {
-          console.log(res);
+      });
+    },
+    uploadUserAva(fileID) {
+      return new Promise(function (resolve, reject) {
+        wx.cloud.callFunction({
+          name: "cloud-user",
+          data: {
+            avatarUrl: fileID,
+            action: "updateUserAvatar",
+          },
+          success: (res) => {
+            resolve(res);
+          },
+          fail: (res) => {
+            reject(res);
+          },
+        });
+      });
+    },
+    onChooseAvatar(e) {
+      let that = this;
+      const { avatarUrl } = e.detail;
+      wx.showLoading();
+      wx.cloud.uploadFile({
+        cloudPath: app.globalData.openid, // 上传至云端的路径
+        filePath: avatarUrl, // 小程序临时文件路径
+        success: async (res) => {
+          console.log(res.fileID); //输出上传后图片的返回地址
+          await that.uploadUserAva(res.fileID);
+          wx.hideLoading();
+          wx.showToast({
+            title: "上传成功",
+          });
         },
-        complete: (res) => {
-          // wx.hideLoading();
+        fail: (res) => {
+          wx.hideLoading();
+          wx.showToast({
+            title: "上传失败",
+          });
         },
       });
     },

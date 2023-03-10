@@ -3,6 +3,6 @@
   "projectname": "wx-mp-chat",
   "setting": {
     "compileHotReLoad": true,
-    "urlCheck": true
+    "urlCheck": false
   }
 }

@@ -1,6 +1,5 @@
 {
   "miniprogramRoot": "miniprogram/",
-  "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -34,18 +33,6 @@
     "showES6CompileOption": false,
     "ignoreUploadUnusedFiles": false
   },
-  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
-  "condition": {
-    "miniprogram": {
-      "list": [
-        {
-          "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide",
-          "query": ""
-        }
-      ]
-    }
-  },
   "compileType": "miniprogram",
   "srcMiniprogramRoot": "miniprogram/",
   "editorSetting": {
@@ -57,5 +44,6 @@
     "ignore": [],
     "include": []
   },
-  "appid": "wx05ad14c746c4bd6e"
+  "appid": "wx05ad14c746c4bd6e",
+  "condition": {}
 }

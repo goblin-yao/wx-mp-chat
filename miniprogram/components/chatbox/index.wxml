@@ -1,20 +1,20 @@
 <scroll-view class="cu-chat" scroll-y="true" enable-back-to-top enable-flex scroll-into-view="{{scrollId}}" style="height:{{scrollHeight}}px;" bindscrolltoupper="tapTop">
-  <!--chatgpt欢迎消息-->
+  <!--chatai欢迎消息-->
 
   <view class="cu-item title">
-    <view class="cu-avatar radius chat-gpt-avatar"></view>
+    <view class="cu-avatar radius chat-ai-avatar"></view>
     <view class="main">
       <view class="content bg-cyan shadow">
-        <text>{{CHAT_GPT_INFO.wellcomeTitle}}</text>
+        <text>{{CHAT_AI_INFO.wellcomeTitle}}</text>
       </view>
     </view>
     <view class="date">长按可复制消息</view>
   </view>
 
   <view wx:for="{{chatList}}" wx:key="index" wx:for-item="item">
-    <!--chatgpt发送的信息-->
-    <view class="cu-item" wx:if="{{item.msgType == MESSAGE_TYPE.CHATGPT_ANSWER}}" id="msg-{{index}}">
-      <view class="cu-avatar radius chat-gpt-avatar"></view>
+    <!--chatai发送的信息-->
+    <view class="cu-item" wx:if="{{item.msgType == MESSAGE_TYPE.CHATAI_ANSWER}}" id="msg-{{index}}">
+      <view class="cu-avatar radius chat-ai-avatar"></view>
       <view class="main">
         <view class="content bg-cyan shadow" data-msgid="msg-{{index}}" bindlongpress="copyMsg">
           <text>{{item.content}}</text>
@@ -26,12 +26,12 @@
       <!-- <view class="date">{{item._createTime}} {{item.userInfo.nickName}}</view> -->
       <!-- <view class="date">{{item._createTime}}</view>  -->
     </view>
-    <view class="cu-item" wx:if="{{item.msgType == MESSAGE_TYPE.WAITING_CHATGPT}}" id="msg-{{index}}">
-      <view class="cu-avatar radius chat-gpt-avatar"></view>
+    <view class="cu-item" wx:if="{{item.msgType == MESSAGE_TYPE.WAITING_CHATAI}}" id="msg-{{index}}">
+      <view class="cu-avatar radius chat-ai-avatar"></view>
       <view class="main">
         <view class="content bg-cyan shadow loading-container">
           <view class="loading"></view>
-          <text>{{CHAT_GPT_INFO.loadingText}}</text>
+          <text>{{CHAT_AI_INFO.loadingText}}</text>
           <view class="cancel_text" bindtap="cancelRequest" data-msgid="msg-{{index}}">取消</view>
         </view>
       </view>
@@ -51,7 +51,11 @@
           <text>{{item.content}}</text>
         </view>
       </view>
-      <view class="cu-avatar radius" style="background-image:url({{item.userInfo.avatarUrl}});"></view>
+       <view class="cu-avatar radius cu-avatar-user"><text>ME</text> </view>
+      <!-- <button class="cu-avatar radius" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <view class="cu-avatar radius" style="background-image:url({{item.userInfo.avatarUrl}});">
+        </view>
+      </button> -->
       <!-- <view class="date">{{item.userInfo.nickName}}</view> -->
     </view>
     <!-- <view class="cu-item self" wx:if="{{item.openid && item.msgType == 'image'}}" id="msg-{{index}}">
