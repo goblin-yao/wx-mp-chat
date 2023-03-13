@@ -16,6 +16,6 @@
     <text class="cuIcon-discover text-grey" bindtap="selectImg"></text>
   </view> -->
   <input class="solid-bottom" placeholder="请输入{{MaxInputLength}}字以内的问题" bindfocus="InputFocus" bindblur="InputBlur" bindinput="bindKeyInput" value="{{inputContent}}" adjust-position="{{false}}" focus="{{false}}" maxlength="{{MaxInputLength}}" cursor-spacing="10" disabled="{{inputDisabled}}"></input>
-  <button class="cu-btn bg-green shadow" disabled="{{submitBtnDisabled}}" bindtap="submit"> 发送</button>
-  <!-- <button class="cu-btn bg-green shadow" bindtap="submit"> 发送</button> -->
+  <button class="cu-btn bg-green shadow" disabled="{{submitBtnDisabled}}" bindtap="submitQuestion"> 发送</button>
+  <!-- <button class="cu-btn bg-green shadow" bindtap="submitQuestion"> 发送</button> -->
 </view>

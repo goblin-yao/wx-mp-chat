@@ -17,7 +17,7 @@ module.exports = {
   // chatAI的一些配置
   CHAT_AI_INFO: {
     nickName: "AI机智魔盒",
-    wellcomeTitle: "AI机智魔盒欢迎你",
+    wellcomeTitle: "AI机智魔盒欢迎你，分享好友可获取次数",
     loadingText: "输入中...",
   },
   /**

@@ -19,7 +19,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    login: false,
     curUserInfo: {},
     curOpenId: "",
     //输入框距离
@@ -47,51 +46,20 @@ Page({
     });
     this.data.inputContent = e.detail.value.trim();
   },
-  async submit() {
-    if (this.data.login) {
-      const userInputQuestion = this.data.inputContent
-        .trim()
-        .replace(/\s+/g, " ");
-      this.setData({
-        inputDisabled: true,
-        inputContent: "",
-      });
-      await this.sendMsgToChatAI(userInputQuestion);
-      //页面一个loading的交互，chatai等待, 发送消息等待的时候，输入框不能再输入东西了。可以disable掉，有内容返回后再添加
+  async submitQuestion() {
+    const userInputQuestion = this.data.inputContent
+      .trim()
+      .replace(/\s+/g, " ");
+    this.setData({
+      inputDisabled: true,
+      inputContent: "",
+    });
+    await this.sendMsgToChatAI(userInputQuestion);
+    //页面一个loading的交互，chatai等待, 发送消息等待的时候，输入框不能再输入东西了。可以disable掉，有内容返回后再添加
 
-      this.setData({
-        inputDisabled: false,
-      });
-    } else {
-      let res = await wx.getUserProfile({
-        desc: "获取用户聊天头像",
-      });
-      let userInfo = res.userInfo;
-
-      wx.showLoading({
-        title: "获取用户信息",
-      });
-      let _r = await this.userRegister(userInfo);
-      console.log("dddd", _r);
-      wx.hideLoading();
-      app.globalData.openid = _r.data.data.openid;
-      app.globalData.userInfo = _r.data.data;
-      this.setData({
-        curUserInfo: app.globalData.userInfo,
-      });
-
-      //异步配置缓存
-      wx.setStorageSync("openid", _r.result.openid);
-
-      this.setData(
-        {
-          login: true,
-        },
-        () => {
-          this.submit();
-        }
-      );
-    }
+    this.setData({
+      inputDisabled: false,
+    });
   },
   async onChatRoomEvent(_e) {
     console.log("onChatRoomEvent=>", _e);
@@ -240,7 +208,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.userAuth();
+    this.userAuth(options);
     console.log("options=>", options);
   },
 
@@ -259,34 +227,45 @@ Page({
       });
     });
   },
-  userAuth() {
+  setInfo(_tem) {
+    app.globalData.openid = _tem.openid;
+    app.globalData.userInfo = _tem;
+    this.setData({
+      curUserInfo: _tem,
+      curOpenId: _tem.openid,
+      isLocalDevelopment:
+        Config.LocalDevMode ||
+        Config.ADMIN_OPENID.includes(_tem.openid),
+    });
+  },
+  userAuth(options) {
+    const userInfFromStorage = wx.getStorageSync('cur_user_info');
+    // 如果本地存储有东西，但不是走的分享，直接走本地环境，有分享就需要重新更新
+    if (userInfFromStorage && !options.share_from_openid) {
+      console.log('userInfFromStorage=>', userInfFromStorage);
+      this.setInfo(userInfFromStorage);
+      return;
+    }
+    let tempUserInfo = { openid: 'ss123456789', avatarUrl: '', nickName: '' };
     cloudContainerCaller({
       path: "/miniprogram/user/auth",
+      data: options,
       success: async (res) => {
         console.log("auth=>", res);
         if (res.data.code == -1) {
-          console.log("--未登录--");
-          app.globalData.openid = res.data.data.openid;
-          this.setData({
-            login: false,
-            curOpenId: res.data.data.openid,
-          });
+          console.log("--登录失败--");
         } else {
-          console.log("--已登录--");
-          app.globalData.openid = res.data.data.openid;
-          app.globalData.userInfo = res.data.data;
-          this.setData({
-            curUserInfo: app.globalData.userInfo,
-            curOpenId: app.globalData.openid,
-            login: true,
-            isLocalDevelopment:
-              Config.LocalDevMode ||
-              Config.ADMIN_OPENID.includes(app.globalData.openid),
-          });
+          console.log("--登录成功--");
         }
+        tempUserInfo = res.data.data;
+
+        this.setInfo(tempUserInfo);
+        wx.setStorageSync("cur_user_info", tempUserInfo);
       },
       fail: (res) => {
         console.log(res);
+        // 获取失败的时候统一使用默认的openid为了让用户能够使用
+        this.setInfo(tempUserInfo);
       },
     });
   },
@@ -325,11 +304,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    // wx.showToast({
-    //   title: 'onReady',
-    // })
-    // this.getChatLimit()
-    // this.reduceLimit()
   },
 
   /**
@@ -366,7 +340,7 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_openid=${this.data.curOpenId}`,
+      path: `/pages/index/index?share_from_openid=${this.data.curOpenId}&share_flag=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },

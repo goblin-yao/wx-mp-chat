@@ -1,18 +1,4 @@
 <scroll-view class="cu-chat" scroll-y="true" enable-back-to-top enable-flex scroll-into-view="{{scrollId}}" style="height:{{scrollHeight}}px;" bindscrolltoupper="tapTop">
-  <!--chatai欢迎消息-->
-
-  <view class="cu-item title">
-    <view class="cu-avatar radius chat-ai-avatar"></view>
-    <view class="main">
-      <view class="content title_content bg-cyan shadow">
-        <text>{{CHAT_AI_INFO.wellcomeTitle}}</text>
-        <view>
-          <button class="cu-btn bg-gray btn-history" bindtap="jumpToHistory"> 查看问答记录</button>
-        </view>
-      </view>
-    </view>
-  </view>
-
   <view wx:for="{{chatList}}" wx:key="index" wx:for-item="item">
     <!--chatai发送的信息-->
     <view class="cu-item from_ai" wx:if="{{item.msgType == MESSAGE_TYPE.CHATAI_ANSWER}}" id="msg-{{index}}">
@@ -29,17 +15,6 @@
       <!-- <view class="date">{{item._createTime}} {{item.userInfo.nickName}}</view> -->
       <!-- <view class="date">{{item._createTime}}</view>  -->
     </view>
-    <view class="cu-item" wx:if="{{item.msgType == MESSAGE_TYPE.WAITING_CHATAI}}" id="msg-{{index}}">
-      <view class="cu-avatar radius chat-ai-avatar"></view>
-      <view class="main">
-        <view class="content bg-cyan shadow loading-container">
-          <view class="loading"></view>
-          <text>{{CHAT_AI_INFO.loadingText}}</text>
-          <view class="cancel_text" bindtap="cancelRequest" data-msgid="msg-{{index}}">取消</view>
-        </view>
-      </view>
-      <!-- <view class="date">{{item.userInfo.nickName}}</view> -->
-    </view>
     <!-- <view class="cu-item" wx:if="{{item.msgType == 'image'}}" id="msg-{{index}}">
       <view class="cu-avatar radius" style="background-image:url({{item.userInfo.avatarUrl}});"></view>
       <view class="main" bindtap="viewImage" data-url="{{item.content}}">
@@ -48,13 +23,14 @@
       <view class="date">{{item._createTime}} {{item.userInfo.nickName}}</view>
     </view> -->
     <!--自己发送的信息-->
-    <view class="cu-item self" wx:if="{{item.openid && item.msgType == MESSAGE_TYPE.USER_QUESTION}}" id="msg-{{index}}">
+    <view class="cu-item" wx:if="{{item.openid && item.msgType == MESSAGE_TYPE.USER_QUESTION}}" id="msg-{{index}}">
+      <view class="cu-avatar radius cu-avatar-user"><text>ME</text> </view>
       <view class="main">
         <view class="content bg-green shadow" data-msgid="msg-{{index}}" bindlongpress="copyMsg">
           <text>{{item.content}}</text>
         </view>
       </view>
-      <view class="cu-avatar radius cu-avatar-user"><text>ME</text> </view>
+      <view class="date">{{item.timeString}}</view>
       <!-- <button class="cu-avatar radius" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
         <view class="cu-avatar radius" style="background-image:url({{item.userInfo.avatarUrl}});">
         </view>

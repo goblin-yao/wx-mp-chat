@@ -3,6 +3,14 @@ text {
   word-break: break-all;
 }
 
+.cu-chat .cu-item {
+  display: flex;
+  padding: 5rpx 20rpx 60rpx;
+  position: relative;
+}
+.cu-chat .cu-item>.main {
+  max-width: calc(100% - 140rpx);
+}
 .btn-history {
   height: 36rpx;
   font-size: 28rpx;

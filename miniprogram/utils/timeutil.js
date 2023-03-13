@@ -1,5 +1,5 @@
-function TimeCode() {
-  var date = new Date();
+function TimeCode(time) {
+  var date = new Date(time);
   var year = date.getFullYear()
   var month = date.getMonth() + 1
   var day = date.getDate()
@@ -16,8 +16,8 @@ function _formatTime(time) {
   var ftime = time.getHours() + '时' + time.getMinutes() + '分' + time.getSeconds() + '秒'
   return date + ftime;
 }
-function TimeCodeYmd(){
-  var date = new Date();
+function TimeCodeYmd(time){
+  var date = new Date(time);
   var year = date.getFullYear()
   var month = date.getMonth() + 1
   var day = date.getDate()

@@ -6,10 +6,6 @@ const {
   MESSAGE_ERROR_TYPE,
 } = require("../../constants.js");
 
-const cloudContainerCaller = require("../../common/util/cloud-container-call");
-
-// 时间工具类
-const timeutil = require("./timeutil");
 Component({
   /**
    * 组件的一些选项
@@ -28,11 +24,7 @@ Component({
   },
   lifetimes: {
     attached() {
-      var that = this;
-      that.initMessageHistory();
-      //初始化监听器
-      // that.initWatcher();
-      that.setData({
+      this.setData({
         scrollHeight:
           app.globalData.systemInfo.windowHeight -
           (50 + app.globalData.safeBottomLeft),
@@ -109,8 +101,7 @@ Component({
     },
     //触顶事件
     tapTop() {
-      var that = this;
-      that.setData(
+      this.setData(
         {
           isTop: true,
         },
@@ -120,7 +111,6 @@ Component({
       );
     },
     receiveMsg(_e) {
-      let that = this;
       console.log("received msg=>", _e);
       if (_e.msgType === MESSAGE_TYPE.CHATAI_ANSWER) {
         let msg = {
@@ -141,8 +131,8 @@ Component({
         this.setData({
           chatList: newChatList,
         });
-        setTimeout(function () {
-          that.setData({
+        setTimeout(() => {
+          this.setData({
             scrollId: "msg-" + parseInt(newChatList.length - 1),
           });
         }, 100);
@@ -169,72 +159,19 @@ Component({
         this.setData({
           chatList: this.data.chatList,
         });
-        setTimeout(function () {
-          that.setData({
-            scrollId: "msg-" + parseInt(that.data.chatList.length - 1),
+        setTimeout(() => {
+          this.setData({
+            scrollId: "msg-" + parseInt(this.data.chatList.length - 1),
           });
         }, 100);
       }
     },
-    //初始化
-    async initMessageHistory() {
-      //如果没有userinfo先查询一次
-      try {
-        if (!app.globalData.userInfo) {
-          const res =await cloudContainerCaller({
-            path: "/miniprogram/user/auth",
-          });
-
-          if (res.data.code == 200) {
-            app.globalData.openid = res.data.data.openid;
-            app.globalData.userInfo = res.data.data;
-          } else {
-          }
-        }
-      } catch (error) {}
-      this.reqMsgHis();
+    jumpToHistory() {
+      wx.navigateTo({
+        url: '/pages/history/history',
+      })
     },
-    // 请求聊天记录
-    reqMsgHis(option) {
-      let that = this;
-      if (that.data.noMoreList) {
-        return;
-      }
-      cloudContainerCaller({
-        path: "/miniprogram//chatmessage/history",
-        data: {
-          step: that.data.chatList.length,
-          option,
-        },
-        success: (result) => {
-          console.log("cloud-msg-his", result);
-          let tarr = result.data.data.rows;
-          let newsLen = tarr.length;
-          if (newsLen == 0) {
-            this.data.noMoreList = true;
-            return;
-          }
-          tarr = tarr.reverse();
 
-          let len = this.data.chatList.length + newsLen;
-          //给每个用户的信息加上userinfo
-          for (let index = 0; index < tarr.length; index++) {
-            if (tarr[index]["msgType"] === MESSAGE_TYPE.USER_QUESTION) {
-              tarr[index]["userInfo"] = app.globalData.userInfo;
-            }
-          }
-          this.setData(
-            {
-              chatList: tarr.concat(that.data.chatList),
-              scrollId: that.data.isTop
-                ? "msg-" + parseInt(newsLen)
-                : "msg-" + parseInt(len - 1),
-            },
-            () => {}
-          );
-        },
-      });
-    },
     uploadUserAva(fileID) {
       return new Promise(function (resolve, reject) {
         wx.cloud.callFunction({

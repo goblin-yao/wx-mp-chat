@@ -4,7 +4,6 @@ const cloudConfigs = {
 };
 module.exports = {
   ADMIN_OPENID: ['o9Onv5BcWuj8o8-78-N1S-HTur7k'],
-  CloudInfo: cloudConfigs.prod, //发布时记得更改
-  // RemoteHttpDomain: 'https://wxchatnodeexpressazure.azurewebsites.net',
+  CloudInfo: cloudConfigs.prod, // 发布时记得更改为 prod
   LocalDevMode: 0, //本地开发模式的选项
 };
