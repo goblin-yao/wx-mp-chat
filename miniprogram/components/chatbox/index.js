@@ -362,6 +362,7 @@ Component({
             if (url && url.length > 0) {
               _nAudioContext.autoplay = true;
               _nAudioContext.src = url;
+              _nAudioContext.play();
               _nAudioContext.onPlay(() => {
                 resolve(data);
                 console.log('playing', new Date().toString())
