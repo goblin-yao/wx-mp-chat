@@ -22,8 +22,11 @@
           <text>{{item.content}}</text>
         </view>
       </view>
-      <view wx:if="{{!item.errorType}}" class="date">长按可复制消息</view>
-      <view wx:if="{{item.errorType}}">
+      <view wx:if="{{!item.errorType && isVoiceFeatureOpen && !item.retryRequest}}" class='voice-msg-container'>
+        <view class="voice-msg {{item.voiceDisplaying&&'.voice-msg-displaying'}}" data-msgindex="{{index}}" bindtap="displayVoice"></view>
+      </view>
+      <view wx:if="{{!item.errorType}}" class="date">长按可复制消息。{{item.totalTime}}</view>
+      <view wx:if="{{item.errorType && !item.retryRequest}}">
         <view class="retry_text" bindtap="retryRequest" data-msgindex="{{index}}">再问一次</view>
       </view>
       <!-- <view class="date">{{item._createTime}} {{item.userInfo.nickName}}</view> -->

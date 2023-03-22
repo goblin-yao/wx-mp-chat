@@ -42,7 +42,7 @@ module.exports = (option) => {
           "X-WX-SERVICE": Config.CloudInfo.SericeName,
           "content-type": "application/json",
         },
-        timeout: 30000,
+        timeout: 60000,
         method: "POST",
       },
       option

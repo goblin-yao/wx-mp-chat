@@ -60,6 +60,33 @@ movable-view image {
   color: var(--grey);
 }
 
+.text-input-voice {
+  border: 1rpx solid #f3e3e3;
+  border-radius: 4rpx;
+  width: 100%;
+  text-align: center;
+}
+
+.text-animate-loading {
+  display: inline-block;
+  -webkit-animation: load-progress-spinner 1s linear infinite;
+  animation: load-progress-spinner 1s linear infinite;
+}
+
+@-webkit-keyframes load-progress-spinner {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load-progress-spinner {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 .bbbug_player {
   height: 120px;
   border-radius: 10px;

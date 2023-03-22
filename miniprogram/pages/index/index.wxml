@@ -11,11 +11,19 @@
 </view>
 
 <view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
-  <!-- <view class="action">
-    <text class="cuIcon-add text-grey" bindtap="showAction"></text>
-    <text class="cuIcon-discover text-grey" bindtap="selectImg"></text>
-  </view> -->
-  <input class="solid-bottom" placeholder="请输入{{MaxInputLength}}字以内的问题" bindfocus="InputFocus" bindblur="InputBlur" bindinput="bindKeyInput" value="{{inputContent}}" adjust-position="{{false}}" focus="{{false}}" maxlength="{{MaxInputLength}}" cursor-spacing="10" disabled="{{inputDisabled}}"></input>
-  <button class="cu-btn bg-green shadow" disabled="{{submitBtnDisabled}}" bindtap="submitQuestion"> 发送</button>
+  <view class="action" wx:if="{{isVoiceFeatureOpen}}">
+    <text class="cuIcon-text text-grey" wx:if="{{isVoiceInputStatus}}" bindtap="changeToTextInput"></text>
+    <text class="cuIcon-voice text-grey" wx:else bindtap="changeToVoiceInput"></text>
+  </view>
+  <view wx:if="{{isVoiceInputStatus}}" class="text-input-voice">
+    <view wx:if="{{voiceStatus==2}}" class="text-grey" bindtap="startVoice">点击输入语音</view>
+    <view wx:if="{{voiceStatus==1}}" class="text-grey" bindtap="stopVoice">
+      <text>{{voiceTime}}秒</text>
+      <view class="cuIcon-loading text-animate-loading"></view>
+      <text>点击停止输入语音</text>
+    </view>
+  </view>
+  <input wx:if="{{!isVoiceInputStatus}}" class="solid-bottom" placeholder="请输入{{MaxInputLength}}字以内的问题" bindfocus="InputFocus" bindblur="InputBlur" bindinput="bindKeyInput" value="{{inputContent}}" adjust-position="{{false}}" focus="{{false}}" maxlength="{{MaxInputLength}}" cursor-spacing="10" disabled="{{inputDisabled}}"></input>
+  <button wx:if="{{!isVoiceInputStatus}}" class="cu-btn bg-green shadow" disabled="{{submitBtnDisabled}}" bindtap="submitQuestion"> 发送</button>
   <!-- <button class="cu-btn bg-green shadow" bindtap="submitQuestion"> 发送</button> -->
 </view>

@@ -1,17 +1,18 @@
 {
-  "pages": [
-    "pages/index/index",
-    "pages/history/history"
-  ],
-  "requiredBackgroundModes": [
-    "audio"
-  ],
+  "pages": ["pages/index/index", "pages/history/history"],
+  "requiredBackgroundModes": ["audio"],
   "useExtendedLib": {
     "weui": true
   },
   "usingComponents": {
     "chat-box": "components/chatbox/index",
     "mp-actionSheet": "weui-miniprogram/actionsheet/actionsheet"
+  },
+  "plugins": {
+    "QCloudAIVoice": {
+      "version": "2.0.5",
+      "provider": "wx3e17776051baf153"
+    }
   },
   "window": {
     "backgroundColor": "#F6F6F6",

@@ -1,10 +1,14 @@
 // release/components/chatbox
 const app = getApp();
+const Config = require("../../config.js");
 const {
   MESSAGE_TYPE,
   CHAT_AI_INFO,
   MESSAGE_ERROR_TYPE,
+  MAX_TIMEOUT_TIME_VOICE_SPEECH
 } = require("../../constants.js");
+const MockData = require("../../mock-data");
+const innerAudioContextMap = {}; // 创建内部 audio 上下文 InnerAudioContext 对象。
 
 Component({
   /**
@@ -48,8 +52,9 @@ Component({
     MESSAGE_TYPE: MESSAGE_TYPE,
     MESSAGE_ERROR_TYPE: MESSAGE_ERROR_TYPE,
     CHAT_AI_INFO: CHAT_AI_INFO,
+    isVoiceFeatureOpen: Config.VoiceToggle,
     //消息记录列表
-    chatList: [],
+    chatList: Config.LocalDevMode ? MockData.chatHistory : [],
     //标记触顶事件
     isTop: false,
     //没有更多数据
@@ -73,11 +78,60 @@ Component({
         }
       }
     },
+    async displayVoice(event) {
+      let that = this;
+      var msgindex = event.target.dataset.msgindex;
+      let curMessage = this.data.chatList[msgindex];
+      let display = false;
+      if (curMessage.voiceDisplaying) {
+        display = false
+      } else {
+        display = true
+        // 其他的播放停止，修改状态
+        for (let index = 0; index < this.data.chatList.length; index++) {
+          const element = this.data.chatList[index];
+          if (
+            element.voiceDisplaying
+          ) {
+            this.setData({
+              [`chatList[${index}].voiceDisplaying`]: false,
+            });
+          }
+        }
+        // 其他播放器停止
+        for (const key in innerAudioContextMap) {
+          if (Object.hasOwnProperty.call(innerAudioContextMap, key)) {
+            if (key !== curMessage.messageId) {
+              const element = innerAudioContextMap[key];
+              element && element.stop()
+            }
+          }
+        }
+      }
+      this.setData({
+        [`chatList[${msgindex}].voiceDisplaying`]: display,
+      });
+      if (!innerAudioContextMap[curMessage.messageId]) {
+        wx.showLoading({
+          title: 'AI语音合成中',
+        })
+      }
+      await this.textToSpeechFromChatBox(
+        display,
+        curMessage, {
+        endCallBack: () => {
+          that.setData({
+            [`chatList[${msgindex}].voiceDisplaying`]: false,
+          });
+        }
+      })
+    },
     retryRequest(event) {
       var msgindex = event.target.dataset.msgindex;
       // 删除掉再问一次
       this.setData({
         [`chatList[${msgindex}].errorType`]: "",
+        [`chatList[${msgindex}].retryRequest`]: true
       });
       this.triggerEvent("resendMsg");
     },
@@ -110,15 +164,58 @@ Component({
         }
       );
     },
-    receiveMsg(_e) {
+    // 语音合成并自动播放
+    async convertTextToVoiceAndPlay(msgToShow) {
+      let that = this;
+      // 其他的播放停止，修改状态
+      for (let index = 0; index < this.data.chatList.length; index++) {
+        const element = this.data.chatList[index];
+        if (
+          element.voiceDisplaying
+        ) {
+          this.setData({
+            [`chatList[${index}].voiceDisplaying`]: false,
+          });
+        }
+      }
+      // 其他播放器停止
+      for (const key in innerAudioContextMap) {
+        if (Object.hasOwnProperty.call(innerAudioContextMap, key)) {
+          if (key !== msgToShow.messageId) {
+            const element = innerAudioContextMap[key];
+            element && element.stop()
+          }
+        }
+      }
+      await this.textToSpeechFromChatBox(
+        true,
+        msgToShow, {
+        endCallBack: () => {
+          const msgindex = that.data.chatList.findIndex(e => e.messageId == msgToShow.messageId)
+          console.log('msgindex=>', msgindex)
+          that.setData({
+            [`chatList[${msgindex}].voiceDisplaying`]: false,
+          });
+        }
+      })
+    },
+    async receiveMsg(_e) {
       console.log("received msg=>", _e);
       if (_e.msgType === MESSAGE_TYPE.CHATAI_ANSWER) {
         let msg = {
           content: _e.data.text,
           errorType: _e.data.errorType,
           msgType: MESSAGE_TYPE.CHATAI_ANSWER,
+          conversationId: _e.data.conversationId,
+          parentMessageId: _e.data.parentMessageId,
+          messageId: _e.data.id,
           userInfo: { nickName: CHAT_AI_INFO.nickName },
+          voiceDisplaying: Config.VoiceToggle ? true : false
         };
+        //语音合成
+        Config.VoiceToggle && await this.convertTextToVoiceAndPlay(msg);
+        msg.totalTime = (new Date().getTime() - app.globalData.AILastRequestStartTime) / 1000
+        msg.totalTime = '对话耗时' + msg.totalTime.toFixed(1) + 's';
         //把原来消息的loading删掉
         let newChatList = [];
         for (let index = 0; index < this.data.chatList.length; index++) {
@@ -211,6 +308,81 @@ Component({
           });
         },
       });
+    },
+    async textToSpeechFromChatBox(display, msgInfo, callbacks) {
+      console.log('textToSpeechFromChatBox', display, msgInfo)
+      //如果是播放
+      const curMsgId = msgInfo.messageId
+      if (display) {
+        if (!innerAudioContextMap[curMsgId]) {
+          innerAudioContextMap[curMsgId] = wx.createInnerAudioContext()
+          //转换一次语音
+          await this.textToAISpeech(msgInfo.content, innerAudioContextMap[curMsgId], callbacks)
+        } else {
+          innerAudioContextMap[curMsgId].play()
+        }
+      } else { //暂停
+        if (!innerAudioContextMap[curMsgId]) {
+          innerAudioContextMap[curMsgId] = wx.createInnerAudioContext()
+        } else {
+          innerAudioContextMap[curMsgId].pause()
+        }
+      }
+    },
+    async textToAISpeech(_text, _nAudioContext, callbacks) {
+      if (!_text.trim()) {
+        return
+      }
+      try {
+        const data = await this.pluginPromiseToSpeech(_text);
+        let url = data.result.filePath;
+        if (url && url.length > 0) {
+          _nAudioContext.autoplay = true;
+          _nAudioContext.src = url;
+          _nAudioContext.onPlay(() => {
+          });
+          _nAudioContext.onEnded(() => {
+            callbacks?.endCallBack && callbacks.endCallBack()
+          });
+          _nAudioContext.onError((res) => {
+            console.log(res.errMsg)
+          });
+        }
+      } catch {
+        callbacks.endCallBack()
+        wx.hideLoading()
+        wx.showToast({
+          title: '语音转换失败，请稍后！',
+        })
+      }
+      wx.hideLoading()
+    },
+    pluginPromiseToSpeech(_text) {//超时
+      let timeoutP = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('timeout');
+        }, MAX_TIMEOUT_TIME_VOICE_SPEECH);
+      })
+      let pSpeech = new Promise((resolve, reject) => {
+        app.globalData.txCloudAIVoicePlugin.textToSpeech({
+          content: _text,
+          speed: 0,
+          volume: 0,
+          voiceType: 0,
+          language: 1,
+          projectId: 0,
+          sampleRate: 16000,
+          success: function (data) {
+            console.log('合成结果:', data)
+            resolve(data)
+          },
+          fail: function (error) {
+            reject(error)
+            console.log(error);
+          }
+        })
+      })
+      return Promise.race([timeoutP, pSpeech])
     },
   },
 });

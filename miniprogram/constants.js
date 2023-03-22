@@ -18,7 +18,7 @@ module.exports = {
   CHAT_AI_INFO: {
     nickName: "AI机智魔盒",
     wellcomeTitle: "AI机智魔盒欢迎你，分享好友可获取次数",
-    loadingText: "输入中...",
+    loadingText: "。。。。。。",
   },
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息
@@ -28,4 +28,6 @@ module.exports = {
    */
   MESSAGE_TYPE: { WAITING_CHATAI: -1, USER_QUESTION: 1, CHATAI_ANSWER: 2 },
   MESSAGE_ERROR_TYPE: { TIMEOUT: -1, SERVER_ERROR: -2 },
+  MAX_TIMEOUT_TIME_VOICE_SPEECH: 10 * 1000, //语音识别等待10秒
+  SUBSCRIBE_TEMPLATE_ID: 'gDR3LuQ-JEOtfmT_ug40QcT6uk4kFPTHMuAVXyD3GqQ'
 };

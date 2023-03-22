@@ -110,7 +110,241 @@ const data = {
     cookies: [],
     errMsg: "request:ok",
   },
-  chatHistory: {},
+  chatHistory: [
+    {
+      "id": 1,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-16T09:03:40.000Z",
+      "updatedAt": "2023-03-16T09:03:40.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-16 17:03:40"
+    },
+    {
+      "id": 2,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "2",
+      "createdAt": "2023-03-16T09:03:42.000Z",
+      "updatedAt": "2023-03-16T09:03:42.000Z"
+    },
+    {
+      "id": 3,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-16T09:04:40.000Z",
+      "updatedAt": "2023-03-16T09:04:40.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-16 17:04:40"
+    },
+    {
+      "id": 4,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "2",
+      "createdAt": "2023-03-16T09:04:41.000Z",
+      "updatedAt": "2023-03-16T09:04:41.000Z"
+    },
+    {
+      "id": 5,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-17T01:59:06.000Z",
+      "updatedAt": "2023-03-17T01:59:06.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 09:59:06"
+    },
+    {
+      "id": 6,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      messageId: '12',
+      "msgType": 2,
+      "content": "2",
+      "createdAt": "2023-03-17T01:59:08.000Z",
+      "updatedAt": "2023-03-17T01:59:08.000Z"
+    },
+    {
+      "id": 7,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "美利坚合众国哪一年成立的？",
+      "createdAt": "2023-03-17T11:10:47.000Z",
+      "updatedAt": "2023-03-17T11:10:47.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 19:10:47"
+    },
+    {
+      "id": 8,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      messageId: '123',
+      "content": "美利坚合众国于1776年7月4日宣布独立，1783年9月3日签署《巴黎和约》正式结束了与英国的战争，但是美国宪法正式生效是在1789年3月4日。因此，可以说美利坚合众国成立于1789年。",
+      "createdAt": "2023-03-17T11:10:55.000Z",
+      "updatedAt": "2023-03-17T11:10:55.000Z"
+    },
+    {
+      "id": 9,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-17T11:16:31.000Z",
+      "updatedAt": "2023-03-17T11:16:31.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 19:16:31"
+    },
+    {
+      "id": 10,
+      messageId: '1234',
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "2",
+      "createdAt": "2023-03-17T11:16:33.000Z",
+      "updatedAt": "2023-03-17T11:16:33.000Z"
+    },
+    {
+      "id": 11,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-17T11:24:06.000Z",
+      "updatedAt": "2023-03-17T11:24:06.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 19:24:06"
+    },
+    {
+      "id": 12,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "请求超时!",
+      "createdAt": "2023-03-17T11:24:07.000Z",
+      "updatedAt": "2023-03-17T11:24:07.000Z"
+    },
+    {
+      "id": 14,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "chatai生成的记录消息",
+      "createdAt": "2023-03-17T11:24:32.000Z",
+      "updatedAt": "2023-03-17T11:24:32.000Z"
+    },
+    {
+      "id": 13,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-17T11:24:32.000Z",
+      "updatedAt": "2023-03-17T11:24:32.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 19:24:32"
+    },
+    {
+      "id": 16,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "chatai生成的记录消息",
+      "createdAt": "2023-03-17T11:26:57.000Z",
+      "updatedAt": "2023-03-17T11:26:57.000Z"
+    },
+    {
+      "id": 15,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-17T11:26:57.000Z",
+      "updatedAt": "2023-03-17T11:26:57.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 19:26:57"
+    },
+    {
+      "id": 17,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "父亲和母亲可以结婚吗",
+      "createdAt": "2023-03-17T11:34:06.000Z",
+      "updatedAt": "2023-03-17T11:34:06.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 19:34:06"
+    },
+    {
+      "id": 18,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "是的，父亲和母亲可以结婚。",
+      "createdAt": "2023-03-17T11:34:12.000Z",
+      "updatedAt": "2023-03-17T11:34:12.000Z"
+    },
+    {
+      "id": 20,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "content": "chatai生成的记录消息",
+      "createdAt": "2023-03-17T11:47:30.000Z",
+      "updatedAt": "2023-03-17T11:47:30.000Z"
+    },
+    {
+      "id": 19,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "content": "1+1",
+      "createdAt": "2023-03-17T11:47:30.000Z",
+      "updatedAt": "2023-03-17T11:47:30.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "updatedAt": "2023-03-16T09:04:34.192Z",
+        "createdAt": "2023-03-16T09:04:34.192Z"
+      },
+      "timeString": "2023-03-17 19:47:30"
+    }
+  ],
   chatAIErrorToken: {
     data: {
       question: "请规划一次双月湾团建活动，时间3月25日26日",
