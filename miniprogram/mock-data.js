@@ -112,237 +112,779 @@ const data = {
   },
   chatHistory: [
     {
-      "id": 1,
+      "id": 146,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": -1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:23:36.000Z",
+      "updatedAt": "2023-03-21T15:23:36.000Z"
+    },
+    {
+      "id": 145,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "1+1",
-      "createdAt": "2023-03-16T09:03:40.000Z",
-      "updatedAt": "2023-03-16T09:03:40.000Z",
+      "createdAt": "2023-03-21T15:23:36.000Z",
+      "updatedAt": "2023-03-21T15:23:36.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-16 17:03:40"
+      "timeString": "2023-03-21 23:23:36"
     },
     {
-      "id": 2,
-      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-      "msgType": 2,
-      "content": "2",
-      "createdAt": "2023-03-16T09:03:42.000Z",
-      "updatedAt": "2023-03-16T09:03:42.000Z"
-    },
-    {
-      "id": 3,
+      "id": 147,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "1+1",
-      "createdAt": "2023-03-16T09:04:40.000Z",
-      "updatedAt": "2023-03-16T09:04:40.000Z",
+      "createdAt": "2023-03-21T15:24:12.000Z",
+      "updatedAt": "2023-03-21T15:24:12.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-16 17:04:40"
+      "timeString": "2023-03-21 23:24:12"
     },
     {
-      "id": 4,
+      "id": 148,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 2,
-      "content": "2",
-      "createdAt": "2023-03-16T09:04:41.000Z",
-      "updatedAt": "2023-03-16T09:04:41.000Z"
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:24:13.000Z",
+      "updatedAt": "2023-03-21T15:24:13.000Z"
     },
     {
-      "id": 5,
+      "id": 150,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:25:50.000Z",
+      "updatedAt": "2023-03-21T15:25:50.000Z"
+    },
+    {
+      "id": 149,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "1+1",
-      "createdAt": "2023-03-17T01:59:06.000Z",
-      "updatedAt": "2023-03-17T01:59:06.000Z",
+      "createdAt": "2023-03-21T15:25:50.000Z",
+      "updatedAt": "2023-03-21T15:25:50.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-17 09:59:06"
+      "timeString": "2023-03-21 23:25:50"
     },
     {
-      "id": 6,
-      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-      messageId: '12',
-      "msgType": 2,
-      "content": "2",
-      "createdAt": "2023-03-17T01:59:08.000Z",
-      "updatedAt": "2023-03-17T01:59:08.000Z"
-    },
-    {
-      "id": 7,
-      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-      "msgType": 1,
-      "content": "美利坚合众国哪一年成立的？",
-      "createdAt": "2023-03-17T11:10:47.000Z",
-      "updatedAt": "2023-03-17T11:10:47.000Z",
-      "userInfo": {
-        "id": 1,
-        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
-      },
-      "timeString": "2023-03-17 19:10:47"
-    },
-    {
-      "id": 8,
+      "id": 152,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 2,
-      messageId: '123',
-      "content": "美利坚合众国于1776年7月4日宣布独立，1783年9月3日签署《巴黎和约》正式结束了与英国的战争，但是美国宪法正式生效是在1789年3月4日。因此，可以说美利坚合众国成立于1789年。",
-      "createdAt": "2023-03-17T11:10:55.000Z",
-      "updatedAt": "2023-03-17T11:10:55.000Z"
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:26:06.000Z",
+      "updatedAt": "2023-03-21T15:26:06.000Z"
     },
     {
-      "id": 9,
+      "id": 151,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "1+1",
-      "createdAt": "2023-03-17T11:16:31.000Z",
-      "updatedAt": "2023-03-17T11:16:31.000Z",
+      "createdAt": "2023-03-21T15:26:06.000Z",
+      "updatedAt": "2023-03-21T15:26:06.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-17 19:16:31"
+      "timeString": "2023-03-21 23:26:06"
     },
     {
-      "id": 10,
-      messageId: '1234',
+      "id": 154,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 2,
-      "content": "2",
-      "createdAt": "2023-03-17T11:16:33.000Z",
-      "updatedAt": "2023-03-17T11:16:33.000Z"
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:26:08.000Z",
+      "updatedAt": "2023-03-21T15:26:08.000Z"
     },
     {
-      "id": 11,
+      "id": 153,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "1+1",
-      "createdAt": "2023-03-17T11:24:06.000Z",
-      "updatedAt": "2023-03-17T11:24:06.000Z",
+      "createdAt": "2023-03-21T15:26:08.000Z",
+      "updatedAt": "2023-03-21T15:26:08.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-17 19:24:06"
+      "timeString": "2023-03-21 23:26:08"
     },
     {
-      "id": 12,
+      "id": 156,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:27:28.000Z",
+      "updatedAt": "2023-03-21T15:27:28.000Z"
+    },
+    {
+      "id": 155,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "2+2",
+      "createdAt": "2023-03-21T15:27:28.000Z",
+      "updatedAt": "2023-03-21T15:27:28.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:27:28"
+    },
+    {
+      "id": 158,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:27:30.000Z",
+      "updatedAt": "2023-03-21T15:27:30.000Z"
+    },
+    {
+      "id": 157,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "2+2",
+      "createdAt": "2023-03-21T15:27:30.000Z",
+      "updatedAt": "2023-03-21T15:27:30.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:27:30"
+    },
+    {
+      "id": 160,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时。",
+      "createdAt": "2023-03-21T15:27:34.000Z",
+      "updatedAt": "2023-03-21T15:27:34.000Z"
+    },
+    {
+      "id": 159,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "2+2",
+      "createdAt": "2023-03-21T15:27:34.000Z",
+      "updatedAt": "2023-03-21T15:27:34.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:27:34"
+    },
+    {
+      "id": 162,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "请求超时!",
-      "createdAt": "2023-03-17T11:24:07.000Z",
-      "updatedAt": "2023-03-17T11:24:07.000Z"
+      "createdAt": "2023-03-21T15:28:05.000Z",
+      "updatedAt": "2023-03-21T15:28:05.000Z"
     },
     {
-      "id": 14,
-      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-      "msgType": 2,
-      "content": "chatai生成的记录消息",
-      "createdAt": "2023-03-17T11:24:32.000Z",
-      "updatedAt": "2023-03-17T11:24:32.000Z"
-    },
-    {
-      "id": 13,
+      "id": 161,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "2+1",
+      "createdAt": "2023-03-21T15:28:05.000Z",
+      "updatedAt": "2023-03-21T15:28:05.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:28:05"
+    },
+    {
+      "id": 164,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时!",
+      "createdAt": "2023-03-21T15:28:21.000Z",
+      "updatedAt": "2023-03-21T15:28:21.000Z"
+    },
+    {
+      "id": 163,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "2+2",
+      "createdAt": "2023-03-21T15:28:21.000Z",
+      "updatedAt": "2023-03-21T15:28:21.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:28:21"
+    },
+    {
+      "id": 165,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "1+1",
-      "createdAt": "2023-03-17T11:24:32.000Z",
-      "updatedAt": "2023-03-17T11:24:32.000Z",
+      "createdAt": "2023-03-21T15:29:16.000Z",
+      "updatedAt": "2023-03-21T15:29:16.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-17 19:24:32"
+      "timeString": "2023-03-21 23:29:16"
     },
     {
-      "id": 16,
+      "id": 166,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 2,
-      "content": "chatai生成的记录消息",
-      "createdAt": "2023-03-17T11:26:57.000Z",
-      "updatedAt": "2023-03-17T11:26:57.000Z"
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "请求超时!",
+      "createdAt": "2023-03-21T15:29:55.000Z",
+      "updatedAt": "2023-03-21T15:29:55.000Z"
     },
     {
-      "id": 15,
+      "id": 168,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "服务器内部错误!",
+      "createdAt": "2023-03-21T15:30:28.000Z",
+      "updatedAt": "2023-03-21T15:30:28.000Z"
+    },
+    {
+      "id": 167,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "1+2",
+      "createdAt": "2023-03-21T15:30:28.000Z",
+      "updatedAt": "2023-03-21T15:30:28.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:30:28"
+    },
+    {
+      "id": 170,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "服务器内部错误!",
+      "createdAt": "2023-03-21T15:30:32.000Z",
+      "updatedAt": "2023-03-21T15:30:32.000Z"
+    },
+    {
+      "id": 169,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "1+2",
+      "createdAt": "2023-03-21T15:30:32.000Z",
+      "updatedAt": "2023-03-21T15:30:32.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:30:32"
+    },
+    {
+      "id": 172,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "服务器内部错误!",
+      "createdAt": "2023-03-21T15:30:34.000Z",
+      "updatedAt": "2023-03-21T15:30:34.000Z"
+    },
+    {
+      "id": 171,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "1+2",
+      "createdAt": "2023-03-21T15:30:34.000Z",
+      "updatedAt": "2023-03-21T15:30:34.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:30:34"
+    },
+    {
+      "id": 173,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "美利坚合众国",
+      "createdAt": "2023-03-21T15:33:34.000Z",
+      "updatedAt": "2023-03-21T15:33:34.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:33:34"
+    },
+    {
+      "id": 174,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "2aae7d9d-7864-4c2e-9cf0-ef1459a47850",
+      "messageId": "cmpl-6wYHPSmRNxIG7Lsd8y0w4HP0ZsuNG",
+      "parentMessageId": "178384d8-6ef4-4d12-8dc5-b9fee0a5399f",
+      "content": "美利坚合众国是一个联邦共和国，位于北美洲，由50个州和联邦特区组成。它是世界上最大的经济体，也是世界上最大的民主国家之一。",
+      "createdAt": "2023-03-21T15:33:43.000Z",
+      "updatedAt": "2023-03-21T15:33:43.000Z"
+    },
+    {
+      "id": 175,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "有没有适合孕妇吃的东西呀？",
+      "createdAt": "2023-03-21T15:37:40.000Z",
+      "updatedAt": "2023-03-21T15:37:40.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:37:40"
+    },
+    {
+      "id": 176,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "7d0ff995-71d4-4e0f-9514-e90a76a2e54b",
+      "messageId": "cmpl-6wYLOJ4hID6CxPilyDL9fiStch7OM",
+      "parentMessageId": "c214b441-b41a-47bf-901f-c48c3b917e9b",
+      "content": "孕妇可以尝试吃一些富含营养的食物，比如新鲜的蔬菜、水果、坚果、豆类、全谷物、低脂乳制品等。此外，还可以适当摄入鱼、蛋白质和健康的油脂。",
+      "createdAt": "2023-03-21T15:37:51.000Z",
+      "updatedAt": "2023-03-21T15:37:51.000Z"
+    },
+    {
+      "id": 177,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "能不能推荐一下孕妇吃的水果呀？",
+      "createdAt": "2023-03-21T15:38:46.000Z",
+      "updatedAt": "2023-03-21T15:38:46.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:38:46"
+    },
+    {
+      "id": 178,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "1137d89f-d70c-49ad-8fd8-6c85ed138308",
+      "messageId": "cmpl-6wYMSEJc17uiwIUM2avIAk8PZVHnY",
+      "parentMessageId": "7d455dbf-3631-49f3-9fd7-0c54427cb809",
+      "content": "孕妇可以吃的水果有苹果、橙子、梨、香蕉、芒果、葡萄等。这些水果都富含维生素和矿物质，能够补充孕妇所需的营养。",
+      "createdAt": "2023-03-21T15:38:53.000Z",
+      "updatedAt": "2023-03-21T15:38:53.000Z"
+    },
+    {
+      "id": 179,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "燕窝是什么？",
+      "createdAt": "2023-03-21T15:58:19.000Z",
+      "updatedAt": "2023-03-21T15:58:19.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-21 23:58:19"
+    },
+    {
+      "id": 180,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "95a08df4-ee05-4693-a2ed-0cce3124c295",
+      "messageId": "cmpl-6wYfNXKwyBDiaVq5E3DbamVdPzdOn",
+      "parentMessageId": "eac386ba-4ad4-4cda-816f-cee5942ce02e",
+      "content": "燕窝是一种可食用的贵重的动物产品，它是由燕子的内脏和胃制成的。它以其独特的味道和营养价值而闻名，是中国传统的美食之一。",
+      "createdAt": "2023-03-21T15:58:29.000Z",
+      "updatedAt": "2023-03-21T15:58:29.000Z"
+    },
+    {
+      "id": 203,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "美利坚合众国哪一年成立",
+      "createdAt": "2023-03-22T00:53:26.000Z",
+      "updatedAt": "2023-03-22T00:53:26.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-22 08:53:26"
+    },
+    {
+      "id": 204,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "4bf72fa9-82e4-4dc5-8b0e-b10b9568e7d0",
+      "messageId": "cmpl-6wh1D3UjrAJLD8HTGlvHN6a1Ea20N",
+      "parentMessageId": "a0ea592a-d487-4ffd-b065-51a42d24a78a",
+      "content": "美利坚合众国于1776年7月4日正式宣布独立，成为一个自由的民主国家。",
+      "createdAt": "2023-03-22T00:53:30.000Z",
+      "updatedAt": "2023-03-22T00:53:30.000Z"
+    },
+    {
+      "id": 205,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "how to learn english",
+      "createdAt": "2023-03-22T00:58:17.000Z",
+      "updatedAt": "2023-03-22T00:58:17.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-22 08:58:17"
+    },
+    {
+      "id": 206,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "cff11a83-be35-46e6-aa1f-5b92a04e1c4a",
+      "messageId": "cmpl-6wh5uKdDfyEyB9czKlBDMNCm1bTsm",
+      "parentMessageId": "bfc0a62d-948f-4239-8e94-3f121477dee5",
+      "content": "I recommend taking classes or using online resources to learn English. You can also practice with a native speaker to get more comfortable speaking the language.",
+      "createdAt": "2023-03-22T00:58:20.000Z",
+      "updatedAt": "2023-03-22T00:58:20.000Z"
+    },
+    {
+      "id": 207,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
       "content": "1+1",
-      "createdAt": "2023-03-17T11:26:57.000Z",
-      "updatedAt": "2023-03-17T11:26:57.000Z",
+      "createdAt": "2023-03-22T01:06:00.000Z",
+      "updatedAt": "2023-03-22T01:06:00.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-17 19:26:57"
+      "timeString": "2023-03-22 09:06:00"
     },
     {
-      "id": 17,
-      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-      "msgType": 1,
-      "content": "父亲和母亲可以结婚吗",
-      "createdAt": "2023-03-17T11:34:06.000Z",
-      "updatedAt": "2023-03-17T11:34:06.000Z",
-      "userInfo": {
-        "id": 1,
-        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
-      },
-      "timeString": "2023-03-17 19:34:06"
-    },
-    {
-      "id": 18,
+      "id": 208,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 2,
-      "content": "是的，父亲和母亲可以结婚。",
-      "createdAt": "2023-03-17T11:34:12.000Z",
-      "updatedAt": "2023-03-17T11:34:12.000Z"
+      "conversationId": "3fd32b0d-1539-4447-9255-0312eaf2a776",
+      "messageId": "cmpl-6whDNstvRwvZfRusHf4Ic3pOmu9Fc",
+      "parentMessageId": "2e481c44-d6d7-4b5a-97c9-9e611e2c87ec",
+      "content": "Two!",
+      "createdAt": "2023-03-22T01:06:02.000Z",
+      "updatedAt": "2023-03-22T01:06:02.000Z"
     },
     {
-      "id": 20,
-      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-      "msgType": 2,
-      "content": "chatai生成的记录消息",
-      "createdAt": "2023-03-17T11:47:30.000Z",
-      "updatedAt": "2023-03-17T11:47:30.000Z"
-    },
-    {
-      "id": 19,
+      "id": 209,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
       "msgType": 1,
-      "content": "1+1",
-      "createdAt": "2023-03-17T11:47:30.000Z",
-      "updatedAt": "2023-03-17T11:47:30.000Z",
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "中华人民共和国成立时间",
+      "createdAt": "2023-03-22T01:06:16.000Z",
+      "updatedAt": "2023-03-22T01:06:16.000Z",
       "userInfo": {
         "id": 1,
         "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-        "updatedAt": "2023-03-16T09:04:34.192Z",
-        "createdAt": "2023-03-16T09:04:34.192Z"
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
       },
-      "timeString": "2023-03-17 19:47:30"
+      "timeString": "2023-03-22 09:06:16"
+    },
+    {
+      "id": 210,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "2d4d4164-1583-40fd-a6d6-6f4426f629ad",
+      "messageId": "cmpl-6whDdV4UbZMfk0mffXlPZHkw58IBO",
+      "parentMessageId": "750ef31a-f2c5-400a-83ed-a8fe134b0b80",
+      "content": "中华人民共和国成立于1949年10月1日。",
+      "createdAt": "2023-03-22T01:06:18.000Z",
+      "updatedAt": "2023-03-22T01:06:18.000Z"
+    },
+    {
+      "id": 211,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "1+2",
+      "createdAt": "2023-03-22T12:30:27.000Z",
+      "updatedAt": "2023-03-22T12:30:27.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-22 20:30:27"
+    },
+    {
+      "id": 212,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "f5914ddc-8791-4522-99f5-05e78dfe4b78",
+      "messageId": "cmpl-6wrtkQ0vrjJhI5kLOZ5efqj8XB9tO",
+      "parentMessageId": "5b7d7a25-62d3-4de3-b1cf-32cf1dc2d76d",
+      "content": "3!",
+      "createdAt": "2023-03-22T12:30:29.000Z",
+      "updatedAt": "2023-03-22T12:30:29.000Z"
+    },
+    {
+      "id": 213,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "电子科技大学简介",
+      "createdAt": "2023-03-22T12:30:44.000Z",
+      "updatedAt": "2023-03-22T12:30:44.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-22 20:30:44"
+    },
+    {
+      "id": 214,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "9c9c3e55-7bbd-4a40-beab-76b65b2e4fe8",
+      "messageId": "cmpl-6wru1v74SE0fgRNZS4WwjPdX2FgtV",
+      "parentMessageId": "8f34d11a-3c35-413a-889f-3b727fd20996",
+      "content": "电子科技大学是中国最著名的科技大学之一，位于成都市，是国家“211工程”重点建设的高等学府。电子科技大学以其雄厚的师资力量、先进的教学设施、丰富的科研条件和完善的管理制度而闻名。它在信息科学、计算机科学、微电子技术、通信技术、生物医学工程等领域取得了显著成就，为国家的科技进步和社会发展做出了重要贡献。",
+      "createdAt": "2023-03-22T12:30:56.000Z",
+      "updatedAt": "2023-03-22T12:30:56.000Z"
+    },
+    {
+      "id": 215,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 1,
+      "conversationId": "",
+      "messageId": "",
+      "parentMessageId": "",
+      "content": "how to learn english",
+      "createdAt": "2023-03-22T12:39:17.000Z",
+      "updatedAt": "2023-03-22T12:39:17.000Z",
+      "userInfo": {
+        "id": 1,
+        "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+        "avatarUrl": null,
+        "nickName": null,
+        "createdAt": "2023-03-16T09:04:34.000Z",
+        "updatedAt": "2023-03-16T09:04:34.000Z"
+      },
+      "timeString": "2023-03-22 20:39:17"
+    },
+    {
+      "id": 216,
+      "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
+      "msgType": 2,
+      "conversationId": "0a71e3bb-efde-4873-b9e8-112abc0bcf0f",
+      "messageId": "cmpl-6ws2IszvjAkiarpSlrFXaXLVejWO5",
+      "parentMessageId": "60410a02-6d5b-4c64-952c-fc9ade0e9f28",
+      "content": "It's easy to learn English! Start by reading books, listening to podcasts, and watching movies in English. You can also practice speaking with friends or taking classes. Good luck!",
+      "createdAt": "2023-03-22T12:39:20.000Z",
+      "updatedAt": "2023-03-22T12:39:20.000Z"
     }
   ],
   chatAIErrorToken: {

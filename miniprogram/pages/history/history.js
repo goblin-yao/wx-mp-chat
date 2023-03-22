@@ -8,7 +8,7 @@ const {
 const cloudContainerCaller = require("../../common/util/cloud-container-call");
 
 // 时间工具类
-const timeutil = require("../../utils/timeutil");
+const timeutil = require("../../common/util/timeutil");
 
 // 获取计时器函数
 Page({

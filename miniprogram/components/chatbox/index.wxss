@@ -89,3 +89,32 @@ text {
     transform: rotate(360deg);
   }
 }
+
+.loading-text {
+  width: 100rpx;
+}
+
+.loading-text::after {
+  content: "";
+  animation: ld 1.8s infinite;
+}
+
+@keyframes ld {
+
+  0%,
+  100% {
+    content: '';
+  }
+
+  25% {
+    content: '。';
+  }
+
+  50% {
+    content: '。。';
+  }
+
+  75% {
+    content: '。。。';
+  }
+}

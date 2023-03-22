@@ -4,6 +4,7 @@
 //   secretid: "",
 //   secretkey: "",
 // };
+// 参考 https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx3e17776051baf153&token=&lang=zh_CN
 const txCloudInfo = require("./config_txcloud");
 
 const cloudConfigs = {
@@ -19,7 +20,7 @@ module.exports = {
   ],
   CloudInfo: cloudConfigs.AIVoice, // 发布时记得更改为 prod
   VoiceToggle: 1, //语音功能开关
-  LocalDevMode: 0, //本地开发模式的选项
   txCloudInfo,
   maxVoiceTime: 30 * 1000, //最长录音时间，单位毫秒
+  LocalDevMode: 0, //本地开发模式的选项
 };

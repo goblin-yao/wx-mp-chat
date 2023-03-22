@@ -8,6 +8,8 @@ const {
   MAX_TIMEOUT_TIME_VOICE_SPEECH
 } = require("../../constants.js");
 const MockData = require("../../mock-data");
+
+const { getVoiceOption } = require("../../common/util/voice-option.js");
 const innerAudioContextMap = {}; // 创建内部 audio 上下文 InnerAudioContext 对象。
 
 Component({
@@ -228,6 +230,7 @@ Component({
         this.setData({
           chatList: newChatList,
         });
+        console.log('textshowed', new Date().toString())
         setTimeout(() => {
           this.setData({
             scrollId: "msg-" + parseInt(newChatList.length - 1),
@@ -334,20 +337,7 @@ Component({
         return
       }
       try {
-        const data = await this.pluginPromiseToSpeech(_text);
-        let url = data.result.filePath;
-        if (url && url.length > 0) {
-          _nAudioContext.autoplay = true;
-          _nAudioContext.src = url;
-          _nAudioContext.onPlay(() => {
-          });
-          _nAudioContext.onEnded(() => {
-            callbacks?.endCallBack && callbacks.endCallBack()
-          });
-          _nAudioContext.onError((res) => {
-            console.log(res.errMsg)
-          });
-        }
+        await this.pluginPromiseToSpeech(_text, _nAudioContext, callbacks);
       } catch {
         callbacks.endCallBack()
         wx.hideLoading()
@@ -357,8 +347,8 @@ Component({
       }
       wx.hideLoading()
     },
-    pluginPromiseToSpeech(_text) {//超时
-      let timeoutP = new Promise((resolve, reject) => {
+    pluginPromiseToSpeech(_text, _nAudioContext, callbacks) {//超时
+      let timeoutP = new Promise((resolve) => {
         setTimeout(() => {
           resolve('timeout');
         }, MAX_TIMEOUT_TIME_VOICE_SPEECH);
@@ -366,15 +356,25 @@ Component({
       let pSpeech = new Promise((resolve, reject) => {
         app.globalData.txCloudAIVoicePlugin.textToSpeech({
           content: _text,
-          speed: 0,
-          volume: 0,
-          voiceType: 0,
-          language: 1,
-          projectId: 0,
-          sampleRate: 16000,
+          ...getVoiceOption(_text),
           success: function (data) {
+            let url = data.result.filePath;
+            if (url && url.length > 0) {
+              _nAudioContext.autoplay = true;
+              _nAudioContext.src = url;
+              _nAudioContext.onPlay(() => {
+                resolve(data);
+                console.log('playing', new Date().toString())
+              });
+              _nAudioContext.onEnded(() => {
+                callbacks?.endCallBack && callbacks.endCallBack()
+              });
+              _nAudioContext.onError((res) => {
+                console.log(res.errMsg)
+                reject(data)
+              });
+            }
             console.log('合成结果:', data)
-            resolve(data)
           },
           fail: function (error) {
             reject(error)

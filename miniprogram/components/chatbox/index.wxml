@@ -36,8 +36,8 @@
       <view class="cu-avatar radius chat-ai-avatar"></view>
       <view class="main">
         <view class="content bg-cyan shadow loading-container">
-          <view class="loading"></view>
-          <text>{{CHAT_AI_INFO.loadingText}}</text>
+          <!-- <view class="loading"></view> -->
+          <text class="loading-text"></text>
           <view class="cancel_text" bindtap="cancelRequest" data-msgid="msg-{{index}}">取消</view>
         </view>
       </view>
