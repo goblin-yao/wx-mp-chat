@@ -33,7 +33,7 @@ Page({
     isLocalDevelopment: false,
     isVoiceFeatureOpen: Config.VoiceToggle,
     isVoiceInputStatus: Config.VoiceToggle ? true : false, //语音模式默认为true，否则为false
-    voiceTime: Math.floor(Config.txCloudInfo.maxVoiceTime / 1000), // 初始时间
+    voiceTime: Math.floor(Config.maxVoiceTime / 1000), // 初始时间
     voiceStatus: 2, // 语音识别管理器的状态：1为开始，2为停止，
     voiceData: "", //语音识别阶段数据,
     resultNumber: 1, //识别结果的段数
@@ -243,7 +243,7 @@ Page({
       secretid: Config.txCloudInfo.secretid,
       appid: Config.txCloudInfo.appid,
       // 录音参数
-      duration: Config.txCloudInfo.maxVoiceTime, // 最长一分钟
+      duration: Config.maxVoiceTime, // 最长一分钟
       frameSize: 0.32, //单位:k
 
       // 实时识别接口参数
@@ -295,7 +295,7 @@ Page({
     } else {
       clearInterval(txCloudAIVoiceInit); // 取消计时
       that.setData({
-        voiceTime: Math.floor(Config.txCloudInfo.maxVoiceTime / 1000),
+        voiceTime: Math.floor(Config.maxVoiceTime / 1000),
         voiceStatus: 2,
       });
       console.log("暂停计时");

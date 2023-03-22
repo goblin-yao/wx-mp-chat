@@ -1,21 +1,15 @@
+// 在腾讯云账号上配置
+// const txCloudInfo = {
+//   appid: ,
+//   secretid: "",
+//   secretkey: "",
+// };
+const txCloudInfo = require("./config_txcloud");
+
 const cloudConfigs = {
   prod: { ServerEnv: "prod-3gqv2g55fbf85d86", SericeName: "express-wjw3" },
   test: { ServerEnv: "test-1glra4je5fec5838", SericeName: "express-dfat" },
-  AIVoice: { ServerEnv: "prod-2g91i02f27ad26e9", SericeName: "express-5klk" }
-};
-//国内版
-// const txCloudInfo = {
-//   appid: 1303066095,
-//   secretid: "AKID3seKkvqTpuhJm01HJ8kIeolTvHSyEFCt",
-//   secretkey: "V8bqthJjxiOrIArJVP6YjyzkLiqkPs5w",
-//   maxVoiceTime: 30 * 1000, //单位毫秒
-// };
-//海外版
-const txCloudInfo = {
-  appid: 1317351780,
-  secretid: "IKIDZK0WrzvfDZlmz1ukREvQlupxxmNkV4Qc",
-  secretkey: "4weAYlr13wcGj281hCZkkX9YkkZBct0u",
-  maxVoiceTime: 30 * 1000, //单位毫秒
+  AIVoice: { ServerEnv: "prod-2g91i02f27ad26e9", SericeName: "express-5klk" },
 };
 
 module.exports = {
@@ -24,7 +18,8 @@ module.exports = {
     "otNgX0bmHWg7YaZm-55B1cze2Gg0",
   ],
   CloudInfo: cloudConfigs.AIVoice, // 发布时记得更改为 prod
-  VoiceToggle: 1,//语音功能开关
+  VoiceToggle: 1, //语音功能开关
   LocalDevMode: 0, //本地开发模式的选项
   txCloudInfo,
+  maxVoiceTime: 30 * 1000, //最长录音时间，单位毫秒
 };
