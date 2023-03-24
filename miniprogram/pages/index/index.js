@@ -56,7 +56,7 @@ Page({
     this.data.inputContent = e.detail.value.trim();
   },
   async submitQuestion() {
-    await this.askForSubscribe();
+    // await this.askForSubscribe();
     const userInputQuestion = this.data.inputContent
       .trim()
       .replace(/\s+/g, " ");

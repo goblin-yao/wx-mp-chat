@@ -20,7 +20,7 @@ App({
     this.globalData.safeBottomLeft = _e.screenHeight - _e.safeArea.bottom;
   },
   globalData: {
-    txCloudAIVoicePlugin: requirePlugin("QCloudAIVoice"),
+    txCloudAIVoicePlugin: null, // requirePlugin("QCloudAIVoice"),
     AILastRequestStartTime: 0, //用来展示耗时间
     curResPromise: null, //当前的Promise，用来abort
     curUserQuestion: "", //用户当前的提问，用来重新发送
