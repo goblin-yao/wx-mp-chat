@@ -10,7 +10,8 @@ const {
   MESSAGE_TYPE,
   MaxInputLength,
   ShareInfo,
-  MESSAGE_ERROR_TYPE, SUBSCRIBE_TEMPLATE_ID
+  MESSAGE_ERROR_TYPE,
+  SUBSCRIBE_TEMPLATE_ID,
 } = require("../../constants.js");
 const recorderManager = wx.getRecorderManager(); // 获取全局唯一的录音管理器 RecorderManager
 let speechRecognizerManager = null; //获取全局唯一的语音识别管理器
@@ -177,7 +178,7 @@ Page({
         const resPromise = new Promise((resolve, reject) => {
           cloudContainerCaller({
             path: "/proxyapi/chat", //"/openapi/chat"
-            data: { question: userInputQuestion },
+            data: { question: userInputQuestion, chatData: eventDataFirst },
             success: function (_e) {
               console.log("/proxyapi/chat", _e);
               resolve(_e);
@@ -211,7 +212,7 @@ Page({
           });
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) { }
+    } catch (error) {}
   },
   //切换到文本输入
   changeToTextInput() {
@@ -302,8 +303,14 @@ Page({
     }
   },
   initAIVoice() {
-    app.globalData.txCloudAIVoicePlugin.setQCloudSecret(Config.txCloudInfo.appid, Config.txCloudInfo.secretid, Config.txCloudInfo.secretkey, true);
-    speechRecognizerManager = app.globalData.txCloudAIVoicePlugin.speechRecognizerManager();
+    app.globalData.txCloudAIVoicePlugin.setQCloudSecret(
+      Config.txCloudInfo.appid,
+      Config.txCloudInfo.secretid,
+      Config.txCloudInfo.secretkey,
+      true
+    );
+    speechRecognizerManager =
+      app.globalData.txCloudAIVoicePlugin.speechRecognizerManager();
     // 请在页面onLoad时初始化好下列函数并确保腾讯云账号信息已经设置
     speechRecognizerManager.OnRecognitionStart = (res) => {
       console.log("开始识别", res);
@@ -320,29 +327,29 @@ Page({
     speechRecognizerManager.OnSentenceEnd = async (res) => {
       console.log("一句话结束", res);
       try {
-        const voiceQuestion = res.result.voice_text_str.trim()
+        const voiceQuestion = res.result.voice_text_str.trim();
         if (!voiceQuestion && this.data.isVoiceInputStatus) {
           wx.showToast({
             title: `语音输入为空`,
-          })
+          });
         } else {
           wx.showLoading({
-            title: '语音识别中',
-          })
-          await this.sendMsgToChatAI(voiceQuestion)
-          wx.hideLoading()
+            title: "语音识别中",
+          });
+          await this.sendMsgToChatAI(voiceQuestion);
+          wx.hideLoading();
         }
       } catch (error) {
         wx.showModal({
-          title: '异常',
+          title: "异常",
           content: `语音识别异常${JSON.stringify(error)}`,
           complete: (res) => {
             if (res.cancel) {
             }
             if (res.confirm) {
             }
-          }
-        })
+          },
+        });
       }
     };
     // 识别结束
@@ -353,18 +360,16 @@ Page({
     speechRecognizerManager.OnError = (res) => {
       console.log("识别失败", res);
       wx.showModal({
-        title: '识别失败',
+        title: "识别失败",
         content: JSON.stringify(res),
         complete: (res) => {
           if (res.cancel) {
-
           }
 
           if (res.confirm) {
-
           }
-        }
-      })
+        },
+      });
     };
     // 录音结束（最长10分钟）时回调
     speechRecognizerManager.OnRecorderStop = (res) => {
@@ -449,9 +454,9 @@ Page({
       });
 
       console.log("/miniprogram/limit/get=>", result);
-      leftChatNum = result?.data?.chat_left_nums || 0;
+      leftChatNum = result?.data?.data?.chatLeftNums || 0;
     } catch (error) {
-      console.log('miniprogram/limit/get error', error)
+      console.log("miniprogram/limit/get error", error);
     }
 
     this.setData({ leftChatNum: leftChatNum });
@@ -470,34 +475,36 @@ Page({
   },
   //订阅
   async askForSubscribe() {
-    const flag = wx.getStorageSync('subscribe_reject');
+    const flag = wx.getStorageSync("subscribe_reject");
     if (flag) {
       //如果有且小于一天
       if (flag - new Date().getTime() < 24 * 3600 * 1000) {
-        return new Promise((_r) => { _r() })
+        return new Promise((_r) => {
+          _r();
+        });
       }
     }
     const res = await wx.requestSubscribeMessage({
       tmplIds: [SUBSCRIBE_TEMPLATE_ID],
-    })
+    });
     //被拒绝，隔一天再提醒
-    if (res[SUBSCRIBE_TEMPLATE_ID] === 'reject') {
-      wx.setStorageSync('subscribe_reject', new Date().getTime())
+    if (res[SUBSCRIBE_TEMPLATE_ID] === "reject") {
+      wx.setStorageSync("subscribe_reject", new Date().getTime());
     }
-    console.log('订阅消息返回内容', res)
+    console.log("订阅消息返回内容", res);
   },
   //订阅
   async testForSubscribe() {
     const res = await cloudContainerCaller({
       path: "/miniprogram//subscribe/test",
     });
-    console.log('发送订阅消息返回内容', res)
+    console.log("发送订阅消息返回内容", res);
   },
-  jumpToAdmin() { },
+  jumpToAdmin() {},
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () { },
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
@@ -509,22 +516,22 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () { },
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () { },
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () { },
+  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享
@@ -533,8 +540,9 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_from_openid=${this.data.curOpenId
-        }&share_flag=${new Date().getTime()}`,
+      path: `/pages/index/index?share_from_openid=${
+        this.data.curOpenId
+      }&share_timestamp=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },
