@@ -16,8 +16,8 @@ module.exports = {
   MaxInputLength: 500,
   // chatAI的一些配置
   CHAT_AI_INFO: {
-    nickName: "达人助手",
-    wellcomeTitle: "达人助手欢迎你，分享好友可获取次数",
+    nickName: "AI声语",
+    wellcomeTitle: "AI声语欢迎你，分享好友可获取次数",
     loadingText: "。。。。。。",
   },
   /**
@@ -29,5 +29,5 @@ module.exports = {
   MESSAGE_TYPE: { WAITING_CHATAI: -1, USER_QUESTION: 1, CHATAI_ANSWER: 2 },
   MESSAGE_ERROR_TYPE: { TIMEOUT: -1, SERVER_ERROR: -2 },
   MAX_TIMEOUT_TIME_VOICE_SPEECH: 10 * 1000, //语音识别等待10秒
-  SUBSCRIBE_TEMPLATE_ID: 'Q3SybjHnStxkL5N9PDT-ty59D6Cu_bduGpeLpaJHSkw'
+  SUBSCRIBE_TEMPLATE_ID: 'MXaAWjuKPU6WlI3PZt9fof_s7o6U3r25d6CvKhNoA7Q'
 };

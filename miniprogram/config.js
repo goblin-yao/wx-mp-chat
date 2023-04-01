@@ -34,7 +34,7 @@ module.exports = {
     "ob88142Vub0qvrT0gVzDDkF0B4F8"
   ],
   CloudInfo: cloudConfigs.DarenzhushouProd, // 发布时记得更改为 prod
-  VoiceToggle: 0, //语音功能开关
+  VoiceToggle: 1, //语音功能开关
   txCloudInfo,
   maxVoiceTime: 30 * 1000, //最长录音时间，单位毫秒
   LocalDevMode: 0, //本地开发模式的选项
