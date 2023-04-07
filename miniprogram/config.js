@@ -42,5 +42,5 @@ module.exports = {
   VoiceToggle: 1, //语音功能开关
   txCloudInfo,
   maxVoiceTime: 30 * 1000, //最长录音时间，单位毫秒
-  LocalDevMode: 0, //本地开发模式的选项
+  LocalDevMode: 1, //本地开发模式的选项
 };

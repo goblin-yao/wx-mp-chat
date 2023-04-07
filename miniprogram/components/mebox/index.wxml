@@ -1,0 +1,41 @@
+<!--mask-->
+<view class="drawer_screen" bindtap="toggleDrawer" data-status="close" wx:if="{{showModalStatus}}"></view>
+<!--content-->
+<!--使用animation属性指定需要执行的动画-->
+<view class="drawer_box" wx:if="{{showModalStatus}}">
+  <!--drawer content-->
+  <view class="drawer_title">我的资料</view>
+  <view class="drawer_content">
+    <view class="top grid">
+      <view class="user-text-wrap">
+        我
+      </view>
+      <view style="margin-left: 20rpx;">
+        <view>
+          <input type="nickname" bind:change="setNickname" class="weui-input" placeholder="请填写昵称" />
+        </view>
+        <text class="user_level level_0">普通用户</text>
+      </view>
+    </view>
+    <view class="top grid">
+      <label class="title col-0">剩余使用次数</label>
+      <label class="mgr20">999次</label>
+      <label>每日赠送5次</label>
+    </view>
+    <view class="top grid">
+      <label class="title col-0 bold-label">邀请好友使用</label>
+    </view>
+    <view class="top grid btn-wrap">
+      <label>赠送10次/每人，每天最多6人</label>
+      <label class='label-btn'>去邀请</label>
+    </view>
+    <view class="top grid">
+      <label class="title col-0 bold-label">关注官方公众号</label>
+    </view>
+    <view class="top grid btn-wrap">
+      <label>公众号输入“领次数“，每日赠送10次</label>
+      <label class='label-btn'>去关注</label>
+    </view>
+  </view>
+  <!-- <view class="btn_ok" bindtap="powerDrawer" data-statu="close">确定</view> -->
+</view>

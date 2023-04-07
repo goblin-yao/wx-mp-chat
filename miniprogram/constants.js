@@ -16,8 +16,8 @@ module.exports = {
   MaxInputLength: 500,
   // chatAI的一些配置
   CHAT_AI_INFO: {
-    nickName: "AI声语",
-    wellcomeTitle: "AI声语欢迎你，分享好友可获取次数",
+    nickName: "声语Pro",
+    wellcomeTitle: "声语Pro欢迎你",
     loadingText: "。。。。。。",
   },
   /**

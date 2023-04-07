@@ -1,6 +1,9 @@
 <mp-toptips msg="{{errMsg}}" type="error" show="{{errMsg}}"></mp-toptips>
 <!--聊天内容-->
 <chat-box id="chat_room" bind:resendMsg="resendMsg"></chat-box>
+<!--我的资料-->
+<me-box id="me_dialog"></me-box>
+
 <view class="left_chat_bar">
   <view wx:if="{{isLocalDevelopment}}">
     <view bindtap="jumpToAdmin">
@@ -9,14 +12,21 @@
   </view>
   <text>剩余{{leftChatNum}}次问答</text>
 </view>
-
+<view class="foot-opt-area" style="margin-bottom:{{InputBottom}}px">
+  <view>
+    <button class="cu-btn bg-gray btn-history" bindtap="jumpToHistory">问答记录</button>
+  </view>
+  <view>
+    <button class="cu-btn bg-gray btn-history" bindtap="openMeBox">我的资料</button>
+  </view>
+</view>
 <view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
   <view class="action" wx:if="{{isVoiceFeatureOpen}}">
     <text class="cuIcon-text text-grey" wx:if="{{isVoiceInputStatus}}" bindtap="changeToTextInput"></text>
     <text class="cuIcon-voice text-grey" wx:else bindtap="changeToVoiceInput"></text>
   </view>
   <view wx:if="{{isVoiceInputStatus}}" class="text-input-voice">
-    <view wx:if="{{voiceStatus==2}}" class="text-grey" bindtap="startVoice">点击输入语音</view>
+    <view wx:if="{{voiceStatus==2}}" class="text-grey" bindtouchstart="startVoice">点击输入语音</view>
     <view wx:if="{{voiceStatus==1}}" class="text-grey" bindtap="stopVoice">
       <text>{{voiceTime}}秒</text>
       <view class="cuIcon-loading text-animate-loading"></view>

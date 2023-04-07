@@ -6,9 +6,6 @@
     <view class="main">
       <view class="content title_content bg-cyan shadow">
         <text>{{CHAT_AI_INFO.wellcomeTitle}}</text>
-        <view>
-          <button class="cu-btn bg-gray btn-history" bindtap="jumpToHistory"> 查看问答记录</button>
-        </view>
       </view>
     </view>
   </view>

@@ -22,6 +22,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showMeBox: true,
     curUserInfo: {},
     curOpenId: "",
     //输入框距离
@@ -212,7 +213,7 @@ Page({
           });
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) {}
+    } catch (error) { }
   },
   //切换到文本输入
   changeToTextInput() {
@@ -385,21 +386,6 @@ Page({
     Config.VoiceToggle && this.initAIVoice();
   },
 
-  userRegister(userInfo) {
-    return new Promise(function (resolve, reject) {
-      cloudContainerCaller({
-        path: "/miniprogram/user/register",
-        data: userInfo,
-        success: function (_e) {
-          console.log("/miniprogram/user/register", _e);
-          resolve(_e);
-        },
-        fail: function (_e) {
-          reject(_e);
-        },
-      });
-    });
-  },
   setInfo(_tem) {
     app.globalData.openid = _tem.openid;
     app.globalData.userInfo = _tem;
@@ -500,11 +486,11 @@ Page({
     });
     console.log("发送订阅消息返回内容", res);
   },
-  jumpToAdmin() {},
+  jumpToAdmin() { },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {},
+  onReady: function () { },
 
   /**
    * 生命周期函数--监听页面显示
@@ -516,23 +502,32 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {},
+  onHide: function () { },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {},
+  onUnload: function () { },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {},
+  onPullDownRefresh: function () { },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {},
+  onReachBottom: function () { },
 
+  jumpToHistory() {
+    wx.navigateTo({
+      url: '/pages/history/history',
+    })
+  },
+
+  openMeBox() {
+    this.selectComponent("#me_dialog").toggleDrawer();
+  },
   /**
    * 用户点击右上角分享
    */
@@ -540,9 +535,8 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_from_openid=${
-        this.data.curOpenId
-      }&share_timestamp=${new Date().getTime()}`,
+      path: `/pages/index/index?share_from_openid=${this.data.curOpenId
+        }&share_timestamp=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },

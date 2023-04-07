@@ -52,6 +52,23 @@ movable-view image {
   height: 100%;
 }
 
+.foot-opt-area {
+  position: fixed;
+  width: 100%;
+  bottom: 106rpx;
+  z-index: 1024;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-history {
+  height: 36rpx;
+  font-size: 28rpx;
+  color: #000;
+  margin-right: 10rpx;
+}
+
 .left_chat_bar {
   position: fixed;
   right: 10px;

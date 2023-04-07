@@ -3,12 +3,6 @@ text {
   word-break: break-all;
 }
 
-.btn-history {
-  height: 36rpx;
-  font-size: 28rpx;
-  color: #826666;
-}
-
 .cu-avatar-user {
   font-size: 32rpx;
   background: #6aa06a;

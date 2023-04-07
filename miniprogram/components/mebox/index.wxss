@@ -1,0 +1,156 @@
+.user-text-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  font-size: 48rpx;
+  background: #9a9c9a;
+  border-radius: 8rpx;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 80rpx;
+  color: #fff;
+}
+
+.user_level {
+  background: #517d51;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 6rpx 8rpx;
+}
+
+/*button*/
+.btn {
+  width: 80%;
+  padding: 20rpx 0;
+  border-radius: 10rpx;
+  text-align: center;
+  margin: 40rpx 10%;
+  background: #000;
+  color: #fff;
+}
+
+/*mask*/
+.drawer_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1025;
+  background: #000;
+  opacity: 0.7;
+  overflow: hidden;
+}
+
+/*content*/
+.drawer_box {
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  z-index: 1026;
+  background: #FAFAFA;
+  border-radius: 16rpx;
+  padding-bottom: 64rpx;
+}
+
+.drawer_title {
+  padding: 15rpx 0;
+  font: 36rpx "microsoft yahei";
+  text-align: center;
+  font-weight: bold;
+}
+
+.drawer_content {
+  margin: 0 20rpx;
+}
+
+.btn_ok {
+  padding: 10rpx;
+  font: 28rpx "microsoft yahei";
+  text-align: center;
+  border-top: 1rpx solid #E8E8EA;
+  color: #3CC51F;
+}
+
+.top {
+  padding-top: 8rpx;
+}
+
+.bottom {
+  padding-bottom: 8rpx;
+}
+
+.title {
+  margin-right: 20rpx;
+  height: 30rpx;
+  line-height: 30rpx;
+  min-width: 60rpx;
+  text-align: center;
+  display: inline-block;
+  font: 32rpx "microsoft yahei";
+}
+
+.input_base {
+  border: 2rpx solid #ccc;
+  padding-left: 10rpx;
+  margin-right: 50rpx;
+}
+
+.input_h30 {
+  height: 30rpx;
+  line-height: 30rpx;
+}
+
+.input_h60 {
+  height: 60rpx;
+}
+
+.input_view {
+  font: 28rpx "microsoft yahei";
+  background: #fff;
+  color: #000;
+  line-height: 30rpx;
+}
+
+.grid {
+  display: -webkit-box;
+  display: box;
+}
+
+.col-0 {
+  -webkit-box-flex: 0;
+  box-flex: 0;
+}
+
+.col-1 {
+  -webkit-box-flex: 1;
+  box-flex: 1;
+}
+
+.fl {
+  float: left;
+}
+
+.bold-label {
+  font-weight: bold;
+}
+
+.btn-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label-btn {
+  color: #ffff;
+  background: #517d51;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.fr {
+  float: right;
+}
+
+.mgr20 {
+  margin-right: 20rpx;
+}

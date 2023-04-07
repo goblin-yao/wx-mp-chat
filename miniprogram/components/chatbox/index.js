@@ -33,7 +33,7 @@ Component({
       this.setData({
         scrollHeight:
           app.globalData.systemInfo.windowHeight -
-          (50 + app.globalData.safeBottomLeft),
+          (80 + app.globalData.safeBottomLeft),
       });
       console.log("data in chatbox:", this.data);
     },
@@ -265,11 +265,6 @@ Component({
           });
         }, 100);
       }
-    },
-    jumpToHistory() {
-      wx.navigateTo({
-        url: '/pages/history/history',
-      })
     },
 
     uploadUserAva(fileID) {
