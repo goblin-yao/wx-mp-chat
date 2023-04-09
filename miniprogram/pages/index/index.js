@@ -432,6 +432,7 @@ Page({
     let leftChatNum = 0;
     if (Config.LocalDevMode) {
       this.setData({ leftChatNum: 9999 });
+      this.selectComponent("#me_dialog").updateLimit({ leftChatNum: 9999 });
       return;
     }
     try {
@@ -446,6 +447,7 @@ Page({
     }
 
     this.setData({ leftChatNum: leftChatNum });
+    this.selectComponent("#me_dialog").updateLimit({ leftChatNum });
   },
   // 获取用户今天剩余聊天次数
   async reduceLimit() {

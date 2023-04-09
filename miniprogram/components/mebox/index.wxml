@@ -1,3 +1,12 @@
+<!-- 关注公众号的 -->
+<view class="drawer_screen" bindtap="closeGZHDrawer" data-status="close" wx:if="{{showGZH}}"></view>
+<view class='gzh_screen' wx:if="{{showGZH}}">
+  <text class="cuIcon-close gzh_close" bindtap="closeGZHDrawer"></text>
+  <view class='gzh_wrap'>
+    <image class="gzh_icon" show-menu-by-longpress="{{true}}" src='{{gzhIconURL}}'></image>
+  </view>
+  <text class='gzh_text'>长按识别二维码，关注公众号</text>
+</view>
 <!--mask-->
 <view class="drawer_screen" bindtap="toggleDrawer" data-status="close" wx:if="{{showModalStatus}}"></view>
 <!--content-->
@@ -5,36 +14,40 @@
 <view class="drawer_box" wx:if="{{showModalStatus}}">
   <!--drawer content-->
   <view class="drawer_title">我的资料</view>
+  <text class="cuIcon-close screen_close" bindtap="toggleDrawer"></text>
   <view class="drawer_content">
     <view class="top grid">
       <view class="user-text-wrap">
         我
       </view>
       <view style="margin-left: 20rpx;">
-        <view>
-          <input type="nickname" bind:change="setNickname" class="weui-input" placeholder="请填写昵称" />
+        <view style="position: relative;">
+          <input type="nickname" style="min-width: 80rpx;max-width: 180rpx;" bind:change="setNickname" value="{{userInfo.nickName}}" class="weui-input" placeholder="请填写昵称" />
+          <view style='position:absolute;top:0;right:0;background: #fff;'>
+            <text class="cuIcon-edit"></text>
+          </view>
         </view>
         <text class="user_level level_0">普通用户</text>
       </view>
     </view>
     <view class="top grid">
       <label class="title col-0">剩余使用次数</label>
-      <label class="mgr20">999次</label>
-      <label>每日赠送5次</label>
+      <label class="mgr20">{{leftChatNum}}次</label>
+      <label>系统每天赠送5次</label>
     </view>
     <view class="top grid">
       <label class="title col-0 bold-label">邀请好友使用</label>
     </view>
     <view class="top grid btn-wrap">
       <label>赠送10次/每人，每天最多6人</label>
-      <label class='label-btn'>去邀请</label>
+      <button class='label-btn' open-type="share">去邀请</button>
     </view>
     <view class="top grid">
       <label class="title col-0 bold-label">关注官方公众号</label>
     </view>
     <view class="top grid btn-wrap">
-      <label>公众号输入“领次数“，每日赠送10次</label>
-      <label class='label-btn'>去关注</label>
+      <label>公众号输入“{{limit_text}}“，每日赠送10次</label>
+      <button class='label-btn' bindtap="guanzhuEvent">去关注</button>
     </view>
   </view>
   <!-- <view class="btn_ok" bindtap="powerDrawer" data-statu="close">确定</view> -->

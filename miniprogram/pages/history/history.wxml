@@ -1,4 +1,5 @@
 <scroll-view class="cu-chat" scroll-y="true" enable-back-to-top enable-flex scroll-into-view="{{scrollId}}" style="height:{{scrollHeight}}px;" bindscrolltoupper="tapTop">
+  <view class="record_tips">存储最近50条记录</view>
   <view wx:for="{{chatList}}" wx:key="index" wx:for-item="item">
     <!--chatai发送的信息-->
     <view class="cu-item from_ai" wx:if="{{item.msgType == MESSAGE_TYPE.CHATAI_ANSWER}}" id="msg-{{index}}">

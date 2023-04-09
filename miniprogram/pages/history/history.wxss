@@ -3,14 +3,22 @@ text {
   word-break: break-all;
 }
 
+.record_tips {
+  font-size: 24rpx;
+  color: var(--grey);
+  text-align: center;
+}
+
 .cu-chat .cu-item {
   display: flex;
   padding: 5rpx 20rpx 60rpx;
   position: relative;
 }
+
 .cu-chat .cu-item>.main {
   max-width: calc(100% - 140rpx);
 }
+
 .btn-history {
   height: 36rpx;
   font-size: 28rpx;

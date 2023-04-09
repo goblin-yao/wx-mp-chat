@@ -41,6 +41,44 @@
   overflow: hidden;
 }
 
+/*mask*/
+.gzh_screen {
+  width: 480rpx;
+  height: 480rpx;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -240rpx;
+  margin-top: -240rpx;
+  z-index: 1028;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.gzh_wrap {}
+
+.gzh_close {
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 40rpx;
+}
+
+.screen_close {
+  color: #000;
+  position: absolute;
+  top: 0;
+  right: 10rpx;
+  font-size: 40rpx;
+}
+
+.gzh_text {
+  background: #fff;
+}
+
 /*content*/
 .drawer_box {
   width: 100%;
@@ -143,8 +181,12 @@
 .label-btn {
   color: #ffff;
   background: #517d51;
-  padding: 4rpx 12rpx;
   border-radius: 8rpx;
+  height: 56rpx;
+  text-align: center;
+  line-height: 56rpx;
+  font-size: 28rpx;
+  margin: 0;
 }
 
 .fr {
@@ -153,4 +195,9 @@
 
 .mgr20 {
   margin-right: 20rpx;
+}
+
+.gzh_icon {
+  width: 300rpx;
+  height: 300rpx;
 }

@@ -20,6 +20,7 @@ module.exports = {
     wellcomeTitle: "声语Pro欢迎你",
     loadingText: "。。。。。。",
   },
+  GZH_RECEIVE_LIMIT_TEXT: "声语",//公众号领次数
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息
    * -1 -> UI的loading等待
