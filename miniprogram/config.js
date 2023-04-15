@@ -16,10 +16,10 @@ const cloudConfigs = {
     ServerEnv: "test-1glra4je5fec5838",
     SericeName: "express-dfat",
   },
-  AIVoiceShouyoubao: {
-    ServerEnv: "prod-2g91i02f27ad26e9",
-    SericeName: "express-5klk",
-  },
+  // AIVoiceShouyoubao: {
+  //   ServerEnv: "prod-2g91i02f27ad26e9",
+  //   SericeName: "express-5klk",
+  // },
 
   DarenzhushouProd: {
     ServerEnv: "prod-3gurr7jtde026102",
@@ -37,7 +37,7 @@ module.exports = {
     "o9Onv5BcWuj8o8-78-N1S-HTur7k",
     "otNgX0bmHWg7YaZm-55B1cze2Gg0",
     "ob88142Vub0qvrT0gVzDDkF0B4F8",
-    "onsoC5hahyobTFb4CIdAHklo-5CU" //声语小程序
+    "onsoC5hahyobTFb4CIdAHklo-5CU", //声语小程序
   ],
   CloudInfo: cloudConfigs.AIShengYuProd, // 发布时记得更改为 prod
   VoiceToggle: 1, //语音功能开关

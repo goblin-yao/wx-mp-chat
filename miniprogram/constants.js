@@ -13,6 +13,7 @@ module.exports = {
     title: 'ai随心聊-天文地理/古今中外'
   }
   ],
+  //可以 wx.getAccountInfoSync().miniProgram.appId 根据当前Appid获取不同的配置
   MaxInputLength: 500,
   // chatAI的一些配置
   CHAT_AI_INFO: {
@@ -20,7 +21,7 @@ module.exports = {
     wellcomeTitle: "声语Pro欢迎你",
     loadingText: "。。。。。。",
   },
-  GZH_RECEIVE_LIMIT_TEXT: "声语",//公众号领次数
+  GZH_RECEIVE_LIMIT_TEXT: "声语",//公众号领次数 声语Pro
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息
    * -1 -> UI的loading等待
