@@ -201,3 +201,7 @@
   width: 300rpx;
   height: 300rpx;
 }
+.kefu_icon {
+  width: 300rpx;
+  height: 400rpx;
+}

@@ -1,5 +1,6 @@
 <!-- 关注公众号的 -->
 <view class="drawer_screen" bindtap="closeGZHDrawer" data-status="close" wx:if="{{showGZH}}"></view>
+<view class="drawer_screen" bindtap="closeKeFuDrawer" data-status="close" wx:if="{{showKeFu}}"></view>
 <view class='gzh_screen' wx:if="{{showGZH}}">
   <text class="cuIcon-close gzh_close" bindtap="closeGZHDrawer"></text>
   <view class='gzh_wrap'>
@@ -7,6 +8,14 @@
   </view>
   <text class='gzh_text'>长按识别二维码，关注公众号</text>
 </view>
+<view class='gzh_screen' wx:if="{{showKeFu}}">
+  <text class="cuIcon-close gzh_close" bindtap="closeKeFuDrawer"></text>
+  <view class='gzh_wrap'>
+    <image class="kefu_icon" show-menu-by-longpress="{{true}}" src='{{kefuIconURL}}'></image>
+  </view>
+  <text class='gzh_text'>长按识别二维码，添加客服</text>
+</view>
+
 <!--mask-->
 <view class="drawer_screen" bindtap="toggleDrawer" data-status="close" wx:if="{{showModalStatus}}"></view>
 <!--content-->
@@ -48,6 +57,10 @@
     <view class="top grid btn-wrap">
       <label>公众号输入“{{limit_text}}“，每日赠送10次</label>
       <button class='label-btn' bindtap="guanzhuEvent">去关注</button>
+    </view>
+    <view class="top grid btn-wrap">
+      <label>添加客服</label>
+      <button class='label-btn' bindtap="kefuEvent">去添加</button>
     </view>
   </view>
   <!-- <view class="btn_ok" bindtap="powerDrawer" data-statu="close">确定</view> -->

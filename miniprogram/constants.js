@@ -1,3 +1,4 @@
+const curAppID = wx.getAccountInfoSync().miniProgram.appId;
 //一些常量配置
 module.exports = {
   ShareInfo: [{
@@ -17,11 +18,11 @@ module.exports = {
   MaxInputLength: 500,
   // chatAI的一些配置
   CHAT_AI_INFO: {
-    nickName: "声语Pro",
-    wellcomeTitle: "声语Pro欢迎你",
+    nickName: curAppID === "wxfed2e64d2ff0da4a" ? "声语Pro" : "GeniusAI助手",
+    wellcomeTitle: curAppID === "wxfed2e64d2ff0da4a" ? "声语Pro欢迎你" : "GeniusAI助手欢迎你",
     loadingText: "。。。。。。",
   },
-  GZH_RECEIVE_LIMIT_TEXT: "声语",//公众号领次数 声语Pro
+  GZH_RECEIVE_LIMIT_TEXT: curAppID === "wxfed2e64d2ff0da4a" ? "声语" : "GeniusAI助手",//公众号领次数
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息
    * -1 -> UI的loading等待
