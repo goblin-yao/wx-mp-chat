@@ -36,10 +36,14 @@
             <text class="cuIcon-edit"></text>
           </view>
         </view>
-        <text class="user_level level_0">普通用户</text>
+        <text wx:if="{{leftChatNum=='-1000'}}" class="user_level level_1">会员</text>
+        <text wx:else class="user_level level_0">普通用户</text>
       </view>
     </view>
-    <view class="top grid">
+    <view class="top grid" wx:if="{{leftChatNum=='-1000'}}">
+      <label>系统每天赠送5次</label>
+    </view>
+    <view class="top grid" wx:else>
       <label class="title col-0">剩余使用次数</label>
       <label class="mgr20">{{leftChatNum}}次</label>
       <label>系统每天赠送5次</label>

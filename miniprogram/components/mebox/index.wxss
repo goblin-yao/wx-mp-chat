@@ -17,6 +17,10 @@
   padding: 6rpx 8rpx;
 }
 
+.level_1 {
+  background: #e46a07;
+}
+
 /*button*/
 .btn {
   width: 80%;
@@ -201,6 +205,7 @@
   width: 300rpx;
   height: 300rpx;
 }
+
 .kefu_icon {
   width: 300rpx;
   height: 400rpx;
