@@ -40,7 +40,10 @@ module.exports = {
     "ob88142Vub0qvrT0gVzDDkF0B4F8",
     "onsoC5hahyobTFb4CIdAHklo-5CU", //声语小程序
   ],
-  CloudInfo: cloudConfigs.AIShengYuProd, // 发布时记得更改为 prod
+  CloudInfo:
+    curAppID === "wxfed2e64d2ff0da4a"
+      ? cloudConfigs.AIShengYuProd
+      : cloudConfigs.DarenzhushouProd, // 发布时记得更改为 prod
   VoiceToggle: curAppID === "wxfed2e64d2ff0da4a" ? 1 : 0, //语音功能开关
   txCloudInfo,
   maxVoiceTime: 30 * 1000, //最长录音时间，单位毫秒
