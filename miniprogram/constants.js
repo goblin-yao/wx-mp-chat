@@ -30,7 +30,7 @@ module.exports = {
     loadingText: "。。。。。。",
   },
   GZH_RECEIVE_LIMIT_TEXT:
-    curAppID === "wxfed2e64d2ff0da4a" ? "声语" : "GeniusAI助手", //公众号领次数
+    curAppID === "wxfed2e64d2ff0da4a" ? "领声语次数" : "领次数", //公众号领次数
   /**
    * 消息类型，约定:大于0的消息是需要入库的消息
    * -1 -> UI的loading等待
