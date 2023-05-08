@@ -146,6 +146,7 @@ Page({
     this.sendMsgToChatAI(app.globalData.curUserQuestion);
   },
   async sendMsgToChatAI(userInputQuestion) {
+    //因为-1000表示是会员
     if (this.data.leftChatNum <= 0 && this.data.leftChatNum > -1000) {
       wx.showToast({
         title: "今日使用次数已用完",
