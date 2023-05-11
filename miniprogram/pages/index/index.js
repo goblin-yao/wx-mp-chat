@@ -161,6 +161,13 @@ Page({
     if (!checkResult) {
       return;
     }
+    console.log('[AILastRequestStartTime]', app.globalData.AILastRequestStartTime)
+    if (new Date().getTime() - app.globalData.AILastRequestStartTime < 10 * 1000) {
+      wx.showToast({
+        title: '提问太频繁了，过几秒钟再试试',
+      })
+      return;
+    }
     app.globalData.AILastRequestStartTime = +new Date();
 
     // 先发送一条消息到屏幕上，再等待server的回复

@@ -42,16 +42,16 @@ Component({
    */
   pageLifetimes: {
     show: function () {
+    },
+  },
+  lifetimes: {
+    attached() {
       // 页面被展示
       const _userInfo = wx.getStorageSync("cur_mp_user_info");
       console.log("_userInfo", _userInfo);
       if (_userInfo) {
         this.setData({ userInfo: _userInfo });
       }
-    },
-  },
-  lifetimes: {
-    attached() {
     },
     detached() { },
   },
