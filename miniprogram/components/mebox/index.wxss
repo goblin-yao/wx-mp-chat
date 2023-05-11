@@ -71,6 +71,11 @@
   font-size: 40rpx;
 }
 
+.kefu_close {
+  top: -160rpx;
+  right: -10rpx;
+}
+
 .screen_close {
   color: #000;
   position: absolute;
@@ -207,6 +212,6 @@
 }
 
 .kefu_icon {
-  width: 300rpx;
-  height: 400rpx;
+  width: 400rpx;
+  height: 610rpx;
 }

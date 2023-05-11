@@ -43,17 +43,17 @@ Component({
   pageLifetimes: {
     show: function () {
       // 页面被展示
-    },
-  },
-  lifetimes: {
-    attached() {
-      const _userInfo = wx.getStorageSync("cur_user_info");
+      const _userInfo = wx.getStorageSync("cur_mp_user_info");
       console.log("_userInfo", _userInfo);
       if (_userInfo) {
         this.setData({ userInfo: _userInfo });
       }
     },
-    detached() {},
+  },
+  lifetimes: {
+    attached() {
+    },
+    detached() { },
   },
   /**
    * 组件的方法列表
@@ -97,7 +97,7 @@ Component({
         data: { nickName },
         success: function (_e) {
           console.log("/miniprogram/user/update", _e);
-          wx.setStorageSync("cur_user_info", _e.data.data);
+          wx.setStorageSync("cur_mp_user_info", _e.data.data);
           that.setData({ userInfo: _e.data.data });
         },
         fail: function (_e) {
