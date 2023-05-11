@@ -398,7 +398,7 @@ Page({
     });
   },
   userAuth(options) {
-    const userInfFromStorage = wx.getStorageSync("cur_user_info");
+    const userInfFromStorage = wx.getStorageSync("cur_mp_user_info");
     // 如果本地存储有东西，但不是走的分享，直接走本地环境，有分享就需要重新更新
     if (userInfFromStorage && !options.share_from_openid) {
       console.log("userInfFromStorage=>", userInfFromStorage);
@@ -419,7 +419,7 @@ Page({
         tempUserInfo = res.data.data;
 
         this.setInfo(tempUserInfo);
-        wx.setStorageSync("cur_user_info", tempUserInfo);
+        wx.setStorageSync("cur_mp_user_info", tempUserInfo);
       },
       fail: (res) => {
         console.log(res);
@@ -464,10 +464,10 @@ Page({
   },
   //订阅
   async askForSubscribe() {
-    const flag = wx.getStorageSync("subscribe_reject");
+    const flag = wx.getStorageSync("subscribe_show");
     if (flag) {
-      //如果有且小于一天
-      if (flag - new Date().getTime() < 24 * 3600 * 1000) {
+      //如果有且小于7天
+      if (flag - new Date().getTime() < 7 * 24 * 3600 * 1000) {
         return new Promise((_r) => {
           _r();
         });
@@ -476,19 +476,19 @@ Page({
     const res = await wx.requestSubscribeMessage({
       tmplIds: [SUBSCRIBE_TEMPLATE_ID],
     });
-    //被拒绝，隔一天再提醒
-    if (res[SUBSCRIBE_TEMPLATE_ID] === "reject") {
-      wx.setStorageSync("subscribe_reject", new Date().getTime());
-    }
+    wx.setStorageSync("subscribe_show", new Date().getTime());
+    // if (res[SUBSCRIBE_TEMPLATE_ID] === "reject") {
+    //   wx.setStorageSync("subscribe_show", new Date().getTime());
+    // }
     console.log("订阅消息返回内容", res);
   },
   //订阅
-  async testForSubscribe() {
-    const res = await cloudContainerCaller({
-      path: "/miniprogram//subscribe/test",
-    });
-    console.log("发送订阅消息返回内容", res);
-  },
+  // async testForSubscribe() {
+  //   const res = await cloudContainerCaller({
+  //     path: "/miniprogram//subscribe/test",
+  //   });
+  //   console.log("发送订阅消息返回内容", res);
+  // },
   jumpToAdmin() { },
   /**
    * 生命周期函数--监听页面初次渲染完成

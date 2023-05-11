@@ -9,7 +9,7 @@
   <text class='gzh_text'>长按识别二维码，关注公众号</text>
 </view>
 <view class='gzh_screen' wx:if="{{showKeFu}}">
-  <text class="cuIcon-close gzh_close" bindtap="closeKeFuDrawer"></text>
+  <text class="cuIcon-close gzh_close kefu_close" bindtap="closeKeFuDrawer"></text>
   <view class='gzh_wrap'>
     <image class="kefu_icon" show-menu-by-longpress="{{true}}" src='{{kefuIconURL}}'></image>
   </view>
