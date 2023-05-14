@@ -29,6 +29,11 @@ text {
   align-items: center;
 }
 
+.text_link {
+  color: rgb(55, 55, 165);
+  display: inline-block;
+}
+
 .voice-msg-displaying {
   -webkit-animation: voice-icon-animate 2s linear infinite;
   animation: voice-icon-animate 2s linear infinite;

@@ -166,6 +166,23 @@ Component({
         }
       );
     },
+    showLink() {
+      wx.showActionSheet({
+        itemList: ['复制链接地址'],
+        success(res) {
+          if (res.tapIndex == 0) {
+            wx.setClipboardData({
+              data: 'https://puzhikeji.com.cn/',
+              success(res) {
+                console.log(res.data); // data
+              },
+            });
+          }
+        },
+        fail(res) {
+        }
+      })
+    },
     // 语音合成并自动播放
     async convertTextToVoiceAndPlay(msgToShow) {
       let that = this;
@@ -200,6 +217,9 @@ Component({
           });
         }
       })
+    },
+    getChatListData() {
+      return this.data.chatList.slice(-8);//获取最近4条对话
     },
     async receiveMsg(_e) {
       console.log("received msg=>", _e);

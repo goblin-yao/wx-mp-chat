@@ -3,6 +3,52 @@ page {
   background: ghostwhite;
 }
 
+
+/*mask*/
+.edit_text_screen {
+  width: 640rpx;
+  height: 640rpx;
+  position: fixed;
+  /* top: 50%; */
+  left: 50%;
+  margin-left: -320rpx;
+  /* margin-top: -240rpx; */
+  z-index: 1028;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #fff;
+}
+
+.edit_textarea {
+  width: 620rpx;
+  height: 620rpx;
+  border: 1px solid #ded1d1;
+}
+
+.edit_btn_group {
+  display: flex;
+  margin-top: 10rpx;
+}
+
+.edit_btn_group_btn {
+  margin-right: 80rpx;
+}
+
+/*mask*/
+.drawer_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1025;
+  background: #000;
+  opacity: 0.7;
+  overflow: hidden;
+}
+
 movable-area {
   position: fixed;
   left: 0;

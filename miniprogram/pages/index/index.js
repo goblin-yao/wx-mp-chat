@@ -22,7 +22,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    showMeBox: true,
+    showTextEdit: false,
+    totalEditContentLength: 0,
+    inputEditContent: "",
+    inputEditBottom: 50,
     curUserInfo: {},
     curOpenId: "",
     //输入框距离
@@ -56,11 +59,58 @@ Page({
     });
     this.data.inputContent = e.detail.value.trim();
   },
+  /****限制字数与计算 */
+  getValueLength: function (e) {
+    let value = e.detail.value
+    let len = parseInt(value.length)
+    this.setData({
+      totalEditContentLength: len, //当前字数 
+      inputEditContent: e.detail.value
+    })
+  },
+  inputEditFocus(e) {
+    console.log('[inputEditBottom]', e.detail.height)
+    this.setData({
+      inputEditBottom: e.detail.height
+    })
+  },
+  inputEditBlur() {
+    this.setData({
+      inputEditBottom: 50
+    })
+  },
+  closeEdit: function () {
+    this.setData({ showTextEdit: false })
+  },
+  async submitEditedQuestion() {
+    await this.sendMsgToChatAI(this.data.inputEditContent.trim())
+    this.setData({ showTextEdit: false, inputContent: "" })
+  },
   async submitQuestion() {
     await this.askForSubscribe();
     const userInputQuestion = this.data.inputContent
       .trim()
       .replace(/\s+/g, " ");
+    if (userInputQuestion.length > MaxInputLength) {
+      wx.showModal({
+        title: '输入问题超过长度限制',
+        content: `输入问题长度${userInputQuestion.length}，超过${MaxInputLength}字限制。请删减问题字数。`,
+        confirmText: '去编辑',
+        complete: (res) => {
+          if (res.cancel) {
+
+          }
+          if (res.confirm) {
+            this.setData({
+              showTextEdit: true,
+              inputEditContent: userInputQuestion,
+              totalEditContentLength: userInputQuestion.length
+            })
+          }
+        }
+      })
+      return
+    }
     this.setData({
       inputDisabled: true,
       inputContent: "",
@@ -145,6 +195,18 @@ Page({
     console.log("ev", event);
     this.sendMsgToChatAI(app.globalData.curUserQuestion);
   },
+  getChatListData() {
+    const tempList = this.selectComponent("#chat_room").getChatListData();
+    const msgList = []
+    for (let index = 0; index < tempList.length; index++) {
+      const element = tempList[index];
+      if (element?.msgType > 0) {
+        msgList.push({ role: element.openid ? 'user' : 'assistant', content: element.content })
+      }
+    }
+    console.log('[msgList]', msgList)
+    return msgList;
+  },
   async sendMsgToChatAI(userInputQuestion) {
     //因为-1000表示是会员
     if (this.data.leftChatNum <= 0 && this.data.leftChatNum > -1000) {
@@ -161,11 +223,17 @@ Page({
     if (!checkResult) {
       return;
     }
-    console.log('[AILastRequestStartTime]', app.globalData.AILastRequestStartTime)
-    if (new Date().getTime() - app.globalData.AILastRequestStartTime < 10 * 1000) {
+    console.log(
+      "[AILastRequestStartTime]",
+      app.globalData.AILastRequestStartTime
+    );
+    if (
+      new Date().getTime() - app.globalData.AILastRequestStartTime <
+      10 * 1000
+    ) {
       wx.showToast({
-        title: '提问太频繁了，过几秒钟再试试',
-      })
+        title: "提问太频繁了，过几秒钟再试试",
+      });
       return;
     }
     app.globalData.AILastRequestStartTime = +new Date();
@@ -185,17 +253,33 @@ Page({
         await this.handleMsgSuccess(res);
       } else {
         const resPromise = new Promise((resolve, reject) => {
-          cloudContainerCaller({
-            path: "/proxyapi/chat", //"/openapi/chat"
-            data: { question: userInputQuestion, chatData: eventDataFirst },
-            success: function (_e) {
+          wx.request({
+            url: "https://puzhikeji.com.cn/proxyapi/chat",
+            data: { question: userInputQuestion, messages: this.getChatListData() },
+            method: "POST",
+            header: {
+              "content-type": "application/json", // 默认值
+            },
+            success(_e) {
               console.log("/proxyapi/chat", _e);
               resolve(_e);
             },
-            fail: function (_e) {
+            fail(_e) {
               reject(_e);
             },
           });
+
+          // cloudContainerCaller({
+          //   path: "/proxyapi/chat", //"/openapi/chat"
+          //   data: { question: userInputQuestion, chatData: eventDataFirst },
+          //   success: function (_e) {
+          //     console.log("/proxyapi/chat", _e);
+          //     resolve(_e);
+          //   },
+          //   fail: function (_e) {
+          //     reject(_e);
+          //   },
+          // });
         });
         const newResPromise = abortPromiseWrapper(resPromise);
         newResPromise
@@ -531,8 +615,8 @@ Page({
 
   jumpToHistory() {
     wx.navigateTo({
-      url: '/pages/history/history',
-    })
+      url: "/pages/history/history",
+    });
   },
 
   openMeBox() {
