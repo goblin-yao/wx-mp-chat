@@ -10,8 +10,8 @@
       openid: <input value="{{curOpenId}}"></input>
     </view>
   </view>
-  <text wx:if="{{leftChatNum=='-1000'}}">会员</text>
-  <text wx:else>剩余{{leftChatNum}}次使用次数</text>
+  <!-- <text wx:if="{{leftChatNum=='-1000'}}">会员</text>
+  <text wx:else>剩余{{leftChatNum}}次使用次数</text> -->
 </view>
 <view class=" foot-opt-area" style="margin-bottom:{{InputBottom}}px">
   <view>
@@ -34,7 +34,20 @@
       <text>点击停止输入语音</text>
     </view>
   </view>
-  <input wx:if="{{!isVoiceInputStatus}}" class="solid-bottom" placeholder="请输入{{MaxInputLength}}字以内的内容" bindfocus="InputFocus" bindblur="InputBlur" bindinput="bindKeyInput" value="{{inputContent}}" adjust-position="{{false}}" focus="{{false}}" maxlength="{{MaxInputLength}}" cursor-spacing="10" disabled="{{inputDisabled}}"></input>
+  <input wx:if="{{!isVoiceInputStatus}}" class="solid-bottom" placeholder="请输入{{MaxInputLength}}字以内的内容" bindfocus="InputFocus" bindblur="InputBlur" bindinput="bindKeyInput" value="{{inputContent}}" adjust-position="{{false}}" focus="{{false}}" maxlength="20000" cursor-spacing="10" disabled="{{inputDisabled}}"></input>
   <button wx:if="{{!isVoiceInputStatus}}" class="cu-btn bg-green shadow" disabled="{{submitBtnDisabled}}" bindtap="submitQuestion"> 发送</button>
   <!-- <button class="cu-btn bg-green shadow" bindtap="submitQuestion"> 发送</button> -->
+</view>
+
+<view class="drawer_screen" data-status="close" wx:if="{{showTextEdit}}">
+</view>
+<view class='edit_text_screen' wx:if="{{showTextEdit}}" style="bottom:{{inputEditBottom}}px">
+  <textarea class='edit_textarea' value="{{inputEditContent}}" auto-focus placeholder="请输入问题内容" maxlength="20000" bindinput="getValueLength" bindfocus="inputEditFocus" bindblur="inputEditBlur"></textarea>
+  <view>
+    总字数 {{totalEditContentLength}}/{{MaxInputLength}}
+  </view>
+  <view class='edit_btn_group'>
+    <button class="cu-btn bg-gray edit_btn_group_btn" bindtap="closeEdit">取消</button>
+    <button class="cu-btn bg-green" disabled="{{totalEditContentLength>MaxInputLength}}" bindtap="submitEditedQuestion">发送</button>
+  </view>
 </view>

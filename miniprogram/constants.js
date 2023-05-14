@@ -4,7 +4,7 @@ module.exports = {
   ShareInfo: [
     {
       imageUrl:
-        "https://wxchatnodeexpressazure.azurewebsites.net/images/share_1.png",
+        "https://puzhikeji.com.cn/asserts/share_1.jpg",
       title: "提问题-ai来回答",
     },
     {
@@ -19,14 +19,14 @@ module.exports = {
     },
   ],
   //可以 wx.getAccountInfoSync().miniProgram.appId 根据当前Appid获取不同的配置
-  MaxInputLength: 500,
+  MaxInputLength: 2000,
   // chatAI的一些配置
   CHAT_AI_INFO: {
     nickName: curAppID === "wxfed2e64d2ff0da4a" ? "声语Pro" : "GeniusAI助手",
     wellcomeTitle:
       curAppID === "wxfed2e64d2ff0da4a"
-        ? "声语Pro欢迎你"
-        : "GeniusAI助手欢迎你",
+        ? "欢迎使用声语Pro欢迎。"
+        : "欢迎使用GeniusAI助手。",
     loadingText: "。。。。。。",
   },
   GZH_RECEIVE_LIMIT_TEXT:
