@@ -11,6 +11,7 @@ const {
   MaxInputLength,
   ShareInfo,
   MESSAGE_ERROR_TYPE,
+  MessageTimer,
   SUBSCRIBE_TEMPLATE_ID,
 } = require("../../constants.js");
 const recorderManager = wx.getRecorderManager(); // 获取全局唯一的录音管理器 RecorderManager
@@ -125,13 +126,16 @@ Page({
     console.log("onChatRoomEvent=>", _e);
     this.selectComponent("#chat_room").receiveMsg(_e);
 
-    //存储问题/答案 数据库
-    const res = await cloudContainerCaller({
-      path: "/miniprogram/chatmessage/add",
-      data: _e,
-    });
+    if (_e?.data?.isDone || _e.msgType == MESSAGE_TYPE.USER_QUESTION) {
+      //存储问题/答案 数据库, e_=done时才保存数据
+      //或者用户提出的问题直接保存
+      const res = await cloudContainerCaller({
+        path: "/miniprogram/chatmessage/add",
+        data: _e,
+      });
 
-    console.log("cloud-msg-push", res);
+      console.log("cloud-msg-push", res);
+    }
   },
   //在消息校验的时候确定输入框是否清空
   async msgChecker(content) {
@@ -188,7 +192,10 @@ Page({
     }
     this.onChatRoomEvent(eventData); //todo
 
-    this.reduceLimit(); //消耗1次
+    // 第一次有响应的时候就扣除一次次数
+    if (eventData.data.isFirstResponse) {
+      this.reduceLimit(); //消耗1次
+    }
   },
   resendMsg(event) {
     console.log("ev", event);
@@ -209,7 +216,31 @@ Page({
     console.log("[msgList]", msgList);
     return msgList;
   },
+  startRequestInterval(messageId = "chatcmpl-7J1Y02zAOfibwLNWYSV6WNHHOloCm") {
+    let that = this;
+    app.globalData.messageInterval = setInterval(() => {
+      wx.request({
+        url: "http://localhost:80/proxyapi/chatstreaminterval",
+        data: { messageId },
+        method: "POST",
+        header: {
+          "content-type": "application/json", // 默认值
+        },
+        success(_e) {
+          console.log("[proxyapi/chatstreaminterval]", _e);
+          that.handleMsgSuccess(_e)
+          if (_e?.data?.isDone) {
+            clearInterval(app.globalData.messageInterval)
+            app.globalData.messageInterval = null;
+          }
+        },
+        fail(_e) {
+        },
+      });
+    }, MessageTimer)
+  },
   async sendMsgToChatAI(userInputQuestion) {
+    let that = this;
     //因为-1000表示是会员
     if (this.data.leftChatNum <= 0 && this.data.leftChatNum > -1000) {
       wx.showToast({
@@ -254,21 +285,18 @@ Page({
         res = MockData.chatAIInnerError;
         await this.handleMsgSuccess(res);
       } else {
-
-        // chat with stream
+        // no stream
         const resPromise = new Promise((resolve, reject) => {
           wx.request({
-            url: "https://puzhikeji.com.cn/proxyapi/chatstream",
-            data: {
-              question: userInputQuestion,
-              messages: this.getChatListData(),
-            },
+            url: "http://localhost:80/proxyapi/chatstreamstart",
+            data: { question: userInputQuestion, messages: this.getChatListData() },
             method: "POST",
             header: {
               "content-type": "application/json", // 默认值
             },
             success(_e) {
               console.log("[proxyapi/chat]", _e);
+              _e?.data?.id && that.startRequestInterval(_e?.data?.id); //通过消息ID轮询
               resolve(_e);
             },
             fail(_e) {
@@ -277,24 +305,6 @@ Page({
           });
         });
 
-        // no stream
-        // const resPromise = new Promise((resolve, reject) => {
-        //   wx.request({
-        //     url: "https://puzhikeji.com.cn/proxyapi/chat",
-        //     data: { question: userInputQuestion, messages: this.getChatListData() },
-        //     method: "POST",
-        //     header: {
-        //       "content-type": "application/json", // 默认值
-        //     },
-        //     success(_e) {
-        //       console.log("[proxyapi/chat]", _e);
-        //       resolve(_e);
-        //     },
-        //     fail(_e) {
-        //       reject(_e);
-        //     },
-        //   });
-        // });
         const newResPromise = abortPromiseWrapper(resPromise);
         newResPromise
           .then(async (_res) => {
@@ -319,7 +329,7 @@ Page({
           });
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) {}
+    } catch (error) { }
   },
   //切换到文本输入
   changeToTextInput() {
@@ -560,7 +570,10 @@ Page({
     if (Config.LocalDevMode) {
       return; // 本地开发不减少次数
     }
-    this.setData({ leftChatNum: --this.data.leftChatNum });
+    const leftChatNum = --this.data.leftChatNum
+    this.setData({ leftChatNum });
+    // 通知me_dialog
+    this.selectComponent("#me_dialog").updateLimit({ leftChatNum });
 
     const res = await cloudContainerCaller({
       path: "/miniprogram/limit/reduce",
@@ -594,11 +607,11 @@ Page({
   //   });
   //   console.log("发送订阅消息返回内容", res);
   // },
-  jumpToAdmin() {},
+  jumpToAdmin() { },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {},
+  onReady: function () { },
 
   /**
    * 生命周期函数--监听页面显示
@@ -610,22 +623,22 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {},
+  onHide: function () { },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {},
+  onUnload: function () { },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {},
+  onPullDownRefresh: function () { },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {},
+  onReachBottom: function () { },
 
   jumpToHistory() {
     wx.navigateTo({
@@ -643,9 +656,8 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_from_openid=${
-        this.data.curOpenId
-      }&share_timestamp=${new Date().getTime()}`,
+      path: `/pages/index/index?share_from_openid=${this.data.curOpenId
+        }&share_timestamp=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },

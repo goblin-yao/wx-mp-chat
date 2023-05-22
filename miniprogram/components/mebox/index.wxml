@@ -63,6 +63,9 @@
       <button class='label-btn' bindtap="guanzhuEvent">去关注</button>
     </view>
     <view class="top grid btn-wrap">
+      <label>公众号可申请会员or充次数，畅享无限制使用</label>
+    </view>
+    <view class="top grid btn-wrap">
       <label>添加客服</label>
       <button class='label-btn' bindtap="kefuEvent">去添加</button>
     </view>

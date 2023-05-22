@@ -223,7 +223,8 @@ Component({
     },
     async receiveMsg(_e) {
       console.log("received msg=>", _e);
-      if (_e.msgType === MESSAGE_TYPE.CHATAI_ANSWER) {
+      // 有text数据
+      if (_e.msgType === MESSAGE_TYPE.CHATAI_ANSWER && _e?.data?.text) {
         let msg = {
           content: _e.data.text,
           errorType: _e.data.errorType,
@@ -232,30 +233,62 @@ Component({
           parentMessageId: _e.data.parentMessageId,
           messageId: _e.data.id,
           userInfo: { nickName: CHAT_AI_INFO.nickName },
-          voiceDisplaying: Config.VoiceToggle ? true : false
+          voiceDisplaying: Config.VoiceToggle ? true : false,
+          isDone: !!_e.data.isDone, // 消息是否结束
+          isFirstResponse: !!_e.data.isFirstResponse, // 消息是否是第一个消息
+          totalTime: 0,
         };
-        //语音合成
-        Config.VoiceToggle && await this.convertTextToVoiceAndPlay(msg);
-        msg.totalTime = (new Date().getTime() - app.globalData.AILastRequestStartTime) / 1000
-        msg.totalTime = '对话耗时' + msg.totalTime.toFixed(1) + 's';
-        //把原来消息的loading删掉
-        let newChatList = [];
-        for (let index = 0; index < this.data.chatList.length; index++) {
-          const element = this.data.chatList[index];
-          if (element.msgType != MESSAGE_TYPE.WAITING_CHATAI) {
-            newChatList.push(element);
+        // 如果消息完成就合成语音
+        if (msg.isDone) {
+          //语音合成
+          Config.VoiceToggle && await this.convertTextToVoiceAndPlay(msg);
+          msg.totalTime = (new Date().getTime() - app.globalData.AILastRequestStartTime) / 1000
+          msg.totalTime = '对话耗时' + msg.totalTime.toFixed(1) + 's';
+          //更新指定ID的消息
+          for (let index = 0; index < this.data.chatList.length; index++) {
+            const element = this.data.chatList[index];
+            if (
+              element.messageId === msg.messageId
+            ) {
+              this.setData({
+                [`chatList[${index}].content`]: msg.content,
+                [`chatList[${index}].totalTime`]: msg.totalTime,
+                [`chatList[${index}].isFirstResponse`]: false,
+              });
+            }
           }
+        } else {
+          let isHaveMessage = false
+          //把原来消息的loading删掉, 如果是新消息就更新，否则就插入一条新的
+          let newChatList = [];
+          for (let index = 0; index < this.data.chatList.length; index++) {
+            const element = this.data.chatList[index];
+            if (element.msgType != MESSAGE_TYPE.WAITING_CHATAI) {
+              newChatList.push(element);
+            }
+            if (
+              element.messageId === msg.messageId
+            ) {
+              isHaveMessage = true
+              this.setData({
+                [`chatList[${index}].content`]: msg.content,
+              });
+            }
+          }
+          //没有新消息才是增加新消息，否则更新
+          if (!isHaveMessage) {
+            newChatList.push(msg);
+            this.setData({
+              chatList: newChatList,
+            });
+          }
+          console.log('textshowed', new Date().toString())
+          setTimeout(() => {
+            this.setData({
+              scrollId: "msg-" + parseInt(newChatList.length - 1),
+            });
+          }, 100);
         }
-        newChatList.push(msg);
-        this.setData({
-          chatList: newChatList,
-        });
-        console.log('textshowed', new Date().toString())
-        setTimeout(() => {
-          this.setData({
-            scrollId: "msg-" + parseInt(newChatList.length - 1),
-          });
-        }, 100);
       }
 
       // loading和用户的信息放一起处理，都在页面上展示用

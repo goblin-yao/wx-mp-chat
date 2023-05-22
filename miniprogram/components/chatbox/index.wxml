@@ -35,13 +35,13 @@
       <view class="cu-avatar radius chat-ai-avatar"></view>
       <view class="main">
         <view class="content bg-cyan shadow" data-msgid="msg-{{index}}" bindlongpress="copyMsg">
-          <text>{{item.content}}</text>
+          <text>{{item.content}}<text wx:if="{{item.isFirstResponse}}" class='input-status'>|</text></text>
         </view>
       </view>
       <view wx:if="{{!item.errorType && isVoiceFeatureOpen && !item.retryRequest}}" class='voice-msg-container'>
         <view class="voice-msg {{item.voiceDisplaying&&'.voice-msg-displaying'}}" data-msgindex="{{index}}" bindtap="displayVoice"></view>
       </view>
-      <view wx:if="{{!item.errorType}}" class="date">长按可复制消息。{{item.totalTime}}</view>
+      <view wx:if="{{!item.errorType}}" class="date">长按可复制消息。{{item.totalTime?item.totalTime:''}}</view>
       <view wx:if="{{item.errorType && !item.retryRequest}}">
         <view class="retry_text" bindtap="retryRequest" data-msgindex="{{index}}">再问一次</view>
       </view>
