@@ -220,7 +220,7 @@ Page({
     let that = this;
     app.globalData.messageInterval = setInterval(() => {
       wx.request({
-        url: "http://localhost:80/proxyapi/chatstreaminterval",
+        url: "https://puzhikeji.com.cn/proxyapi/chatstreaminterval",
         data: { messageId },
         method: "POST",
         header: {
@@ -288,7 +288,7 @@ Page({
         // no stream
         const resPromise = new Promise((resolve, reject) => {
           wx.request({
-            url: "http://localhost:80/proxyapi/chatstreamstart",
+            url: "https://puzhikeji.com.cn/proxyapi/chatstreamstart",
             data: { question: userInputQuestion, messages: this.getChatListData() },
             method: "POST",
             header: {
