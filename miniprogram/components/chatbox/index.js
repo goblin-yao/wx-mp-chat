@@ -354,11 +354,12 @@ Component({
       try {
         await this.pluginPromiseToSpeech(_text, _nAudioContext, callbacks);
       } catch {
-        callbacks.endCallBack()
         wx.hideLoading()
         wx.showToast({
           title: '语音转换失败，请稍后！',
         })
+        // {"Response":{"RequestId":"6461058e55ab7434c9b008b0","Error":{"Code":"UnsupportedOperation.TextTooLong","Message":"Text too long"}}}
+        callbacks.endCallBack()
       }
       wx.hideLoading()
     },

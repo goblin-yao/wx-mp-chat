@@ -61,30 +61,30 @@ Page({
   },
   /****限制字数与计算 */
   getValueLength: function (e) {
-    let value = e.detail.value
-    let len = parseInt(value.length)
+    let value = e.detail.value;
+    let len = parseInt(value.length);
     this.setData({
-      totalEditContentLength: len, //当前字数 
-      inputEditContent: e.detail.value
-    })
+      totalEditContentLength: len, //当前字数
+      inputEditContent: e.detail.value,
+    });
   },
   inputEditFocus(e) {
-    console.log('[inputEditBottom]', e.detail.height)
+    console.log("[inputEditBottom]", e.detail.height);
     this.setData({
-      inputEditBottom: e.detail.height
-    })
+      inputEditBottom: e.detail.height,
+    });
   },
   inputEditBlur() {
     this.setData({
-      inputEditBottom: 50
-    })
+      inputEditBottom: 50,
+    });
   },
   closeEdit: function () {
-    this.setData({ showTextEdit: false })
+    this.setData({ showTextEdit: false });
   },
   async submitEditedQuestion() {
-    await this.sendMsgToChatAI(this.data.inputEditContent.trim())
-    this.setData({ showTextEdit: false, inputContent: "" })
+    await this.sendMsgToChatAI(this.data.inputEditContent.trim());
+    this.setData({ showTextEdit: false, inputContent: "" });
   },
   async submitQuestion() {
     await this.askForSubscribe();
@@ -93,23 +93,22 @@ Page({
       .replace(/\s+/g, " ");
     if (userInputQuestion.length > MaxInputLength) {
       wx.showModal({
-        title: '输入问题超过长度限制',
+        title: "输入问题超过长度限制",
         content: `输入问题长度${userInputQuestion.length}，超过${MaxInputLength}字限制。请删减问题字数。`,
-        confirmText: '去编辑',
+        confirmText: "去编辑",
         complete: (res) => {
           if (res.cancel) {
-
           }
           if (res.confirm) {
             this.setData({
               showTextEdit: true,
               inputEditContent: userInputQuestion,
-              totalEditContentLength: userInputQuestion.length
-            })
+              totalEditContentLength: userInputQuestion.length,
+            });
           }
-        }
-      })
-      return
+        },
+      });
+      return;
     }
     this.setData({
       inputDisabled: true,
@@ -197,14 +196,17 @@ Page({
   },
   getChatListData() {
     const tempList = this.selectComponent("#chat_room").getChatListData();
-    const msgList = []
+    const msgList = [];
     for (let index = 0; index < tempList.length; index++) {
       const element = tempList[index];
       if (element?.msgType > 0) {
-        msgList.push({ role: element.openid ? 'user' : 'assistant', content: element.content })
+        msgList.push({
+          role: element.openid ? "user" : "assistant",
+          content: element.content,
+        });
       }
     }
-    console.log('[msgList]', msgList)
+    console.log("[msgList]", msgList);
     return msgList;
   },
   async sendMsgToChatAI(userInputQuestion) {
@@ -252,35 +254,47 @@ Page({
         res = MockData.chatAIInnerError;
         await this.handleMsgSuccess(res);
       } else {
+
+        // chat with stream
         const resPromise = new Promise((resolve, reject) => {
           wx.request({
-            url: "https://puzhikeji.com.cn/proxyapi/chat",
-            data: { question: userInputQuestion, messages: this.getChatListData() },
+            url: "https://puzhikeji.com.cn/proxyapi/chatstream",
+            data: {
+              question: userInputQuestion,
+              messages: this.getChatListData(),
+            },
             method: "POST",
             header: {
               "content-type": "application/json", // 默认值
             },
             success(_e) {
-              console.log("/proxyapi/chat", _e);
+              console.log("[proxyapi/chat]", _e);
               resolve(_e);
             },
             fail(_e) {
               reject(_e);
             },
           });
-
-          // cloudContainerCaller({
-          //   path: "/proxyapi/chat", //"/openapi/chat"
-          //   data: { question: userInputQuestion, chatData: eventDataFirst },
-          //   success: function (_e) {
-          //     console.log("/proxyapi/chat", _e);
-          //     resolve(_e);
-          //   },
-          //   fail: function (_e) {
-          //     reject(_e);
-          //   },
-          // });
         });
+
+        // no stream
+        // const resPromise = new Promise((resolve, reject) => {
+        //   wx.request({
+        //     url: "https://puzhikeji.com.cn/proxyapi/chat",
+        //     data: { question: userInputQuestion, messages: this.getChatListData() },
+        //     method: "POST",
+        //     header: {
+        //       "content-type": "application/json", // 默认值
+        //     },
+        //     success(_e) {
+        //       console.log("[proxyapi/chat]", _e);
+        //       resolve(_e);
+        //     },
+        //     fail(_e) {
+        //       reject(_e);
+        //     },
+        //   });
+        // });
         const newResPromise = abortPromiseWrapper(resPromise);
         newResPromise
           .then(async (_res) => {
@@ -305,7 +319,7 @@ Page({
           });
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) { }
+    } catch (error) {}
   },
   //切换到文本输入
   changeToTextInput() {
@@ -580,11 +594,11 @@ Page({
   //   });
   //   console.log("发送订阅消息返回内容", res);
   // },
-  jumpToAdmin() { },
+  jumpToAdmin() {},
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () { },
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
@@ -596,22 +610,22 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () { },
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () { },
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () { },
+  onReachBottom: function () {},
 
   jumpToHistory() {
     wx.navigateTo({
@@ -629,8 +643,9 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_from_openid=${this.data.curOpenId
-        }&share_timestamp=${new Date().getTime()}`,
+      path: `/pages/index/index?share_from_openid=${
+        this.data.curOpenId
+      }&share_timestamp=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },
