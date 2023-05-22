@@ -3,6 +3,23 @@ text {
   word-break: break-all;
 }
 
+.input-status {
+  animation: inputStatusFramse 1s infinite steps(1, start);
+  -webkit-animation: : inputStatusFramse 1s infinite steps(1, start);
+}
+
+@keyframes inputStatusFramse {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
 .cu-avatar-user {
   font-size: 32rpx;
   background: #6aa06a;

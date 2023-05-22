@@ -3,7 +3,7 @@
   "projectname": "wx-mp-chat",
   "setting": {
     "compileHotReLoad": true,
-    "urlCheck": true
+    "urlCheck": false
   },
   "condition": {
     "miniprogram": {
@@ -17,5 +17,6 @@
         }
       ]
     }
-  }
+  },
+  "libVersion": "2.32.0"
 }

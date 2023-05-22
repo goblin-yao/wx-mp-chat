@@ -23,6 +23,7 @@ App({
     txCloudAIVoicePlugin: requirePlugin("QCloudAIVoice"),
     AILastRequestStartTime: 0, //用来展示耗时间
     curResPromise: null, //当前的Promise，用来abort
+    messageInterval: null,//当前消息的定时器，abort时取消定时器
     curUserQuestion: "", //用户当前的提问，用来重新发送
   },
 });
