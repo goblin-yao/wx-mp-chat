@@ -5,7 +5,7 @@ text {
 
 .input-status {
   animation: inputStatusFramse 1s infinite steps(1, start);
-  -webkit-animation: : inputStatusFramse 1s infinite steps(1, start);
+  -webkit-animation: inputStatusFramse 1s infinite steps(1, start);
 }
 
 @keyframes inputStatusFramse {
