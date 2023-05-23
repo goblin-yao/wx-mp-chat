@@ -5,7 +5,7 @@ const {
   MESSAGE_TYPE,
   CHAT_AI_INFO,
   MESSAGE_ERROR_TYPE,
-  MAX_TIMEOUT_TIME_VOICE_SPEECH
+  MAX_TIMEOUT_TIME_VOICE_SPEECH,
 } = require("../../constants.js");
 const MockData = require("../../mock-data");
 
@@ -86,15 +86,13 @@ Component({
       let curMessage = this.data.chatList[msgindex];
       let display = false;
       if (curMessage.voiceDisplaying) {
-        display = false
+        display = false;
       } else {
-        display = true
+        display = true;
         // 其他的播放停止，修改状态
         for (let index = 0; index < this.data.chatList.length; index++) {
           const element = this.data.chatList[index];
-          if (
-            element.voiceDisplaying
-          ) {
+          if (element.voiceDisplaying) {
             this.setData({
               [`chatList[${index}].voiceDisplaying`]: false,
             });
@@ -105,7 +103,7 @@ Component({
           if (Object.hasOwnProperty.call(innerAudioContextMap, key)) {
             if (key !== curMessage.messageId) {
               const element = innerAudioContextMap[key];
-              element && element.stop()
+              element && element.stop();
             }
           }
         }
@@ -115,25 +113,23 @@ Component({
       });
       if (!innerAudioContextMap[curMessage.messageId]) {
         wx.showLoading({
-          title: 'AI语音合成中',
-        })
+          title: "AI语音合成中",
+        });
       }
-      await this.textToSpeechFromChatBox(
-        display,
-        curMessage, {
+      await this.textToSpeechFromChatBox(display, curMessage, {
         endCallBack: () => {
           that.setData({
             [`chatList[${msgindex}].voiceDisplaying`]: false,
           });
-        }
-      })
+        },
+      });
     },
     retryRequest(event) {
       var msgindex = event.target.dataset.msgindex;
       // 删除掉再问一次
       this.setData({
         [`chatList[${msgindex}].errorType`]: "",
-        [`chatList[${msgindex}].retryRequest`]: true
+        [`chatList[${msgindex}].retryRequest`]: true,
       });
       this.triggerEvent("resendMsg");
     },
@@ -168,20 +164,19 @@ Component({
     },
     showLink() {
       wx.showActionSheet({
-        itemList: ['复制链接地址'],
+        itemList: ["复制链接地址"],
         success(res) {
           if (res.tapIndex == 0) {
             wx.setClipboardData({
-              data: 'https://puzhikeji.com.cn/',
+              data: "https://puzhikeji.com.cn/",
               success(res) {
                 console.log(res.data); // data
               },
             });
           }
         },
-        fail(res) {
-        }
-      })
+        fail(res) {},
+      });
     },
     // 语音合成并自动播放
     async convertTextToVoiceAndPlay(msgToShow) {
@@ -189,9 +184,7 @@ Component({
       // 其他的播放停止，修改状态
       for (let index = 0; index < this.data.chatList.length; index++) {
         const element = this.data.chatList[index];
-        if (
-          element.voiceDisplaying
-        ) {
+        if (element.voiceDisplaying) {
           this.setData({
             [`chatList[${index}].voiceDisplaying`]: false,
           });
@@ -202,24 +195,24 @@ Component({
         if (Object.hasOwnProperty.call(innerAudioContextMap, key)) {
           if (key !== msgToShow.messageId) {
             const element = innerAudioContextMap[key];
-            element && element.stop()
+            element && element.stop();
           }
         }
       }
-      await this.textToSpeechFromChatBox(
-        true,
-        msgToShow, {
+      await this.textToSpeechFromChatBox(true, msgToShow, {
         endCallBack: () => {
-          const msgindex = that.data.chatList.findIndex(e => e.messageId == msgToShow.messageId)
-          console.log('msgindex=>', msgindex)
+          const msgindex = that.data.chatList.findIndex(
+            (e) => e.messageId == msgToShow.messageId
+          );
+          console.log("msgindex=>", msgindex);
           that.setData({
             [`chatList[${msgindex}].voiceDisplaying`]: false,
           });
-        }
-      })
+        },
+      });
     },
     getChatListData() {
-      return this.data.chatList.slice(-8);//获取最近4条对话
+      return this.data.chatList.slice(-8); //获取最近4条对话
     },
     async receiveMsg(_e) {
       console.log("received msg=>", _e);
@@ -233,23 +226,26 @@ Component({
           parentMessageId: _e.data.parentMessageId,
           messageId: _e.data.id,
           userInfo: { nickName: CHAT_AI_INFO.nickName },
-          voiceDisplaying: Config.VoiceToggle ? true : false,
+          voiceDisplaying: false,
           isDone: !!_e.data.isDone, // 消息是否结束
           isFirstResponse: !!_e.data.isFirstResponse, // 消息是否是第一个消息
           totalTime: 0,
         };
         // 如果消息完成就合成语音
         if (msg.isDone) {
-          //语音合成
-          Config.VoiceToggle && await this.convertTextToVoiceAndPlay(msg);
-          msg.totalTime = (new Date().getTime() - app.globalData.AILastRequestStartTime) / 1000
-          msg.totalTime = '对话耗时' + msg.totalTime.toFixed(1) + 's';
+          // 语音合成
+          if (Config.VoiceToggle) {
+            msg.voiceDisplaying = Config.VoiceToggle ? true : false; // 消息是否播放
+            await this.convertTextToVoiceAndPlay(msg);
+          }
+          msg.totalTime =
+            (new Date().getTime() - app.globalData.AILastRequestStartTime) /
+            1000;
+          msg.totalTime = "对话耗时" + msg.totalTime.toFixed(1) + "s";
           //更新指定ID的消息
           for (let index = 0; index < this.data.chatList.length; index++) {
             const element = this.data.chatList[index];
-            if (
-              element.messageId === msg.messageId
-            ) {
+            if (element.messageId === msg.messageId) {
               this.setData({
                 [`chatList[${index}].content`]: msg.content,
                 [`chatList[${index}].totalTime`]: msg.totalTime,
@@ -258,7 +254,7 @@ Component({
             }
           }
         } else {
-          let isHaveMessage = false
+          let isHaveMessage = false;
           //把原来消息的loading删掉, 如果是新消息就更新，否则就插入一条新的
           let newChatList = [];
           for (let index = 0; index < this.data.chatList.length; index++) {
@@ -266,10 +262,8 @@ Component({
             if (element.msgType != MESSAGE_TYPE.WAITING_CHATAI) {
               newChatList.push(element);
             }
-            if (
-              element.messageId === msg.messageId
-            ) {
-              isHaveMessage = true
+            if (element.messageId === msg.messageId) {
+              isHaveMessage = true;
               this.setData({
                 [`chatList[${index}].content`]: msg.content,
               });
@@ -282,7 +276,7 @@ Component({
               chatList: newChatList,
             });
           }
-          console.log('textshowed', new Date().toString())
+          console.log("textshowed", new Date().toString());
           setTimeout(() => {
             this.setData({
               scrollId: "msg-" + parseInt(newChatList.length - 1),
@@ -361,47 +355,53 @@ Component({
       });
     },
     async textToSpeechFromChatBox(display, msgInfo, callbacks) {
-      console.log('textToSpeechFromChatBox', display, msgInfo)
+      console.log("textToSpeechFromChatBox", display, msgInfo);
       //如果是播放
-      const curMsgId = msgInfo.messageId
+      const curMsgId = msgInfo.messageId;
       if (display) {
         if (!innerAudioContextMap[curMsgId]) {
-          innerAudioContextMap[curMsgId] = wx.createInnerAudioContext()
+          innerAudioContextMap[curMsgId] = wx.createInnerAudioContext();
           //转换一次语音
-          await this.textToAISpeech(msgInfo.content, innerAudioContextMap[curMsgId], callbacks)
+          await this.textToAISpeech(
+            msgInfo.content,
+            innerAudioContextMap[curMsgId],
+            callbacks
+          );
         } else {
-          innerAudioContextMap[curMsgId].play()
+          innerAudioContextMap[curMsgId].play();
         }
-      } else { //暂停
+      } else {
+        //暂停
         if (!innerAudioContextMap[curMsgId]) {
-          innerAudioContextMap[curMsgId] = wx.createInnerAudioContext()
+          innerAudioContextMap[curMsgId] = wx.createInnerAudioContext();
         } else {
-          innerAudioContextMap[curMsgId].pause()
+          innerAudioContextMap[curMsgId].pause();
         }
       }
     },
     async textToAISpeech(_text, _nAudioContext, callbacks) {
       if (!_text.trim()) {
-        return
+        return;
       }
       try {
         await this.pluginPromiseToSpeech(_text, _nAudioContext, callbacks);
       } catch {
-        wx.hideLoading()
+        wx.hideLoading();
         wx.showToast({
-          title: '语音转换失败，请稍后！',
-        })
+          title: "语音转换失败，请稍后！",
+        });
         // {"Response":{"RequestId":"6461058e55ab7434c9b008b0","Error":{"Code":"UnsupportedOperation.TextTooLong","Message":"Text too long"}}}
-        callbacks.endCallBack()
+        callbacks.endCallBack();
       }
-      wx.hideLoading()
+      wx.hideLoading();
     },
-    pluginPromiseToSpeech(_text, _nAudioContext, callbacks) {//超时
+    pluginPromiseToSpeech(_text, _nAudioContext, callbacks) {
+      //超时
       let timeoutP = new Promise((resolve) => {
         setTimeout(() => {
-          resolve('timeout');
+          resolve("timeout");
         }, MAX_TIMEOUT_TIME_VOICE_SPEECH);
-      })
+      });
       let pSpeech = new Promise((resolve, reject) => {
         app.globalData.txCloudAIVoicePlugin.textToSpeech({
           content: _text,
@@ -414,25 +414,25 @@ Component({
               _nAudioContext.play();
               _nAudioContext.onPlay(() => {
                 resolve(data);
-                console.log('playing', new Date().toString())
+                console.log("playing", new Date().toString());
               });
               _nAudioContext.onEnded(() => {
-                callbacks?.endCallBack && callbacks.endCallBack()
+                callbacks?.endCallBack && callbacks.endCallBack();
               });
               _nAudioContext.onError((res) => {
-                console.log(res.errMsg)
-                reject(data)
+                console.log(res.errMsg);
+                reject(data);
               });
             }
-            console.log('合成结果:', data)
+            console.log("合成结果:", data);
           },
           fail: function (error) {
-            reject(error)
+            reject(error);
             console.log(error);
-          }
-        })
-      })
-      return Promise.race([timeoutP, pSpeech])
+          },
+        });
+      });
+      return Promise.race([timeoutP, pSpeech]);
     },
   },
 });
