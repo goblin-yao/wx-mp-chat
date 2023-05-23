@@ -216,7 +216,7 @@ Page({
     console.log("[msgList]", msgList);
     return msgList;
   },
-  startRequestInterval() {
+  startRequestInterval(messageId) {
     let that = this;
     // 每次轮询把上次的结果删除掉
     clearInterval(app.globalData.messageInterval);
