@@ -20,7 +20,7 @@ Page({
     MESSAGE_ERROR_TYPE: MESSAGE_ERROR_TYPE,
     CHAT_AI_INFO: CHAT_AI_INFO,
     isTop: false,
-    scrollId: '',
+    scrollId: "",
     //消息记录列表
     chatList: [],
   },
@@ -29,8 +29,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
-    this.initMessageHistory()
-    wx.hideShareMenu()
+    this.initMessageHistory();
+    wx.hideShareMenu();
   },
   //初始化
   async initMessageHistory() {
@@ -47,7 +47,7 @@ Page({
         } else {
         }
       }
-    } catch (error) { }
+    } catch (error) {}
     this.reqMsgHis();
   },
   // 请求聊天记录
@@ -77,7 +77,9 @@ Page({
           if (tarr[index]["msgType"] === MESSAGE_TYPE.USER_QUESTION) {
             tarr[index]["userInfo"] = app.globalData.userInfo;
 
-            tarr[index]["timeString"] = timeutil.TimeCode(tarr[index]['createdAt']);
+            tarr[index]["timeString"] = timeutil.TimeCode(
+              tarr[index]["createdAt"]
+            );
           }
         }
         this.setData(
@@ -87,7 +89,7 @@ Page({
               ? "msg-" + parseInt(newsLen)
               : "msg-" + parseInt(len - 1),
           },
-          () => { }
+          () => {}
         );
       },
     });
@@ -121,32 +123,30 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
-  },
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-  },
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () { },
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () { },
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () { },
+  onReachBottom: function () {},
 });
