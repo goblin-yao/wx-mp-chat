@@ -18,7 +18,7 @@ module.exports = {
       title: "ai随心聊-天文地理/古今中外",
     },
   ],
-  MessageTimer: 2000,//每间隔x毫秒取一次聊天状态
+  MessageTimer: 1000,//每间隔x毫秒取一次聊天状态
   //可以 wx.getAccountInfoSync().miniProgram.appId 根据当前Appid获取不同的配置
   MaxInputLength: 2000,
   // chatAI的一些配置

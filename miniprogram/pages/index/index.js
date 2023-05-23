@@ -216,8 +216,12 @@ Page({
     console.log("[msgList]", msgList);
     return msgList;
   },
-  startRequestInterval(messageId = "chatcmpl-7J1Y02zAOfibwLNWYSV6WNHHOloCm") {
+  startRequestInterval() {
     let that = this;
+    // 每次轮询把上次的结果删除掉
+    clearInterval(app.globalData.messageInterval);
+    app.globalData.messageInterval = null;
+
     app.globalData.messageInterval = setInterval(() => {
       wx.request({
         url: "https://puzhikeji.com.cn/proxyapi/chatstreaminterval",
@@ -228,16 +232,15 @@ Page({
         },
         success(_e) {
           console.log("[proxyapi/chatstreaminterval]", _e);
-          that.handleMsgSuccess(_e)
+          that.handleMsgSuccess(_e);
           if (_e?.data?.isDone) {
-            clearInterval(app.globalData.messageInterval)
+            clearInterval(app.globalData.messageInterval);
             app.globalData.messageInterval = null;
           }
         },
-        fail(_e) {
-        },
+        fail(_e) {},
       });
-    }, MessageTimer)
+    }, MessageTimer);
   },
   async sendMsgToChatAI(userInputQuestion) {
     let that = this;
@@ -289,7 +292,10 @@ Page({
         const resPromise = new Promise((resolve, reject) => {
           wx.request({
             url: "https://puzhikeji.com.cn/proxyapi/chatstreamstart",
-            data: { question: userInputQuestion, messages: this.getChatListData() },
+            data: {
+              question: userInputQuestion,
+              messages: this.getChatListData(),
+            },
             method: "POST",
             header: {
               "content-type": "application/json", // 默认值
@@ -329,7 +335,7 @@ Page({
           });
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) { }
+    } catch (error) {}
   },
   //切换到文本输入
   changeToTextInput() {
@@ -570,7 +576,7 @@ Page({
     if (Config.LocalDevMode) {
       return; // 本地开发不减少次数
     }
-    const leftChatNum = --this.data.leftChatNum
+    const leftChatNum = --this.data.leftChatNum;
     this.setData({ leftChatNum });
     // 通知me_dialog
     this.selectComponent("#me_dialog").updateLimit({ leftChatNum });
@@ -607,11 +613,11 @@ Page({
   //   });
   //   console.log("发送订阅消息返回内容", res);
   // },
-  jumpToAdmin() { },
+  jumpToAdmin() {},
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () { },
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
@@ -623,22 +629,22 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () { },
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () { },
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () { },
+  onReachBottom: function () {},
 
   jumpToHistory() {
     wx.navigateTo({
@@ -656,8 +662,9 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_from_openid=${this.data.curOpenId
-        }&share_timestamp=${new Date().getTime()}`,
+      path: `/pages/index/index?share_from_openid=${
+        this.data.curOpenId
+      }&share_timestamp=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },
