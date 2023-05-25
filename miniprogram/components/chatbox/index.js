@@ -30,6 +30,15 @@ Component({
   },
   lifetimes: {
     attached() {
+      // setInterval(() => {
+      //   const _list = []
+      //   for (let index = 0; index < this.data.chatList.length; index++) {
+      //     const element = this.data.chatList[index];
+      //     element.content += '测。'
+      //     _list.push(element)
+      //   }
+      //   this.setData({ chatList: _list })
+      // }, 1000)
       this.setData({
         scrollHeight:
           app.globalData.systemInfo.windowHeight -
@@ -175,7 +184,7 @@ Component({
             });
           }
         },
-        fail(res) {},
+        fail(res) { },
       });
     },
     // 语音合成并自动播放

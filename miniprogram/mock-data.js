@@ -114,11 +114,11 @@ const data = {
     {
       "id": 146,
       "openid": "otNgX0bmHWg7YaZm-55B1cze2Gg0",
-      "msgType": -1,
+      "msgType": 2,
       "conversationId": "",
       "messageId": "",
       "parentMessageId": "",
-      "content": "请求超时。",
+      "content": "以学习为例，AI可以通过智能化的教育平台和个性化的学习推荐系统，为学生提供更加高效、精准的学习体验。AI可以根据学生的学习情况和兴趣爱好，自动推荐适合他们的课程和学习资源，帮",
       "createdAt": "2023-03-21T15:23:36.000Z",
       "updatedAt": "2023-03-21T15:23:36.000Z"
     },
