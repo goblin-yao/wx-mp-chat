@@ -35,7 +35,7 @@
       <view class="cu-avatar radius chat-ai-avatar"></view>
       <view class="main">
         <view class="content bg-cyan shadow" data-msgid="msg-{{index}}" bindlongpress="copyMsg">
-          <text>{{item.content}}<text wx:if="{{item.isFirstResponse}}" class='input-status'>|</text></text>
+          <view>{{item.content}}<text wx:if="{{item.isFirstResponse}}" class='input-status'>|</text></view>
         </view>
       </view>
       <view wx:if="{{!item.errorType && isVoiceFeatureOpen && !item.retryRequest}}" class='voice-msg-container'>
