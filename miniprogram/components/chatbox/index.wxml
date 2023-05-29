@@ -5,15 +5,18 @@
     <view class="cu-avatar radius chat-ai-avatar"></view>
     <view class="main">
       <view class="content title_content bg-cyan shadow">
-        <view>{{CHAT_AI_INFO.wellcomeTitle}}网页版访问地址：<view class='text_link' bindtap="showLink">https://puzhikeji.com.cn/</view>，需微信扫码登录。
+        <view>{{CHAT_AI_INFO.wellcomeTitle}}网页版访问地址：<view class='text_link' bindtap="showLink">https://puzhikeji.com.cn/</view>，如需在手机端使用网页版，复制网址后，在微信聊天中粘贴跳转进入（无需登录），电脑端使用网页版需微信扫码登录。
           <view>
-            我的资料中，关注关注官方公众号，每日可领次数。
+            在我的资料中：
           </view>
           <view>
-            公众号可以申请会员，享受次数无限权益。
+            关注关注官方公众号，每日可领次数
           </view>
           <view>
-            添加客服，有专人支持，回答各类AI问题。
+            公众号可以申请会员or充次数，享受次数无限权益
+          </view>
+          <view>
+            添加客服，有专人支持，回答各类AI问题
           </view>
           <view>
             使用tips：
@@ -22,7 +25,7 @@
             输入字数不超过2000字。
           </view>
           <view>
-            如果回答没有完成，可以输入“继续”继续答题。
+            如果回答没有完成，可以输入“继续”继续答题
           </view>
         </view>
       </view>
