@@ -69,7 +69,6 @@ Page({
           this.data.noMoreList = true;
           return;
         }
-        tarr = tarr.reverse();
 
         let len = this.data.chatList.length + newsLen;
         //给每个用户的信息加上userinfo

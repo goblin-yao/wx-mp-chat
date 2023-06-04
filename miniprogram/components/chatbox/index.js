@@ -271,7 +271,7 @@ Component({
             if (element.msgType != MESSAGE_TYPE.WAITING_CHATAI) {
               newChatList.push(element);
             }
-            if (element.messageId === msg.messageId) {
+            if (element.messageId === msg.messageId && element.msgType === msg.msgType) {
               isHaveMessage = true;
               this.setData({
                 [`chatList[${index}].content`]: msg.content,
@@ -293,7 +293,6 @@ Component({
           }, 100);
         }
       }
-
       // loading和用户的信息放一起处理，都在页面上展示用
       if (_e.msgType === MESSAGE_TYPE.USER_QUESTION) {
         let msg = {
