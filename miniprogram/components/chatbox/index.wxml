@@ -1,7 +1,7 @@
 <scroll-view class="cu-chat" scroll-y="true" enable-back-to-top enable-flex scroll-into-view="{{scrollId}}" style="height:{{scrollHeight}}px;" bindscrolltoupper="tapTop">
   <!--chatai欢迎消息-->
 
-  <view class="cu-item title">
+  <view wx:if="{{promptType==1}}" class="cu-item title">
     <view class="cu-avatar radius chat-ai-avatar"></view>
     <view class="main">
       <view class="content title_content bg-cyan shadow">

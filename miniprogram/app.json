@@ -1,8 +1,33 @@
 {
-  "pages": ["pages/index/index", "pages/history/history"],
-  "requiredBackgroundModes": ["audio"],
+  "pages": [
+    "pages/chat-homepage/index",
+    "pages/duihua-homepage/index",
+    "pages/kouyu-homepage/index",
+    "pages/index/index",
+    "pages/history/history"
+  ],
+  "requiredBackgroundModes": [
+    "audio"
+  ],
   "useExtendedLib": {
     "weui": true
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
+    "list": [
+      {
+        "pagePath": "pages/chat-homepage/index"
+      },
+      {
+        "pagePath": "pages/duihua-homepage/index"
+      },
+      {
+        "pagePath": "pages/kouyu-homepage/index"
+      }
+    ]
   },
   "usingComponents": {
     "chat-box": "components/chatbox/index",

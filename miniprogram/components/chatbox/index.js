@@ -58,6 +58,8 @@ Component({
    * 组件的初始数据
    */
   data: {
+    promptType: -1,
+    promptText: '',
     scrollId: "",
     systemInfo: {},
     MESSAGE_TYPE: MESSAGE_TYPE,
@@ -75,6 +77,9 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    updatePromptInfo(_d) {
+      this.setData({ promptType: _d.promptType, promptText: _d.promptText })
+    },
     copyMsg(event) {
       var curMsgId = event.currentTarget.dataset.msgid;
       for (let index = 0; index < this.data.chatList.length; index++) {
@@ -295,6 +300,7 @@ Component({
       }
       // loading和用户的信息放一起处理，都在页面上展示用
       if (_e.msgType === MESSAGE_TYPE.USER_QUESTION) {
+
         let msg = {
           content: CHAT_AI_INFO.loadingText,
           msgType: MESSAGE_TYPE.WAITING_CHATAI,

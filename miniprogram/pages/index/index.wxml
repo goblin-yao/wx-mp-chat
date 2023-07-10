@@ -13,7 +13,7 @@
   <!-- <text wx:if="{{leftChatNum=='-1000'}}">会员</text>
   <text wx:else>剩余{{leftChatNum}}次使用次数</text> -->
 </view>
-<view class=" foot-opt-area" style="margin-bottom:{{InputBottom}}px">
+<view class="foot-opt-area" style="margin-bottom:{{InputBottom}}px">
   <view>
     <button class="cu-btn bg-gray btn-history" bindtap="jumpToHistory">使用记录</button>
   </view>

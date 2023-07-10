@@ -23,6 +23,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    promptType: 1,
+    promptText: "",
     showTextEdit: false,
     totalEditContentLength: 0,
     inputEditContent: "",
@@ -84,7 +86,9 @@ Page({
     this.setData({ showTextEdit: false });
   },
   async submitEditedQuestion() {
-    await this.sendMsgToChatAI(this.data.inputEditContent.trim());
+    await this.sendMsgToChatAI({
+      userInputQuestion: this.data.inputEditContent.trim(),
+    });
     this.setData({ showTextEdit: false, inputContent: "" });
   },
   async submitQuestion() {
@@ -115,17 +119,19 @@ Page({
       inputDisabled: true,
       inputContent: "",
     });
-    await this.sendMsgToChatAI(userInputQuestion);
+    await this.sendMsgToChatAI({ userInputQuestion: userInputQuestion });
     //页面一个loading的交互，chatai等待, 发送消息等待的时候，输入框不能再输入东西了。可以disable掉，有内容返回后再添加
 
     this.setData({
       inputDisabled: false,
     });
   },
-  async onChatRoomEvent(_e) {
+  async onChatRoomEvent(_e, fromSystem) {
     console.log("onChatRoomEvent=>", _e);
     this.selectComponent("#chat_room").receiveMsg(_e);
-
+    if (fromSystem) {
+      return;
+    }
     if (_e?.data?.isDone || _e.msgType == MESSAGE_TYPE.USER_QUESTION) {
       //存储问题/答案 数据库, e_=done时才保存数据
       //或者用户提出的问题直接保存
@@ -199,7 +205,7 @@ Page({
   },
   resendMsg(event) {
     console.log("ev", event);
-    this.sendMsgToChatAI(app.globalData.curUserQuestion);
+    this.sendMsgToChatAI({ userInputQuestion: app.globalData.curUserQuestion });
   },
   getChatListData() {
     const tempList = this.selectComponent("#chat_room").getChatListData();
@@ -214,6 +220,10 @@ Page({
       }
     }
     console.log("[msgList]", msgList);
+    return msgList;
+  },
+  makeMessageToSend(userInpObj) {
+    const msgList = [{ role: "user", content: userInpObj.userInputQuestion }];
     return msgList;
   },
   startRequestInterval(messageId) {
@@ -238,49 +248,56 @@ Page({
             app.globalData.messageInterval = null;
           }
         },
-        fail(_e) {},
+        fail(_e) { },
       });
     }, MessageTimer);
   },
-  async sendMsgToChatAI(userInputQuestion) {
-    let that = this;
-    //因为-1000表示是会员
-    if (this.data.leftChatNum <= 0 && this.data.leftChatNum > -1000) {
-      wx.showToast({
-        title: "今日使用次数已用完",
-      });
-      return;
-    }
-    if (!userInputQuestion) {
-      return;
-    }
-    app.globalData.curUserQuestion = userInputQuestion;
-    let checkResult = await this.msgChecker(userInputQuestion);
-    if (!checkResult) {
-      return;
-    }
-    console.log(
-      "[AILastRequestStartTime]",
-      app.globalData.AILastRequestStartTime
-    );
-    if (
-      new Date().getTime() - app.globalData.AILastRequestStartTime <
-      10 * 1000
-    ) {
-      wx.showToast({
-        title: "提问太频繁了，过几秒钟再试试",
-      });
-      return;
-    }
-    app.globalData.AILastRequestStartTime = +new Date();
+  async sendMsgToChatAI(userInputObj) {
+    // 如果由系统触发，不做次数等校验
+    const { userInputQuestion, fromSystem } = userInputObj;
 
+    let that = this;
+    app.globalData.curUserQuestion = userInputQuestion;
+
+    if (!fromSystem) {
+      //因为-1000表示是会员
+      if (this.data.leftChatNum <= 0 && this.data.leftChatNum > -1000) {
+        wx.showToast({
+          title: "今日使用次数已用完",
+        });
+        return;
+      }
+      if (!userInputQuestion) {
+        return;
+      }
+      let checkResult = await this.msgChecker(userInputQuestion);
+      if (!checkResult) {
+        return;
+      }
+      console.log(
+        "[AILastRequestStartTime]",
+        app.globalData.AILastRequestStartTime
+      );
+      if (
+        new Date().getTime() - app.globalData.AILastRequestStartTime <
+        10 * 1000
+      ) {
+        wx.showToast({
+          title: "提问太频繁了，过几秒钟再试试",
+        });
+        return;
+      }
+    }
+
+    app.globalData.AILastRequestStartTime = +new Date();
     // 先发送一条消息到屏幕上，再等待server的回复
     let eventDataFirst = {
       msgType: MESSAGE_TYPE.USER_QUESTION,
       data: { text: userInputQuestion },
     };
     try {
-      await this.onChatRoomEvent(eventDataFirst); //todo
+      await this.onChatRoomEvent(eventDataFirst, fromSystem); //todo
+
       let res = null;
       if (Config.LocalDevMode) {
         // res = MockData.chatAITimeout;
@@ -293,8 +310,8 @@ Page({
           wx.request({
             url: "https://puzhikeji.com.cn/proxyapi/chatstreamstart",
             data: {
-              question: userInputQuestion,
               messages: this.getChatListData(),
+              options: { promptText: this.data.promptText },
             },
             method: "POST",
             header: {
@@ -335,7 +352,7 @@ Page({
           });
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) {}
+    } catch (error) { }
   },
   //切换到文本输入
   changeToTextInput() {
@@ -426,6 +443,10 @@ Page({
     }
   },
   initAIVoice() {
+    if (app.globalData.txCloudAIVoicePluginInited) {
+      return;
+    }
+    app.globalData.txCloudAIVoicePluginInited = true;
     app.globalData.txCloudAIVoicePlugin.setQCloudSecret(
       Config.txCloudInfo.appid,
       Config.txCloudInfo.secretid,
@@ -459,7 +480,7 @@ Page({
           wx.showLoading({
             title: "语音识别中",
           });
-          await this.sendMsgToChatAI(voiceQuestion);
+          await this.sendMsgToChatAI({ userInputQuestion: voiceQuestion });
           wx.hideLoading();
         }
       } catch (error) {
@@ -504,8 +525,47 @@ Page({
    */
   onLoad: function (options) {
     console.log("page load options=>", options);
-    this.userAuth(options);
+    wx.setNavigationBarTitle({
+      title: decodeURIComponent(options.text || "声语Pro"),
+    });
+    this.selectComponent("#chat_room").updatePromptInfo({
+      promptType: options.promptType,
+      promptText: "",
+    });
+    // 你现在是一名雅思外教，对我进行英文雅思对话练习，由你开始说话，你和我轮流每人说一句，请开始
+    this.setData({ promptType: options.promptType });
+
+    this.startConversation(options);
+
+    // 由于之前页面已经注册了用户，所以这里不注册用户
+    // this.userAuth(options);
     Config.VoiceToggle && this.initAIVoice();
+  },
+  startConversation(_params) {
+    const { scenesId } = _params;
+
+    let promptText = "";
+    let startTalkForUser = ''
+    for (let iterator in Config.SCENCES_ALL) {
+      const curArray = Config.SCENCES_ALL[iterator];
+      for (let j = 0; j < curArray.length; j++) {
+        if (String(scenesId) === String(curArray[j]["scenesId"])) {
+          console.log(curArray[j]);
+          promptText = curArray[j]["promptInfo"]["promptText"];
+          startTalkForUser = curArray[j]["promptInfo"]["startTalk"];
+        }
+      }
+    }
+    this.data.promptText = promptText;
+
+    // 雅思教练两种场景，需要自动聊天，其他的情况等待进入页面由用户触发
+    if (!["102", "103", "201", '202'].includes(String(scenesId))) {
+      return;
+    }
+    this.sendMsgToChatAI({
+      userInputQuestion: startTalkForUser,
+      fromSystem: true,
+    }); //todo
   },
 
   setInfo(_tem) {
@@ -613,11 +673,11 @@ Page({
   //   });
   //   console.log("发送订阅消息返回内容", res);
   // },
-  jumpToAdmin() {},
+  jumpToAdmin() { },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {},
+  onReady: function () { },
 
   /**
    * 生命周期函数--监听页面显示
@@ -629,22 +689,22 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {},
+  onHide: function () { },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {},
+  onUnload: function () { },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {},
+  onPullDownRefresh: function () { },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {},
+  onReachBottom: function () { },
 
   jumpToHistory() {
     wx.navigateTo({
@@ -662,9 +722,8 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_from_openid=${
-        this.data.curOpenId
-      }&share_timestamp=${new Date().getTime()}`,
+      path: `/pages/index/index?share_from_openid=${this.data.curOpenId
+        }&share_timestamp=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },
