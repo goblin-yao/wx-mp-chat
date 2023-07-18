@@ -2,8 +2,8 @@
   <view class='bg-cyan light padding-tb-sm padding-lr-xs'> 选择对话场景
   </view>
   <view>
-    <view wx:for="{{topics}}" wx:key="index" wx:for-item="item" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="showSelection" class="bg-gradual-blue margin-tb-xs padding-tb-xs padding-lr-xs">
-      {{item}}
+    <view wx:for="{{topics}}" wx:key="index" wx:for-item="item" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="showSelection" class="{{item.clicked?'view-click':'bg-gradual-blue'}} margin-tb-xs padding-tb-xs padding-lr-xs">
+      {{item.content}}
     </view>
     <view class="bg-green margin-tb-xs padding-tb-xs padding-lr-xs" bindtap="updateTopics">换一批话题</view>
   </view>

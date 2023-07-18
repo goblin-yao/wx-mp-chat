@@ -31,6 +31,9 @@
       </view>
     </view>
   </view>
+  <view class="cu-item " wx:if="{{continueBtnShowFlag}}" bindtap="continueChat">
+    <view class="cu-info">点击继续上次对话</view>
+  </view>
 
   <view wx:for="{{chatList}}" wx:key="index" wx:for-item="item">
     <!--chatai发送的信息-->
@@ -70,7 +73,7 @@
       <view class="date">{{item._createTime}} {{item.userInfo.nickName}}</view>
     </view> -->
     <!--自己发送的信息-->
-    <view class="cu-item self" wx:if="{{item.openid && item.msgType == MESSAGE_TYPE.USER_QUESTION}}" id="msg-{{index}}">
+    <view class="cu-item self {{showScore?'from_ai':''}}" wx:if="{{item.openid && item.msgType == MESSAGE_TYPE.USER_QUESTION}}" id="msg-{{index}}">
       <view class="main">
         <view class="content bg-green shadow" data-msgid="msg-{{index}}" bindlongpress="copyMsg">
           <text>{{item.content}}</text>
@@ -82,6 +85,16 @@
         </view>
       </button> -->
       <!-- <view class="date">{{item.userInfo.nickName}}</view> -->
+      <view class="date" wx:if="{{showScore&&!item.showScore}}" bindtap="scoreHandler" data-msgid="msg-{{index}}">
+        <view class="bg-cyan text-center text-df" style="border-radius: 20rpx;">AI打分</view>
+      </view>
+      <view class="date date-score" wx:if="{{item.showScore==1}}">
+        <view class="bg-cyan text-left text-df" style="border-radius: 20rpx;padding: 0 20rpx;">
+          AI打分中<text class="loading-text"></text></view>
+      </view>
+      <view class="date date-score" wx:if="{{item.showScore==2}}" bindtap="scoreDialogHandler" data-msgid="msg-{{index}}">
+        <view class="bg-gradual-orange text-center text-df" style="border-radius: 20rpx;">展示AI评分</view>
+      </view>
     </view>
     <!-- <view class="cu-item self" wx:if="{{item.openid && item.msgType == 'image'}}" id="msg-{{index}}">
       <view class="main" bindtap="viewImage" data-url="{{item.content}}">

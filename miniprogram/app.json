@@ -1,9 +1,9 @@
 {
   "pages": [
-    "pages/chat-homepage/index",
-    "pages/duihua-homepage/index",
-    "pages/kouyu-homepage/index",
     "pages/index/index",
+    "pages/duihua/index",
+    "pages/kouyu/index",
+    "pages/chat/index",
     "pages/history/history"
   ],
   "requiredBackgroundModes": [
@@ -19,13 +19,13 @@
     "backgroundColor": "#000000",
     "list": [
       {
-        "pagePath": "pages/chat-homepage/index"
+        "pagePath": "pages/index/index"
       },
       {
-        "pagePath": "pages/duihua-homepage/index"
+        "pagePath": "pages/duihua/index"
       },
       {
-        "pagePath": "pages/kouyu-homepage/index"
+        "pagePath": "pages/kouyu/index"
       }
     ]
   },

@@ -1,0 +1,53 @@
+<mp-toptips msg="{{errMsg}}" type="error" show="{{errMsg}}"></mp-toptips>
+<!--聊天内容-->
+<chat-box id="chat_room" bind:resendMsg="resendMsg"></chat-box>
+<!--我的资料-->
+<me-box id="me_dialog"></me-box>
+
+<view class="left_chat_bar">
+  <view wx:if="{{isLocalDevelopment}}">
+    <view bindtap="jumpToAdmin">
+      openid: <input value="{{curOpenId}}"></input>
+    </view>
+  </view>
+  <!-- <text wx:if="{{leftChatNum=='-1000'}}">会员</text>
+  <text wx:else>剩余{{leftChatNum}}次使用次数</text> -->
+</view>
+<view class="foot-opt-area" style="margin-bottom:{{InputBottom}}px">
+  <view>
+    <button class="cu-btn bg-gray btn-history" bindtap="jumpToHistory">使用记录</button>
+  </view>
+  <view>
+    <button class="cu-btn bg-gray btn-history" bindtap="openMeBox">我的资料</button>
+  </view>
+</view>
+<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
+  <view class="action" wx:if="{{isVoiceFeatureOpen}}">
+    <text class="cuIcon-text text-grey" wx:if="{{isVoiceInputStatus}}" bindtap="changeToTextInput"></text>
+    <text class="cuIcon-voice text-grey" wx:else bindtap="changeToVoiceInput"></text>
+  </view>
+  <view wx:if="{{isVoiceInputStatus}}" class="text-input-voice">
+    <view wx:if="{{voiceStatus==2}}" class="text-grey" bindtouchstart="startVoice">点击输入语音</view>
+    <view wx:if="{{voiceStatus==1}}" class="text-grey" bindtap="stopVoice">
+      <text>{{voiceTime}}秒</text>
+      <view class="cuIcon-loading text-animate-loading"></view>
+      <text>点击停止输入语音</text>
+    </view>
+  </view>
+  <input wx:if="{{!isVoiceInputStatus}}" class="solid-bottom" placeholder="请输入{{MaxInputLength}}字以内的内容" bindfocus="InputFocus" bindblur="InputBlur" bindinput="bindKeyInput" value="{{inputContent}}" adjust-position="{{false}}" focus="{{false}}" maxlength="20000" cursor-spacing="10" disabled="{{inputDisabled}}"></input>
+  <button wx:if="{{!isVoiceInputStatus}}" class="cu-btn bg-green shadow" disabled="{{submitBtnDisabled}}" bindtap="submitQuestion"> 发送</button>
+  <!-- <button class="cu-btn bg-green shadow" bindtap="submitQuestion"> 发送</button> -->
+</view>
+
+<view class="drawer_screen" data-status="close" wx:if="{{showTextEdit}}">
+</view>
+<view class='edit_text_screen' wx:if="{{showTextEdit}}" style="bottom:{{inputEditBottom}}px">
+  <textarea class='edit_textarea' value="{{inputEditContent}}" auto-focus placeholder="请输入问题内容" maxlength="20000" bindinput="getValueLength" bindfocus="inputEditFocus" bindblur="inputEditBlur"></textarea>
+  <view>
+    总字数 {{totalEditContentLength}}/{{MaxInputLength}}
+  </view>
+  <view class='edit_btn_group'>
+    <button class="cu-btn bg-gray edit_btn_group_btn" bindtap="closeEdit">取消</button>
+    <button class="cu-btn bg-green" disabled="{{totalEditContentLength>MaxInputLength}}" bindtap="submitEditedQuestion">发送</button>
+  </view>
+</view>

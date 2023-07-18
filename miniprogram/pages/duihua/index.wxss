@@ -3,7 +3,7 @@ page {
   background: ghostwhite;
 }
 
-.view-hover {
+.view-click {
   background-image: none;
-  background-color: rgb(164, 98, 230);
+  background-color: rgb(239, 194, 71);
 }

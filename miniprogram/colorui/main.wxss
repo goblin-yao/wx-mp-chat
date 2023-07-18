@@ -2168,6 +2168,18 @@ button.icon.lg {
   left: 136rpx;
 }
 
+.cu-chat .cu-item.self .date {
+  width: 100rpx;
+  right: 130rpx;
+  left: auto;
+}
+
+.cu-chat .cu-item.self .date-score {
+  width: 240rpx;
+  right: 130rpx;
+  left: auto;
+}
+
 .cu-chat .cu-item .action {
   padding: 0 30rpx;
   display: flex;

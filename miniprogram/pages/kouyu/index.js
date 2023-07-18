@@ -3,7 +3,7 @@ const app = getApp();
 const cloudContainerCaller = require("../../common/util/cloud-container-call");
 const Config = require("../../config");
 const { ShareInfo } = require("../../constants.js");
-
+const topics = require('./topics')
 // 获取计时器函数
 Page({
   /**
@@ -11,15 +11,71 @@ Page({
    */
   data: {
     // prompt类型待再后台配置，当前先用这样的类型
-    scenesAll: Config.SCENCES_ALL.chat,
+    topics: []
+  },
+  saveSelectData(_info) {
+    wx.setStorageSync('last_select_kouyu_topics', _info)
+  },
+  getTopicInitData() {
+    const d = wx.getStorageSync('last_select_kouyu_topics')
+    if (d?.topic) {
+      d.topic.clicked = true
+      return [d.topic];
+    }
+    return [];
+  },
+  setTopicStatus(_info) {
+    const _t = this.data.topics
+    const newArray = []
+    for (let index = 0; index < _t.length; index++) {
+      const element = _t[index];
+      if (element.content == _info.topic.content) {
+        element.clicked = true
+      } else {
+        element.clicked = false
+      }
+      newArray.push(element)
+    }
+    this.setData({
+      topics: newArray
+    })
+  },
+  updateTopics() {
+    this.makeTopics() // TBD ,是否永远将第一条置顶，否则传入true
+  },
+  makeTopics(refresh = false) {
+    // 克隆原始数组以防止修改
+    const clonedArray = [...topics];
+    // 新建一个空数组用于存储随机选取的元素
+    // 第一个元素从历史记录中取，第二次刷新后删除掉历史记录
+    const result = refresh ? [] : this.getTopicInitData();
+    // 随机选取元素直到达到指定的数量
+    while (result.length < 10) {
+      // 生成一个随机索引
+      const randomIndex = Math.floor(Math.random() * clonedArray.length);
+
+      // 从原始数组中取出对应的元素，并将其添加到结果数组中
+      const randomElement = clonedArray.splice(randomIndex, 1)[0];
+      !result.find(e => e.content == randomElement) && result.push({ content: randomElement });
+    }
+    this.setData({ topics: result });
   },
   jumpPage(e) {
     const data = e.currentTarget.dataset;
-    const url = data.path;
-    const index = data.index;
-    const pageInfo = this.data.scenesAll[index];
+    const topic = this.data.topics[data.index]
+    const pageInfoType = 0
+    const pageInfo = Config.SCENCES_ALL.kouyu[pageInfoType];
+    const url = pageInfo.pagePath;
+    // 更新prompt
+    pageInfo.promptInfo.promptText = pageInfo.promptInfo.promptTextTemplate.replace('{{TOPIC}}', topic.content)
+    // 更新startTalk
+    pageInfo.promptInfo.startTalk = pageInfo.promptInfo.startTalkTemplate.replace('{{TOPIC}}', topic.content)
+    this.saveSelectData({ pageInfoType, topic });
+    this.setTopicStatus({ pageInfoType, topic });//根据状态更新对应的topic选择样式
+    const toUrl = `${url}?scenesText=${encodeURIComponent(topic.content)}&promptType=${pageInfo.promptInfo.promptType}&scenesId=${pageInfo.scenesId}`
+    console.log(toUrl);
     wx.navigateTo({
-      url: `${url}?text=${pageInfo.text}&promptType=${pageInfo.promptInfo.promptType}&scenesId=${pageInfo.scenesId}`,
+      url: toUrl
     });
   },
 
@@ -67,6 +123,7 @@ Page({
    */
   onLoad: function (options) {
     console.log("page load options=>", options);
+    this.makeTopics();
     this.userAuth(options);
   },
   /**
@@ -81,7 +138,7 @@ Page({
     if (typeof this.getTabBar === 'function') {
       this.getTabBar((tabBar) => {
         tabBar.setData({
-          selected: 0
+          selected: 2
         })
       })
     }

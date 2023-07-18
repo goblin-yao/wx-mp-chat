@@ -44,13 +44,13 @@ const CHAT_SCENCES = [
   {
     scenesId: 1,
     text: "随性聊天",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: { promptText: DEFAULT_PROMPT_TEXT, promptType: 1 },
   },
   {
     scenesId: 102,
     text: "雅思口语自由练习",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: {
       promptText:
         DEFAULT_PROMPT_TEXT +
@@ -62,7 +62,7 @@ const CHAT_SCENCES = [
   {
     scenesId: 103,
     text: "托福口语自由练习",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: {
       promptText:
         DEFAULT_PROMPT_TEXT +
@@ -74,7 +74,7 @@ const CHAT_SCENCES = [
   {
     scenesId: 104,
     text: "面试官",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: {
       promptText:
         DEFAULT_PROMPT_TEXT +
@@ -85,7 +85,7 @@ const CHAT_SCENCES = [
   {
     scenesId: 105,
     text: "心理咨询",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: {
       promptText:
         DEFAULT_PROMPT_TEXT_Chinese +
@@ -101,7 +101,7 @@ const CHAT_SCENCES = [
   {
     scenesId: 106,
     text: "佛祖",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: {
       promptText:
         DEFAULT_PROMPT_TEXT_Chinese +
@@ -115,7 +115,7 @@ const DUIHUA_SCENCES = [
   {
     scenesId: 201,
     text: "情景话题",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: {
       promptText_init:
         DEFAULT_PROMPT_TEXT +
@@ -131,18 +131,18 @@ const DUIHUA_SCENCES = [
       9: topic
       10: topic
       without any other polite words.`,
-      promptText:
+      promptTextTemplate:
         DEFAULT_PROMPT_TEXT +
         `You are an English teacher now, and now you are having a conversation with me on the topic "{{TOPIC}}"\n`,
 
       promptType: 201,
-      startTalk: `Hi, my English teacher. Let's start for the topic "{{TOPIC}}"`,
+      startTalkTemplate: `Hi, my English teacher. Let's start for the topic "{{TOPIC}}"`,
     },
   },
   {
     scenesId: 202,
     text: "情景话题",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
     promptInfo: {
       promptText_init:
         DEFAULT_PROMPT_TEXT +
@@ -158,7 +158,7 @@ const DUIHUA_SCENCES = [
         9: topic
         10: topic
         without any other polite words.`,
-      promptText:
+      promptTextTemplate:
         DEFAULT_PROMPT_TEXT +
         `You are now an English teacher. For the spoken English topic "{{TOPIC}}, please simulate the dialogue between the two parties. Give the answer in the form of
         Teacher: topic
@@ -167,7 +167,7 @@ const DUIHUA_SCENCES = [
         Student: topic
         without any other polite words.\n`,
       promptType: 202,
-      startTalk: `Hi, my English teacher. Let's start for the topic "{{TOPIC}}"`,
+      startTalkTemplate: `Hi, my English teacher. Let's start for the topic "{{TOPIC}}"`,
     },
   },
 ];
@@ -176,7 +176,10 @@ const KOUYU_SCENCES = [
   {
     scenesId: 301,
     text: "雅思考试口语题",
-    pagePath: "/pages/index/index",
+    pagePath: "/pages/chat/index",
+    ScorePromptText:
+      DEFAULT_PROMPT_TEXT +
+      `You are an IELTS teacher now, and now you are having a conversation with me on the topic "{{TOPIC}}"\n. You are going to rate what 'User' said in this conversation. Please rate this English conversation on a scale from 0 to 100 according to 'User' said in this conversation. The full score is 100. Give the answer in the form of {{score}}: {{reason}}`,
 
     promptInfo: {
       promptText_init:
@@ -193,11 +196,11 @@ const KOUYU_SCENCES = [
         9: topic
         10: topic
         without any other polite words.`,
-      promptText:
+      promptTextTemplate:
         DEFAULT_PROMPT_TEXT +
         `You are an IELTS teacher now, and now you are having a conversation with me on the topic "{{TOPIC}}"\n`,
       promptType: 301,
-      startTalk: `Hi, my IELTS teacher. Let's start for the topic "{{TOPIC}}"`,
+      startTalkTemplate: `Hi, my IELTS teacher. Let's start for the topic "{{TOPIC}}"`,
     },
   },
 ];

@@ -13,39 +13,91 @@ Page({
     // prompt类型待再后台配置，当前先用这样的类型
     topics: []
   },
-  updateTopics() {
-    this.makeTopics()
+  saveSelectData(_info) {
+    wx.setStorageSync('last_select_duihua_topics', _info)
   },
-  makeTopics(count = 3) {
+  getTopicInitData() {
+    const d = wx.getStorageSync('last_select_duihua_topics')
+    if (d?.topic) {
+      d.topic.clicked = true
+      return [d.topic];
+    }
+    return [];
+  },
+  setTopicStatus(_info) {
+    const _t = this.data.topics
+    const newArray = []
+    for (let index = 0; index < _t.length; index++) {
+      const element = _t[index];
+      if (element.content == _info.topic.content) {
+        element.clicked = true
+      } else {
+        element.clicked = false
+      }
+      newArray.push(element)
+    }
+    this.setData({
+      topics: newArray
+    })
+  },
+  updateTopics() {
+    this.makeTopics() // TBD ,是否永远将第一条置顶，否则传入true
+  },
+  makeTopics(refresh = false) {
     // 克隆原始数组以防止修改
     const clonedArray = [...topics];
-
     // 新建一个空数组用于存储随机选取的元素
-    const result = [];
-
+    // 第一个元素从历史记录中取，第二次刷新后删除掉历史记录
+    const result = refresh ? [] : this.getTopicInitData();
     // 随机选取元素直到达到指定的数量
-    while (result.length < count) {
+    while (result.length < 10) {
       // 生成一个随机索引
       const randomIndex = Math.floor(Math.random() * clonedArray.length);
 
       // 从原始数组中取出对应的元素，并将其添加到结果数组中
       const randomElement = clonedArray.splice(randomIndex, 1)[0];
-      result.push(randomElement);
+      !result.find(e => e.content == randomElement) && result.push({ content: randomElement });
     }
     this.setData({ topics: result });
   },
-  jumpPage(e) {
-
+  showSelection(e) {
+    const that = this
     const data = e.currentTarget.dataset;
     const topic = this.data.topics[data.index]
-    const pageInfo = Config.SCENCES_ALL.kouyu[0];
+    if (topic.clicked) {
+      //从数据缓存中取，然后直接跳转，不用回显了
+      const d = wx.getStorageSync('last_select_duihua_topics')
+      that.jumpPage(d.pageInfoType, d.topic)
+      return;
+    }
+
+    wx.showActionSheet({
+      itemList: ["AI发起对话模式", "AI相互对话模式"],
+      success(res) {
+        if (res.tapIndex == 0) {
+          that.jumpPage(0, topic)
+        }
+        if (res.tapIndex == 1) {
+          that.jumpPage(1, topic)
+        }
+      },
+      fail(res) { },
+    });
+  },
+  jumpPage(pageInfoType, topic) {
+    const pageInfo = Config.SCENCES_ALL.duihua[pageInfoType];
     const url = pageInfo.pagePath;
     // 更新prompt
-    pageInfo.promptInfo.promptText = pageInfo.promptInfo.promptText.replace('{{TOPIC}}', topic)
+    pageInfo.promptInfo.promptText = pageInfo.promptInfo.promptTextTemplate.replace('{{TOPIC}}', topic.content)
     // 更新startTalk
-    pageInfo.promptInfo.startTalk = pageInfo.promptInfo.startTalk.replace('{{TOPIC}}', topic)
+    pageInfo.promptInfo.startTalk = pageInfo.promptInfo.startTalkTemplate.replace('{{TOPIC}}', topic.content)
+    this.saveSelectData({ pageInfoType, topic });
+    this.setTopicStatus({ pageInfoType, topic });//根据状态更新对应的topic选择样式
+
+    const toUrl = `${url}?scenesText=${encodeURIComponent(topic.content)}&promptType=${pageInfo.promptInfo.promptType}&scenesId=${pageInfo.scenesId}`
+    console.log(toUrl);
     wx.navigateTo({
-      url: `${url}?text=${topic}&promptType=${pageInfo.promptInfo.promptType}&scenesId=${pageInfo.scenesId}`,
+      url: toUrl
     });
   },
 
@@ -108,7 +160,7 @@ Page({
     if (typeof this.getTabBar === 'function') {
       this.getTabBar((tabBar) => {
         tabBar.setData({
-          selected: 2
+          selected: 1
         })
       })
     }

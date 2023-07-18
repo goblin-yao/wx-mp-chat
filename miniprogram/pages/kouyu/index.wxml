@@ -2,8 +2,8 @@
   <view class='bg-cyan light padding-tb-sm padding-lr-xs'> 选择口语考试题
   </view>
   <view>
-    <view wx:for="{{topics}}" wx:key="index" wx:for-item="item" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="jumpPage" class="bg-gradual-green margin-tb-xs padding-tb-xs padding-lr-xs">
-      {{item}}
+    <view wx:for="{{topics}}" wx:key="index" wx:for-item="item" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="jumpPage" class="{{item.clicked?'view-click':'bg-gradual-green'}} margin-tb-xs padding-tb-xs padding-lr-xs">
+      {{item.content}}
     </view>
     <view class="bg-blue margin-tb-xs padding-tb-xs padding-lr-xs" bindtap="updateTopics">换一批考题</view>
   </view>

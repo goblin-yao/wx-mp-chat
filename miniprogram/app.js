@@ -1,4 +1,5 @@
 //app.js
+const Config = require("./config");
 App({
   onLaunch() {
     this.InitCloud(); //初始化云服务 / ESC
@@ -19,7 +20,14 @@ App({
     this.globalData.CustomBar = custom.bottom + custom.top - _e.statusBarHeight;
     this.globalData.safeBottomLeft = _e.screenHeight - _e.safeArea.bottom;
   },
+  setVoiceToggle(val) {
+    this.globalData.VoiceToggle = val
+  },
+  getVoiceToggle() {
+    return this.globalData.VoiceToggle
+  },
   globalData: {
+    VoiceToggle: Config.VoiceToggle,
     txCloudAIVoicePluginInited: false,
     txCloudAIVoicePlugin: requirePlugin("QCloudAIVoice"),
     AILastRequestStartTime: 0, //用来展示耗时间

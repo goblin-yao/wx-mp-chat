@@ -1,9 +1,0 @@
-<view class="padding-lr-sm">
-  <view class='bg-cyan light padding-tb-sm padding-lr-xs'> 选择聊天场景
-  </view>
-  <view>
-    <view wx:for="{{scenesAll}}" wx:key="index" wx:for-item="item" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="jumpPage" class="bg-gradual-orange margin-tb-xs padding-tb-xs padding-lr-xs">
-      {{item.text}}
-    </view>
-  </view>
-</view>

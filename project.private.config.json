@@ -18,7 +18,14 @@
         {
           "name": "",
           "pathName": "pages/index/index",
-          "query": "text=%E9%9B%85%E6%80%9D%E5%8F%A3%E8%AF%AD%E8%87%AA%E7%94%B1%E7%BB%83%E4%B9%A0&promptType=102&scenesId=102",
+          "query": "scenesText=%E9%9B%85%E6%80%9D%E5%8F%A3%E8%AF%AD%E8%87%AA%E7%94%B1%E7%BB%83%E4%B9%A0&promptType=102&scenesId=102",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/chat/index",
+          "query": "scenesText=Role%20of%20technology%20in%20disaster%20management&promptType=301&scenesId=301",
           "launchMode": "default",
           "scene": null
         }
