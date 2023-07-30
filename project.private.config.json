@@ -28,6 +28,13 @@
           "query": "scenesText=Role%20of%20technology%20in%20disaster%20management&promptType=301&scenesId=301",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "面试官-dev",
+          "pathName": "pages/chat/index",
+          "query": "scenesText=%E9%9D%A2%E8%AF%95%E5%AE%98&promptType=104&scenesId=104",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

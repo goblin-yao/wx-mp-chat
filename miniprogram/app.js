@@ -4,6 +4,7 @@ App({
   onLaunch() {
     this.InitCloud(); //初始化云服务 / ESC
     this.InitCustom(); //初始化custom所需配置信息
+    this.setUserInfo();
   },
   InitCloud() {
     wx.cloud.init();
@@ -21,10 +22,18 @@ App({
     this.globalData.safeBottomLeft = _e.screenHeight - _e.safeArea.bottom;
   },
   setVoiceToggle(val) {
-    this.globalData.VoiceToggle = val
+    this.globalData.VoiceToggle = val;
   },
   getVoiceToggle() {
-    return this.globalData.VoiceToggle
+    return this.globalData.VoiceToggle;
+  },
+  setUserInfo() {
+    const userInfFromStorage = wx.getStorageSync("cur_mp_user_info");
+    // 如果本地存储有东西，但不是走的分享，直接走本地环境，有分享就需要重新更新
+    if (userInfFromStorage) {
+      this.globalData.openid = userInfFromStorage.openid;
+      this.globalData.userInfo = userInfFromStorage;
+    }
   },
   globalData: {
     VoiceToggle: Config.VoiceToggle,

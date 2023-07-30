@@ -56,7 +56,7 @@ const CHAT_SCENCES = [
         DEFAULT_PROMPT_TEXT +
         `You are now an IELTS foreign teacher, and you are doing English IELTS dialogue exercises for user. You start to speak, and you and user take turns to say one sentence each. Please start.\n`,
       promptType: 102,
-      startTalk: `Hi, my IELTS foreign teacher. Let's start`,
+      startTalkText: `Hi, my IELTS foreign teacher. Let's start`,
     },
   },
   {
@@ -68,7 +68,7 @@ const CHAT_SCENCES = [
         DEFAULT_PROMPT_TEXT +
         `You are now an TOEFL foreign teacher, and you are doing English TOEFL dialogue exercises for user. You start to speak, and you and user take turns to say one sentence each. Please start.\n`,
       promptType: 103,
-      startTalk: `Hi, my TOEFL foreign teacher. Let's start`,
+      startTalkText: `Hi, my TOEFL foreign teacher. Let's start`,
     },
   },
   {
@@ -78,8 +78,9 @@ const CHAT_SCENCES = [
     promptInfo: {
       promptText:
         DEFAULT_PROMPT_TEXT +
-        `我想让你担任Android开发工程师面试官。我将成为候选人，您将向我询问Android开发工程师职位的面试问题。我希望你只作为面试官回答。不要一次写出所有的问题。我希望你只对我进行采访。问我问题，等待我的回答。不要写解释。像面试官一样一个一个问我，等我回答`,
+        `我想让你担任面试官。我将成为候选人，您将向我询问面试问题。我希望你只作为面试官回答。不要一次写出所有的问题。我希望你只对我进行采访。问我问题，等待我的回答。不要写解释。像面试官一样一个一个问我，等我回答。`,
       promptType: 104,
+      startTalkSystem: `Hello. May I ask what position you are interviewing for today?`,
     },
   },
   {
@@ -179,7 +180,7 @@ const KOUYU_SCENCES = [
     pagePath: "/pages/chat/index",
     ScorePromptText:
       DEFAULT_PROMPT_TEXT +
-      `You are an IELTS teacher now, and now you are having a conversation with me on the topic "{{TOPIC}}"\n. You are going to rate what 'User' said in this conversation. Please rate this English conversation on a scale from 0 to 100 according to 'User' said in this conversation. The full score is 100. Give the answer in the form of {{score}}: {{reason}}`,
+      `You are an IELTS teacher now, and now you are having a conversation with me on the topic "{{TOPIC}}"\n. You are going to rate what 'User' said in this conversation. Please rate this English conversation on a scale from 0 to 100 according to 'User' said in this conversation. The full score is 100. Give the answer in the form of \n {{score}}: {{reason}}`,
 
     promptInfo: {
       promptText_init:
@@ -223,6 +224,6 @@ module.exports = {
       : cloudConfigs.DarenzhushouProd, // 发布时记得更改为 prod
   VoiceToggle: curAppID === "wxfed2e64d2ff0da4a" ? 1 : 0, //语音功能开关
   txCloudInfo,
-  maxVoiceTime: 30 * 1000, //最长录音时间，单位毫秒
+  maxVoiceTime: 2 * 60 * 1000, //最长录音时间，单位毫秒
   LocalDevMode: 0, //本地开发模式的选项
 };

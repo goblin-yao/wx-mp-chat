@@ -10,7 +10,6 @@ const {
 const MockData = require("../../mock-data");
 
 // 时间工具类
-const timeutil = require("../../common/util/timeutil");
 const { getVoiceOption } = require("../../common/util/voice-option.js");
 const localChatMessagesHandler = require("../../common/util/local-chat-messages-handler");
 const innerAudioContextMap = {}; // 创建内部 audio 上下文 InnerAudioContext 对象。
@@ -80,9 +79,9 @@ Component({
           if (Object.hasOwnProperty.call(innerAudioContextMap, key)) {
             const element = innerAudioContextMap[key];
             element && element.pause();
-            // todo 可以更精准暂停当前正在播放中的音频?
           }
         }
+        console.error("chatbox component unload!!!!");
       } catch (error) {
         console.log("--释放音频内容失败--");
       }
@@ -98,31 +97,29 @@ Component({
         showScore: showScore,
         promptType: _d.promptType,
         scenesId: _d.scenesId,
-        scenesText: _d.scenesText,
+        scenesText: decodeURIComponent(_d.scenesText),
         promptText: _d.promptText,
       });
     },
     showScoreModal(_txt) {
       wx.showModal({
-        title: 'AI评分',
+        title: "AI评分",
         content: _txt,
         complete: (res) => {
           if (res.cancel) {
-
           }
 
           if (res.confirm) {
-
           }
-        }
-      })
+        },
+      });
     },
     scoreDialogHandler(event) {
       const curMsgId = event.currentTarget.dataset.msgid;
       for (let index = 0; index < this.data.chatList.length; index++) {
         const element = this.data.chatList[index];
         if (curMsgId == `msg-${index}`) {
-          this.showScoreModal(element.scoreText)
+          this.showScoreModal(element.scoreText);
           break;
         }
       }
@@ -131,18 +128,18 @@ Component({
     scoreHandler(event) {
       const that = this;
       wx.showLoading({
-        title: 'AI打分中',
-      })
+        title: "AI打分中",
+      });
       const curMsgId = event.currentTarget.dataset.msgid;
-      let msgIndex = -1
-      let tempMsgList = []
+      let msgIndex = -1;
+      let tempMsgList = [];
       for (let index = 0; index < this.data.chatList.length; index++) {
         const element = this.data.chatList[index];
-        tempMsgList.push(element)
+        tempMsgList.push(element);
         if (curMsgId == `msg-${index}`) {
           msgIndex = index;
           // 取这个消息往之前的8条消息
-          this.setData({ [`chatList[${index}].showScore`]: 1 })
+          this.setData({ [`chatList[${index}].showScore`]: 1 });
           break;
         }
       }
@@ -150,7 +147,12 @@ Component({
         url: "https://puzhikeji.com.cn/proxyapi/chat",
         data: {
           messages: this.getChatListData(tempMsgList),
-          options: { promptText: Config.SCENCES_ALL.kouyu[0]['ScorePromptText'].replace('{{TOPIC}}', decodeURIComponent(this.data.scenesText)) },
+          options: {
+            promptText: Config.SCENCES_ALL.kouyu[0]["ScorePromptText"].replace(
+              "{{TOPIC}}",
+              this.data.scenesText
+            ),
+          },
         },
         method: "POST",
         header: {
@@ -158,21 +160,21 @@ Component({
         },
         success(_e) {
           console.log("[proxyapi/chat]", _e);
-          wx.hideLoading()
+          wx.hideLoading();
           if (_e?.data?.text) {
-            that.showScoreModal(_e.data.text)
+            that.showScoreModal(_e.data.text);
             that.setData({
               [`chatList[${msgIndex}].showScore`]: 2,
-              [`chatList[${msgIndex}].scoreText`]: _e.data.text
-            })
+              [`chatList[${msgIndex}].scoreText`]: _e.data.text,
+            });
           }
         },
         fail(_e) {
-          wx.hideLoading()
+          wx.hideLoading();
           that.setData({
             [`chatList[${msgIndex}].showScore`]: -1,
-            [`chatList[${msgIndex}].scoreText`]: ''
-          })
+            [`chatList[${msgIndex}].scoreText`]: "",
+          });
         },
       });
     },
@@ -285,7 +287,7 @@ Component({
             });
           }
         },
-        fail(res) { },
+        fail(res) {},
       });
     },
     // 语音合成并自动播放
@@ -314,10 +316,16 @@ Component({
           const msgindex = that.data.chatList.findIndex(
             (e) => e.messageId == msgToShow.messageId
           );
-          console.log("msgindex=>", msgindex);
-          that.setData({
-            [`chatList[${msgindex}].voiceDisplaying`]: false,
-          });
+          console.log(
+            "msgToShow|||msgindex|||chatList=>",
+            msgToShow,
+            msgindex,
+            that.data.chatList
+          );
+          msgindex > -1 &&
+            that.setData({
+              [`chatList[${msgindex}].voiceDisplaying`]: false,
+            });
         },
       });
     },
@@ -333,13 +341,13 @@ Component({
           });
         }
       }
-      return msgList
+      return msgList;
     },
 
     //可以传入特定的消息列表，或者用默认的
     getChatListData(_chatList) {
       const tempList = (_chatList || this.data.chatList).slice(-8); //获取最近4条对话
-      return this.makeChatListToAI(tempList)
+      return this.makeChatListToAI(tempList);
     },
     updateVoiceToggle(val) {
       this.setData({ isVoiceFeatureOpen: val });
@@ -361,63 +369,58 @@ Component({
           isFirstResponse: !!_e.data.isFirstResponse, // 消息是否是第一个消息
           totalTime: 0,
         };
-        // 如果消息完成就合成语音
+        // 如果消息完成就合成语音，对话耗时，合成语音
         if (msg.isDone) {
           msg.totalTime =
             (new Date().getTime() - app.globalData.AILastRequestStartTime) /
             1000;
           msg.totalTime = "对话耗时" + msg.totalTime.toFixed(1) + "s";
-          //更新指定ID的消息
-          for (let index = 0; index < this.data.chatList.length; index++) {
-            const element = this.data.chatList[index];
-            if (element.messageId === msg.messageId) {
+          // 语音合成
+          if (this.data.isVoiceFeatureOpen) {
+            msg.voiceDisplaying = true; // 消息是否播放
+            await this.convertTextToVoiceAndPlay(msg);
+          }
+        }
+
+        let isHaveMessage = false;
+        //把原来消息的loading删掉, 如果是新消息就更新，否则就插入一条新的
+        let newChatList = [];
+        for (let index = 0; index < this.data.chatList.length; index++) {
+          const element = this.data.chatList[index];
+          if (element.msgType != MESSAGE_TYPE.WAITING_CHATAI) {
+            newChatList.push(element);
+          }
+          if (
+            element.messageId === msg.messageId &&
+            element.msgType === msg.msgType
+          ) {
+            isHaveMessage = true;
+            if (msg.isDone) {
               this.setData({
                 [`chatList[${index}].content`]: msg.content,
                 [`chatList[${index}].totalTime`]: msg.totalTime,
                 [`chatList[${index}].isFirstResponse`]: false,
               });
               this.setMessageDataToLS(msg); // 消息是done后设置到本地
-            }
-          }
-          // 语音合成
-          if (this.data.isVoiceFeatureOpen) {
-            msg.voiceDisplaying = true; // 消息是否播放
-            await this.convertTextToVoiceAndPlay(msg);
-          }
-        } else {
-          let isHaveMessage = false;
-          //把原来消息的loading删掉, 如果是新消息就更新，否则就插入一条新的
-          // todo 有时候loading消息没删除掉，看看是什么原因
-          let newChatList = [];
-          for (let index = 0; index < this.data.chatList.length; index++) {
-            const element = this.data.chatList[index];
-            if (element.msgType != MESSAGE_TYPE.WAITING_CHATAI) {
-              newChatList.push(element);
-            }
-            if (
-              element.messageId === msg.messageId &&
-              element.msgType === msg.msgType
-            ) {
-              isHaveMessage = true;
+            } else {
               this.setData({
                 [`chatList[${index}].content`]: msg.content,
               });
             }
           }
-          //没有新消息才是增加新消息，否则更新
-          if (!isHaveMessage) {
-            newChatList.push(msg);
-            this.setData({
-              chatList: newChatList,
-            });
-          }
-          console.log("textshowed", new Date().toString());
-          setTimeout(() => {
-            this.setData({
-              scrollId: "msg-" + parseInt(newChatList.length - 1),
-            });
-          }, 100);
         }
+        //没有新消息才是增加新消息，否则更新
+        if (!isHaveMessage) {
+          newChatList.push(msg);
+          this.setData({
+            chatList: newChatList,
+          });
+        }
+        setTimeout(() => {
+          this.setData({
+            scrollId: "msg-" + parseInt(newChatList.length - 1),
+          });
+        }, 100);
       }
       // loading和用户的信息放一起处理，都在页面上展示用
       if (_e.msgType === MESSAGE_TYPE.USER_QUESTION) {
@@ -433,7 +436,7 @@ Component({
           openid: app.globalData.openid,
           userInfo: app.globalData.userInfo,
         };
-        // console.log("dddd->", app.globalData.userInfo);
+        console.log("dddd->", app.globalData.userInfo);
         this.data.chatList.push(msgForUser);
         this.data.chatList.push(msgLoading);
 

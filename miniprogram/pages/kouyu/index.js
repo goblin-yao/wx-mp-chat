@@ -69,7 +69,7 @@ Page({
     // 更新prompt
     pageInfo.promptInfo.promptText = pageInfo.promptInfo.promptTextTemplate.replace('{{TOPIC}}', topic.content)
     // 更新startTalk
-    pageInfo.promptInfo.startTalk = pageInfo.promptInfo.startTalkTemplate.replace('{{TOPIC}}', topic.content)
+    pageInfo.promptInfo.startTalkText = pageInfo.promptInfo.startTalkTemplate.replace('{{TOPIC}}', topic.content)
     this.saveSelectData({ pageInfoType, topic });
     this.setTopicStatus({ pageInfoType, topic });//根据状态更新对应的topic选择样式
     const toUrl = `${url}?scenesText=${encodeURIComponent(topic.content)}&promptType=${pageInfo.promptInfo.promptType}&scenesId=${pageInfo.scenesId}`

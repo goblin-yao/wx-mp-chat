@@ -1,6 +1,6 @@
 <mp-toptips msg="{{errMsg}}" type="error" show="{{errMsg}}"></mp-toptips>
 <!--聊天内容-->
-<chat-box id="chat_room" bind:resendMsg="resendMsg"></chat-box>
+<chat-box wx:if="{{ChatBoxShowFlagForUnCache}}" id="chat_room" bind:resendMsg="resendMsg"></chat-box>
 <!--我的资料-->
 <me-box id="me_dialog"></me-box>
 

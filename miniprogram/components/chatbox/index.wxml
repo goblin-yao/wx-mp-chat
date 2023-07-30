@@ -31,6 +31,10 @@
       </view>
     </view>
   </view>
+  <view class="cu-item " wx:if="{{scenesText&&scenesId>200}}" bindtap="continueChat">
+    <text class="bg-gradual-green scenes-text">{{scenesText}}</text>
+  </view>
+
   <view class="cu-item " wx:if="{{continueBtnShowFlag}}" bindtap="continueChat">
     <view class="cu-info">点击继续上次对话</view>
   </view>

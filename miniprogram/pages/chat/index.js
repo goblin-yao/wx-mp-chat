@@ -24,6 +24,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    ChatBoxShowFlagForUnCache: true, // 用来切换chatbox的隐藏与展示，因为多个页面使用同一个组件数据错乱了
     promptType: 1,
     promptText: "",
     scenesId: "",
@@ -137,7 +138,6 @@ Page({
       return;
     }
     if (_e?.data?.isDone || _e.msgType == MESSAGE_TYPE.USER_QUESTION) {
-
       //存储问题/答案 数据库, e_=done时才保存数据
       //或者用户提出的问题直接保存
       const res = await cloudContainerCaller({
@@ -538,11 +538,11 @@ Page({
     this.startConversation(options);
 
     //AI相互对话时禁止语音 todo
-    let tempToggleData = true
+    let tempToggleData = true;
     if (["202"].includes(String(options.scenesId))) {
-      tempToggleData = false
+      tempToggleData = false;
     }
-    app.setVoiceToggle(tempToggleData)
+    app.setVoiceToggle(tempToggleData);
     this.selectComponent("#chat_room").updateVoiceToggle(tempToggleData);
     tempToggleData && this.initAIVoice();
   },
@@ -550,14 +550,15 @@ Page({
     const { scenesId } = _params;
 
     let promptText = "";
-    let startTalkForUser = "";
+    let startTalkForUser = "",
+      startTalkForSystem = "";
     for (let iterator in Config.SCENCES_ALL) {
       const curArray = Config.SCENCES_ALL[iterator];
       for (let j = 0; j < curArray.length; j++) {
         if (String(scenesId) === String(curArray[j]["scenesId"])) {
-          console.log(curArray[j]);
           promptText = curArray[j]["promptInfo"]["promptText"];
-          startTalkForUser = curArray[j]["promptInfo"]["startTalk"];
+          startTalkForUser = curArray[j]["promptInfo"]["startTalkText"];
+          startTalkForSystem = curArray[j]["promptInfo"]["startTalkSystem"];
         }
       }
     }
@@ -568,13 +569,19 @@ Page({
       scenesId: this.data.scenesId,
     });
     if (msgFromLS?.data.length) {
-      //如果有历史记录，就提示是否继续。不用自动触发主动聊天之类的
-      // 通知到chatbox组件展示是否继续按钮，然后就不自动聊天
+      // 通知到chatbox组件展示是否继续按钮
       this.selectComponent("#chat_room").showContinueBtn();
-      return;
     }
     // 雅思教练两种场景，需要自动聊天，其他的情况等待进入页面由用户触发
-    if (!["102", "103", "201", "202"].includes(String(scenesId))) {
+    if (!["102", "103", "201", "104", "202"].includes(String(scenesId))) {
+      return;
+    }
+    // 面试官需要AI自动触发
+    if (["104"].includes(String(scenesId))) {
+      this.selectComponent("#chat_room").receiveMsg({
+        msgType: MESSAGE_TYPE.CHATAI_ANSWER,
+        data: { text: startTalkForSystem },
+      });
       return;
     }
     this.sendMsgToChatAI({
@@ -710,8 +717,10 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    this.setData({ ChatBoxShowFlagForUnCache: false })
     clearInterval(app.globalData.messageInterval);
     app.globalData.messageInterval = null;
+    console.error("chat page unload!!!!");
   },
 
   /**

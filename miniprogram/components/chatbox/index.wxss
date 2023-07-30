@@ -3,6 +3,18 @@ text {
   word-break: break-all;
 }
 
+.scenes-text {
+  display: inline-block;
+  margin: 20rpx auto;
+  font-size: 24rpx;
+  padding: 8rpx 12rpx;
+  background-image: none;
+  background-color: rgb(239, 194, 71);
+  border-radius: 6rpx;
+  color: var(--white);
+  line-height: 1.4;
+}
+
 .input-status {
   animation: inputStatusFramse 1s infinite steps(1, start);
   -webkit-animation: inputStatusFramse 1s infinite steps(1, start);
