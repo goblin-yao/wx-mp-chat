@@ -24,7 +24,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    ChatBoxShowFlagForUnCache: true, // 用来切换chatbox的隐藏与展示，因为多个页面使用同一个组件数据错乱了
+    // ChatBoxShowFlagForUnCache: true, // 用来切换chatbox的隐藏与展示，因为多个页面使用同一个组件数据错乱了
     promptType: 1,
     promptText: "",
     scenesId: "",
@@ -437,10 +437,10 @@ Page({
     }
   },
   initAIVoice() {
-    if (app.globalData.txCloudAIVoicePluginInited) {
-      return;
-    }
-    app.globalData.txCloudAIVoicePluginInited = true;
+    // if (app.globalData.txCloudAIVoicePluginInited) {
+    //   return;
+    // }
+    // app.globalData.txCloudAIVoicePluginInited = true;
     app.globalData.txCloudAIVoicePlugin.setQCloudSecret(
       Config.txCloudInfo.appid,
       Config.txCloudInfo.secretid,
@@ -717,7 +717,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    this.setData({ ChatBoxShowFlagForUnCache: false })
+    // this.setData({ ChatBoxShowFlagForUnCache: false })
     clearInterval(app.globalData.messageInterval);
     app.globalData.messageInterval = null;
     console.error("chat page unload!!!!");
