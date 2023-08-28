@@ -89,7 +89,7 @@
         </view>
       </button> -->
       <!-- <view class="date">{{item.userInfo.nickName}}</view> -->
-      <view class="date" wx:if="{{showScore&&!item.showScore}}" bindtap="scoreHandler" data-msgid="msg-{{index}}">
+      <!-- <view class="date" wx:if="{{showScore&&!item.showScore}}" bindtap="scoreHandler" data-msgid="msg-{{index}}">
         <view class="bg-cyan text-center text-df" style="border-radius: 20rpx;">AI打分</view>
       </view>
       <view class="date date-score" wx:if="{{item.showScore==1}}">
@@ -98,7 +98,7 @@
       </view>
       <view class="date date-score" wx:if="{{item.showScore==2}}" bindtap="scoreDialogHandler" data-msgid="msg-{{index}}">
         <view class="bg-gradual-orange text-center text-df" style="border-radius: 20rpx;">展示AI评分</view>
-      </view>
+      </view> -->
     </view>
     <!-- <view class="cu-item self" wx:if="{{item.openid && item.msgType == 'image'}}" id="msg-{{index}}">
       <view class="main" bindtap="viewImage" data-url="{{item.content}}">

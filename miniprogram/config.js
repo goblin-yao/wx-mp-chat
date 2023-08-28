@@ -180,7 +180,7 @@ const KOUYU_SCENCES = [
     pagePath: "/pages/chat/index",
     ScorePromptText:
       DEFAULT_PROMPT_TEXT +
-      `You are an IELTS teacher now, and now you are having a conversation with me on the topic "{{TOPIC}}"\n. You are going to rate what 'User' said in this conversation. Please rate this English conversation on a scale from 0 to 100 according to 'User' said in this conversation. The full score is 100. Give the answer in the form of \n {{score}}: {{reason}}`,
+      `You are an IELTS teacher now, and now you are going to rate what 'User' said in this conversation for the topic "{{TOPIC}}". Please rate this English conversation on a scale from 0 to 100 according to 'User' said in this conversation. The full score is 100. Give the answer in the form of \n {{score}}: {{reason}}`,
 
     promptInfo: {
       promptText_init:

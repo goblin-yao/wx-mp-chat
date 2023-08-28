@@ -287,7 +287,7 @@ Component({
             });
           }
         },
-        fail(res) {},
+        fail(res) { },
       });
     },
     // 语音合成并自动播放
@@ -535,6 +535,8 @@ Component({
       } catch {
         wx.hideLoading();
         wx.showToast({
+          duration: 3000,
+          mask: true,
           title: "语音转换失败，请稍后！",
         });
         // {"Response":{"RequestId":"6461058e55ab7434c9b008b0","Error":{"Code":"UnsupportedOperation.TextTooLong","Message":"Text too long"}}}

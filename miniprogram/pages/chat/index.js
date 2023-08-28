@@ -1,6 +1,7 @@
 // 获取全局APP
 const app = getApp();
 const abortPromiseWrapper = require("../../common/util/abort-promise");
+const { checkIsFinishMsg } = require("../../common/util/textutil");
 
 const Config = require("../../config");
 const cloudContainerCaller = require("../../common/util/cloud-container-call");
@@ -132,11 +133,19 @@ Page({
     });
   },
   async onChatRoomEvent(_e, fromSystem) {
-    console.log("onChatRoomEvent=>", _e);
-    this.selectComponent("#chat_room").receiveMsg(_e);
+    console.log("onChatRoomEvent=>", _e, { fromSystem });
+    //如果是 202 场景，对话加多换行
+
+    if (["202"].includes(String(this.data.scenesId))) {
+      if (_e.msgType == MESSAGE_TYPE.CHATAI_ANSWER && _e?.data?.text) {
+        _e.data.text = _e.data.text.replace(/\n/g, "\n\n");
+      }
+    }
+    //!! 系统触发的消息不展示在页面上，但是发送给AI的对话需要这句话。
     if (fromSystem) {
       return;
     }
+    this.selectComponent("#chat_room").receiveMsg(_e);
     if (_e?.data?.isDone || _e.msgType == MESSAGE_TYPE.USER_QUESTION) {
       //存储问题/答案 数据库, e_=done时才保存数据
       //或者用户提出的问题直接保存
@@ -163,6 +172,8 @@ Page({
       result = true;
     } else {
       wx.showToast({
+        duration: 3000,
+        mask: true,
         title: "内容含有敏感词",
       });
     }
@@ -234,21 +245,29 @@ Page({
           "content-type": "application/json", // 默认值
         },
         success(_e) {
+          // 连续三次消息内容一样，认为是Done
+          const ressult = checkIsFinishMsg(_e);
+          if (ressult) {
+            if (_e?.data) {
+              _e.data.isDone = true;
+            }
+          }
           console.log("[proxyapi/chatstreaminterval]", _e);
           that.handleMsgSuccess(_e);
-          // Todo 连续三次消息内容一样，认为是Done
           if (_e?.data?.isDone) {
             clearInterval(app.globalData.messageInterval);
             app.globalData.messageInterval = null;
           }
         },
-        fail(_e) { },
+        fail(_e) {},
       });
     }, MessageTimer);
   },
   async sendMsgToChatAI(userInputObj) {
     // 如果由系统触发，不做次数等校验
     const { userInputQuestion, fromSystem } = userInputObj;
+    // 如果由系统触发，发送消息由用户触发
+    let chatInit = [{ role: "user", content: userInputQuestion }];
 
     let that = this;
     app.globalData.curUserQuestion = userInputQuestion;
@@ -257,6 +276,8 @@ Page({
       //因为-1000表示是会员
       if (this.data.leftChatNum <= 0 && this.data.leftChatNum > -1000) {
         wx.showToast({
+          duration: 3000,
+          mask: true,
           title: "今日使用次数已用完",
         });
         return;
@@ -277,6 +298,8 @@ Page({
         10 * 1000
       ) {
         wx.showToast({
+          duration: 3000,
+          mask: true,
           title: "提问太频繁了，过几秒钟再试试",
         });
         return;
@@ -285,6 +308,7 @@ Page({
 
     app.globalData.AILastRequestStartTime = +new Date();
     // 先发送一条消息到屏幕上，再等待server的回复
+    // 系统触发的消息不会展示出来
     let eventDataFirst = {
       msgType: MESSAGE_TYPE.USER_QUESTION,
       data: { text: userInputQuestion },
@@ -299,12 +323,17 @@ Page({
         res = MockData.chatAIInnerError;
         await this.handleMsgSuccess(res);
       } else {
+        if (fromSystem) {
+          wx.showLoading({
+            title: "等待AI...",
+          });
+        }
         // no stream
         const resPromise = new Promise((resolve, reject) => {
           wx.request({
             url: "https://puzhikeji.com.cn/proxyapi/chatstreamstart",
             data: {
-              messages: this.getChatListData(),
+              messages: fromSystem ? chatInit : this.getChatListData(),
               options: { promptText: this.data.promptText },
             },
             method: "POST",
@@ -312,9 +341,52 @@ Page({
               "content-type": "application/json", // 默认值
             },
             success(_e) {
+              if (fromSystem) {
+                wx.hideLoading();
+              }
               console.log("[proxyapi/chatstreamstart]", _e);
               _e?.data?.id && that.startRequestInterval(_e?.data?.id); //通过消息ID轮询
               resolve(_e);
+            },
+            fail(_e) {
+              wx.hideLoading();
+              reject(_e);
+            },
+          });
+        });
+
+        /**AI打分 */
+        const resScorePromise = new Promise((resolve, reject) => {
+          wx.showLoading({
+            title: "AI打分中",
+          });
+          wx.request({
+            url: "https://puzhikeji.com.cn/proxyapi/chat",
+            data: {
+              messages: [
+                {
+                  role: "user",
+                  content: userInputQuestion,
+                },
+              ],
+              options: {
+                promptText: Config.SCENCES_ALL.kouyu[0][
+                  "ScorePromptText"
+                ].replace("{{TOPIC}}", this.data.scenesText),
+              },
+            },
+            method: "POST",
+            header: {
+              "content-type": "application/json", // 默认值
+            },
+            success(_e) {
+              console.log("[proxyapi/chat]", _e);
+              if (_e?.data?.text) {
+                _e.data.isDone = true;
+                resolve(_e);
+              } else {
+                reject(_e);
+              }
             },
             fail(_e) {
               reject(_e);
@@ -322,7 +394,13 @@ Page({
           });
         });
 
-        const newResPromise = abortPromiseWrapper(resPromise);
+        //口语考试题，自动打分
+        const newResPromise = abortPromiseWrapper(
+          ["301"].includes(String(this.data.scenesId))
+            ? resScorePromise
+            : resPromise
+        );
+
         newResPromise
           .then(async (_res) => {
             await this.handleMsgSuccess(_res);
@@ -343,11 +421,15 @@ Page({
                 },
               });
             }
+          })
+          .finally(() => {
+            wx.hideLoading();
           });
         app.globalData.curResPromise = newResPromise; //当前有promise
       }
-    } catch (error) { }
+    } catch (error) {}
   },
+
   //切换到文本输入
   changeToTextInput() {
     //停止输入语音
@@ -366,6 +448,8 @@ Page({
   startVoice: function () {
     if (this.data.leftChatNum <= 0) {
       wx.showToast({
+        duration: 3000,
+        mask: true,
         title: "今日使用次数已用完",
       });
       return;
@@ -468,6 +552,8 @@ Page({
         const voiceQuestion = res.result.voice_text_str.trim();
         if (!voiceQuestion && this.data.isVoiceInputStatus) {
           wx.showToast({
+            duration: 3000,
+            mask: true,
             title: `语音输入为空`,
           });
         } else {
@@ -499,7 +585,7 @@ Page({
       console.log("识别失败", res);
       wx.showModal({
         title: "识别失败",
-        content: JSON.stringify(res),
+        content: "网络连接不佳，请您稍后再试!", //JSON.stringify(res),
         complete: (res) => {
           if (res.cancel) {
           }
@@ -695,11 +781,11 @@ Page({
   //   });
   //   console.log("发送订阅消息返回内容", res);
   // },
-  jumpToAdmin() { },
+  jumpToAdmin() {},
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () { },
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
@@ -711,7 +797,7 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () { },
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
@@ -726,12 +812,12 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () { },
+  onReachBottom: function () {},
 
   jumpToHistory() {
     wx.navigateTo({
@@ -749,8 +835,9 @@ Page({
     const randomShare = ShareInfo[Math.floor(Math.random() * ShareInfo.length)];
     return {
       title: randomShare.title,
-      path: `/pages/index/index?share_from_openid=${this.data.curOpenId
-        }&share_timestamp=${new Date().getTime()}`,
+      path: `/pages/index/index?share_from_openid=${
+        this.data.curOpenId
+      }&share_timestamp=${new Date().getTime()}`,
       imageUrl: randomShare.imageUrl,
     };
   },
